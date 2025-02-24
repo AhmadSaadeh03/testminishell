@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/02/24 15:50:11 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/02/24 19:02:32 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 #include <stdio.h>
+#include <string.h>
 typedef struct s_node
 {
     char *node;
