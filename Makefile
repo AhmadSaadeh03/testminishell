@@ -2,7 +2,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = srcs/main.c srcs/split.c
+SRCS = srcs/main.c srcs/split.c srcs/checks.c
 
 OBJ = $(SRCS:.c=.o)
 

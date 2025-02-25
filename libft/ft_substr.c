@@ -41,5 +41,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 // int     main()
 // {
 //         char *p = "lorem ipsum dolor sit amet";
-//         printf("%s",ft_substr(p, 7, 10));
+//         printf("%s",ft_substr(p, 7 ,10));
 // }
