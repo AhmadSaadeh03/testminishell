@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/02/25 12:33:16 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/01 16:42:25 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
-
+        
 int closed_quotes(t_minishell *shell, char qoute) // this function to check that the qoutes are closed even number
 {
     int i;
@@ -30,75 +30,59 @@ int closed_quotes(t_minishell *shell, char qoute) // this function to check that
     return(0);
 }
 
-static char *ft_strremove(char *str, const char *remove)
+int qoutes_handling(t_minishell *shell,char qoute)
 {
-    char *result;
-    char *ptr;
-    int i;
-    int j;
-    int k;
-    if (!str || !remove)
-        return (NULL);
-    result = (char *)malloc((ft_strlen(str) - ft_strlen(remove)) + 1);
-    if (!result)
-        return (NULL);
-    ptr = str;
-    i = 0;
-    j = 0;
-    k = 0;
-    while (ptr[i])
-    {
-        while(ptr[i] != remove[k] && remove[k])
-        {
-            result[j++] = ptr[i];
-            i++;
-        }
-        i++;
-        k++;
-    }
-    result[j] = '\0';
-    return (result);
-}
+    int i = 0;
+    int j = 0;
+    int flag = 0;
+    char *str;
 
-void    split_quotes(t_minishell *shell, char operator)
-{
-    int i;
-    int len;
-    char    *temp = NULL;
-    int first;
-
-    i = 0;
-    first = 0;
-    len = 0;
-    while(shell->name[i])
+    str = (char *)malloc(sizeof(char) * (ft_strlen(shell->name) + 1));
+    if (!str)
+        return 0; // Return failure if memory allocation fails
+    while (shell->name[i])
     {
-        first = 0;
-        if (shell->name[i] == operator)
+        if (shell->name[i] == qoute)
         {
-            first = i;
-            i++;
-            while(shell->name[i] != operator)
-            {
-                len++;
-                i++;
-            }
-            if(shell->name[i] == operator)
-            {
-                len++;
-                // i did a sub of the qouted part "hello world" and store it the struct shell->qouted
-                shell->quoted = ft_substr(shell->name, first, len + 1);
-                if(!shell->quoted)
-                    return ;
-                temp = ft_strremove(shell->name, shell->quoted); // this function remove the qouted part from the name
-                break;
-            }
-            i++;
-        }
+            // Toggle the flag when encountering a quote
+            flag = !flag;
+        }     
+        if (flag)
+        {
+            str[j] = shell->name[i];
+            j++;
+        }     
         i++;
     }
-    // printf("%s\n", shell->quoted);
-    // printf("%s\n", temp);
-    free(shell->name);
-    shell->name = ft_strdup(temp);
-    split_space(shell); ///// we need to store the shell->quoted in the node this way to split it is not very correct...
+    str[j] = '"';
+    str[j+1] = '\0';
+    shell->token_type->quoted = str;
+    return 1;
 }
+
+
+// int init_operation(t_minishell *shell)
+// {
+//     int i = 0;
+//     shell->token_type = malloc(sizeof(t_tokentype));
+//     if (!shell->token_type)
+//         return 1; 
+//     shell->token_type->append = NULL;
+//     shell->token_type->pipe = '\0';
+//     shell->token_type->redirect_in = '\0';
+//     shell->token_type->redirect_out = '\0';
+//     while (shell->name[i])
+//     {
+//         if (shell->name[i] == '>')
+//             shell->token_type->redirect_out = i;
+//         else if (shell->name[i] == '<')
+//             shell->token_type->redirect_in = i;
+//         else if (shell->name[i] == '>' && shell->name[i + 1])
+//             shell->token_type->append = ">>";
+//         else if (shell->name[i] == '|')
+//             shell->token_type->pipe = i;
+//         i++;
+//     }
+//     return 0;
+// }
+

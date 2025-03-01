@@ -1,8 +1,8 @@
 CC = cc 
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS = srcs/main.c srcs/split.c srcs/checks.c
+SRCS = srcs/main.c srcs/split.c srcs/checks.c srcs/initilize.c
 
 OBJ = $(SRCS:.c=.o)
 
