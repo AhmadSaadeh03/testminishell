@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/01 16:55:35 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/03 14:59:08 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int split(t_minishell *shell)
     }
     while (shell->name[i])
     {
-        if (shell->name[i] == '|' || shell->name[i] == '<' ||shell->name[i] == '>'|| shell->name[i] == '-')
+        if (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>')
         {
             if (split_operation(shell, shell->name[i]) == 1)
                 return 1;
@@ -106,8 +106,8 @@ int split(t_minishell *shell)
                 printf("%s\n", "Invalid quotes");
                 return 1;
             }
-           qoutes_handling(shell,shell->name[i]);
-        }    
+        qoutes_handling(shell,shell->name[i]);
+    }    
         i++;
     }
     //split_space(shell);
@@ -115,8 +115,10 @@ int split(t_minishell *shell)
         return 1;
     
     t_node *head = create_node_list(shell->token_space);
+    shell->token_list = head;
     if (head)
     {
+        parsing(&shell);
         t_node *current = head;
         while (current != NULL)
         {

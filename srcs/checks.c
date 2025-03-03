@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/01 16:42:25 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/03 13:40:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
-        
+
 int closed_quotes(t_minishell *shell, char qoute) // this function to check that the qoutes are closed even number
 {
     int i;
@@ -47,7 +47,7 @@ int qoutes_handling(t_minishell *shell,char qoute)
             // Toggle the flag when encountering a quote
             flag = !flag;
         }     
-        if (flag)
+        if (flag )
         {
             str[j] = shell->name[i];
             j++;
