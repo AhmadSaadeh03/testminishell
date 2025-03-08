@@ -1,8 +1,16 @@
 CC = cc 
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS = srcs/main.c srcs/split.c srcs/checks.c
+<<<<<<< HEAD
+SRCS = srcs/main.c srcs/split.c srcs/checks.c srcs/initilize.c
+=======
+<<<<<<< HEAD
+SRCS = srcs/main.c srcs/split.c srcs/checks.c srcs/initilize.c srcs/parse.c
+=======
+SRCS = srcs/main.c srcs/split.c srcs/checks.c srcs/initilize.c srcs/parse.c srcs/ft_free.c
+>>>>>>> f26bb66 (new)
+>>>>>>> 5213311 (new)
 
 OBJ = $(SRCS:.c=.o)
 
