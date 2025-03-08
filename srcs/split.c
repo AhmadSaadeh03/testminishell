@@ -1,173 +1,220 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*									                                         */
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/01 16:55:35 by asaadeh          ###   ########.fr       */
-=======
-<<<<<<< HEAD
-/*   Updated: 2025/03/03 14:59:08 by fghanem          ###   ########.fr       */
-=======
-/*   Updated: 2025/03/08 14:24:28 by fghanem          ###   ########.fr       */
->>>>>>> f26bb66 (new)
->>>>>>> 5213311 (new)
+/*   Updated: 2025/02/25 12:45:40 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
 
-int split_space(t_minishell *shell)
+// int split_space(t_minishell *shell)
+// {
+//     shell->token_space = ft_split(shell->name, ' ');
+//     if (shell->token_space != NULL)
+//     {
+//         t_node *head = create_node_list(shell->token_space);
+//         if (!head)
+//                 return (1);
+//         t_node *current = head;
+//         while (current != NULL)
+//         {
+//             printf("%s", current->node);
+//             if (current->next != NULL)
+//                 printf(" -> ");
+//             current = current->next;
+//         }
+//         printf(" -> NULL\n");
+//         current = head;
+//         while (current != NULL)
+//         {
+//             t_node *temp = current;
+//             current = current->next;
+//             free(temp->node);
+//             free(temp);
+//         }
+//         int i = 0;
+//         while (shell->token_space[i])
+//         {
+//             free(shell->token_space[i]);
+//             i++;
+//         }
+//         free(shell->token_space);
+//     }
+//     return (0);
+// }
+int	split_space(t_minishell *shell)
 {
-    shell->token_space = &shell->name;
-    shell->token_space = ft_split(shell->name, ' ');
-    if (!shell->token_space) {
-        printf("Error: Failed to split the input\n");
-        return 1;
-    }
-    return 0;   
+	t_node	*head;
+
+	shell->token_space = ft_split(shell->name, ' ');
+	if (shell->token_space != NULL)
+	{
+		head = create_node_list(shell->token_space);
+		if (!head)
+			return (1);
+		return (0);
+	}
+	return (1);
 }
 
-int split_operation(t_minishell *shell, char operator)
+int	split_pipe(t_minishell *shell, char operator)
 {
-    char *temp;
-    int i = 0, len, new_len;
-    temp = ft_strdup(shell->name);
-    if (!temp)
-        return 1;
-    len = ft_strlen(temp);
-    while (i < len)
-    {
-        if (temp[i] == operator && operator == '|')
-        {
-            if (i == 0 || i == len - 1) 
-            {
-                printf("%s\n", "syntax error near unexpected token");
-                free(temp);
-                return 1;
-            }
-            if (i > 0 && temp[i - 1] != ' ') 
-            {
-                // Create a new string with extra space for the new space
-                new_len = len + 1; // Space before the operator
-                char *new_temp = malloc(new_len + 1);
-                if (!new_temp)
-                {
-                    free(temp);
-                    return 1; // Memory allocation error
-                }
-                // Copy the part before the operator and the space
-                ft_memcpy(new_temp, temp, i);
-                new_temp[i] = ' '; // Add space
-                ft_memcpy(new_temp + i + 1, temp + i, len - i + 1);
-                free(temp);
-                temp = new_temp;
-                len = new_len;
-                i++; // Move index forward due to the inserted space
-            }
-            // Add space after operator if not present
-            if (i + 1 < len && temp[i + 1] != ' ') 
-            {
-                new_len = len + 1; // Space after the operator
-                char *new_temp = malloc(new_len + 1);
-                if (!new_temp)
-                {
-                    free(temp);
-                    return 1; // Memory allocation error
-                }
-                // Copy the part before the operator, add space, and then the rest
-                ft_memcpy(new_temp, temp, i + 1);
-                new_temp[i + 1] = ' ';
-                ft_memcpy(new_temp + i + 2, temp + i + 1, len - i);
-                free(temp);
-                temp = new_temp;
-                len = new_len;
-            }
-        }
-        i++;  // Move to the next character
-    }
-    free(shell->name);
-    shell->name = temp;
-    return 0;
+	char	*temp;
+	int		i;
+	int		len;
+
+	temp = ft_strdup(shell->name);
+	if (!temp)
+		return (1);
+	i = 0;
+	len = ft_strlen(temp);
+	while (temp[i])
+	{
+		if (temp[i] == operator)
+		{
+			// If the pipe is at the beginning or end of the string, add spaces accordingly
+			if (temp[0] == operator|| temp[len - 1] == operator)
+			// If there is a pipe in the first of string is error or al the last it's open a quote.
+			{
+				printf("%s\n", "syntax error near unexpected token");
+				exit(1);
+			}
+			if (i > 0 && temp[i - 1] != ' ' && (temp[i - 1] != ' ' || temp[i
+					+ 1] != ' ')) // Add space before pipe if not already there
+			{
+				// Shift the characters to the right to make space
+				ft_memmove(temp + i + 1, temp + i, len - i + 1);
+					// Shift right by 1
+				temp[i] = ' ';                                  
+					// Insert space before pipe
+				len++;                                          
+					// Increase length of the string since we added a space
+				i++;                                            
+					// Move forward to avoid infinite loop due to the new space
+			}
+			if (i + 1 < len && temp[i + 1] != ' ')
+			// Add space after pipe if not already there
+			{
+				// Shift characters to the right by 1 to make space for the space after the pipe
+				ft_memmove(temp + i + 2, temp + i + 1, len - i);
+					// Shift right by 1
+				temp[i + 1] = ' ';
+				len++;
+			}
+		}
+		i++;
+	}
+	split_space(shell);
+	free(shell->name);
+	shell->name = temp;
+	return (0);
 }
 
-int split(t_minishell *shell)
+int	split(t_minishell *shell)
 {
-    int i = 0;
-    if (!*shell->name || !shell->name)
-    {
-        return (1);
-    }
-    while (shell->name[i])
-    {
-        if (shell->name[i] == '|' || shell->name[i] == '<' ||shell->name[i] == '>'|| shell->name[i] == '-')
-        {
-            if (split_operation(shell, shell->name[i]) == 1)
-                return (1);
-        }
-        if (shell->name[i] == 34)
-        {
-            if (!closed_quotes(shell, shell->name[i])) // check if the qoutes is closed the function is in checks.c if it returns (1) this means it's closed else is error
-            {
-                printf("%s\n", "Invalid quotes");
-                return (1);
-            }
-<<<<<<< HEAD
-           qoutes_handling(shell,shell->name[i]);
-        }    
-=======
-<<<<<<< HEAD
-        qoutes_handling(shell,shell->name[i]);
-    }    
-=======
-            qoutes_handling(shell,shell->name[i]);
-        }    
->>>>>>> f26bb66 (new)
->>>>>>> 5213311 (new)
-        i++;
-    }
-    if (split_space(shell) == 1)
-<<<<<<< HEAD
-        return 1;
-    
-    t_node *head = create_node_list(shell->token_space);
-    if (head)
-    {
-        t_node *current = head;
-        while (current != NULL)
-        {
-            printf("%s", current->node);
-            if (current->next != NULL)
-                printf(" -> ");
-            current = current->next;
-        }
-        printf(" -> NULL\n");
-        current = head;
-        while (current != NULL)
-        {
-            t_node *temp = current;
-            current = current->next;
-            free(temp->node);
-            free(temp);
-        }
-    }
-    i = 0;
-    while (shell->token_space[i])
-    {
-        free(shell->token_space[i]);
-        i++;
-    }
-    free(shell->token_space);
-    return 0;
-} 
-=======
-        return (1);
-    shell->token_list = create_node_list(shell->token_space);
-    put_type(&shell);
-    free_token_space(shell->token_space);
-    return (0);
+	int		i;
+	// int		inside_qoute;
+	t_node	*head;
+	t_node	*current;
+	t_node	*temp;
+
+	i = 0;
+	// inside_qoute = 0;
+	if (!*shell->name)
+		return (1);
+	while (shell->name[i])
+	{
+		if (shell->name[i] == ' ')
+		{
+			split_space(shell);
+		}
+		if (shell->name[i] == '|' || shell->name[i] == '<'
+			|| shell->name[i] == '>')
+		{
+			split_pipe(shell, shell->name[i]);
+		}
+		if (shell->name[i] == 39 || shell->name[i] == 34)
+		{
+			if (!closed_quotes(shell, shell->name[i]))
+			// check if the qoutes is closed the function is in checks.c if it returns 1 this means it's closed else is error
+			{
+				printf("%s\n", "Invalid quotes");
+				exit(1);
+			}
+			// inside_qoute = !inside_qoute;
+			split_quotes(shell, shell->name[i]);
+		}
+		i++;
+	}
+	head = create_node_list(shell->token_space);
+	if (head)
+	{
+		current = head;
+		while (current != NULL)
+		{
+			printf("%s", current->node);
+			if (current->next != NULL)
+				printf(" -> ");
+			current = current->next;
+		}
+		printf(" -> NULL\n");
+		current = head;
+		while (current != NULL)
+		{
+			temp = current;
+			current = current->next;
+			free(temp->node);
+			free(temp);
+		}
+	}
+	i = 0;
+	while (shell->token_space[i])
+	{
+		free(shell->token_space[i]);
+		i++;
+	}
+	free(shell->token_space);
+	return (0);
 }
->>>>>>> f26bb66 (new)
+
+t_node	*create_node_list(char **tokens)
+{
+	int		i;
+	t_node	*head;
+	t_node	*current;
+	t_node	*new_node;
+
+	i = 0;
+	head = NULL;
+	current = NULL;
+	while (tokens[i])
+	{
+		new_node = malloc(sizeof(t_node));
+		if (!new_node)
+			return (NULL);
+		new_node->node = ft_strdup(tokens[i]);
+		if (!new_node->node)
+		{
+			free(new_node);
+			return (NULL);
+		}
+		new_node->next = NULL;
+		if (!head)
+		{
+			head = new_node;
+			current = head;
+		}
+		else
+		{
+			current->next = new_node;
+			current = new_node;
+		}
+		i++;
+	}
+	return (head);
+}

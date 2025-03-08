@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/02/26 13:59:27 by fghanem          ###   ########.fr       */
+/*   Created: 2025/02/26 12:38:53 by fghanem           #+#    #+#             */
+/*   Updated: 2025/02/26 12:57:22 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "libft.h"
 
-int	main(void)
+int	ft_strcmp(char *s1, char *s2)
 {
-	t_minishell	shell;
+	int	i;
 
-	while (1)
-	{
-		shell.name = readline("minihell > ");
-		if (shell.name == NULL)
-		{
-			break ;
-		}
-		add_history(shell.name);
-		split(&shell);
-		if (!&split_space)
-			return (1);
-		free(shell.name);
-	}
-	return (0);
+	i = 0;
+	while ((s1[i] == s2[i]) && (s1[i] != '\0'))
+		i++;
+	return (s1[i] - s2[i]);
 }
