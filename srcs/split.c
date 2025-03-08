@@ -6,7 +6,15 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/01 16:55:35 by asaadeh          ###   ########.fr       */
+=======
+<<<<<<< HEAD
+/*   Updated: 2025/03/03 14:59:08 by fghanem          ###   ########.fr       */
+=======
+/*   Updated: 2025/03/08 14:24:28 by fghanem          ###   ########.fr       */
+>>>>>>> f26bb66 (new)
+>>>>>>> 5213311 (new)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +41,7 @@ int split_operation(t_minishell *shell, char operator)
     len = ft_strlen(temp);
     while (i < len)
     {
-        if (temp[i] == operator)
+        if (temp[i] == operator && operator == '|')
         {
             if (i == 0 || i == len - 1) 
             {
@@ -85,33 +93,44 @@ int split_operation(t_minishell *shell, char operator)
     shell->name = temp;
     return 0;
 }
+
 int split(t_minishell *shell)
 {
     int i = 0;
     if (!*shell->name || !shell->name)
     {
-        return 1;
+        return (1);
     }
     while (shell->name[i])
     {
         if (shell->name[i] == '|' || shell->name[i] == '<' ||shell->name[i] == '>'|| shell->name[i] == '-')
         {
             if (split_operation(shell, shell->name[i]) == 1)
-                return 1;
+                return (1);
         }
         if (shell->name[i] == 34)
         {
-            if (!closed_quotes(shell, shell->name[i])) // check if the qoutes is closed the function is in checks.c if it returns 1 this means it's closed else is error
+            if (!closed_quotes(shell, shell->name[i])) // check if the qoutes is closed the function is in checks.c if it returns (1) this means it's closed else is error
             {
                 printf("%s\n", "Invalid quotes");
-                return 1;
+                return (1);
             }
+<<<<<<< HEAD
            qoutes_handling(shell,shell->name[i]);
         }    
+=======
+<<<<<<< HEAD
+        qoutes_handling(shell,shell->name[i]);
+    }    
+=======
+            qoutes_handling(shell,shell->name[i]);
+        }    
+>>>>>>> f26bb66 (new)
+>>>>>>> 5213311 (new)
         i++;
     }
-    //split_space(shell);
     if (split_space(shell) == 1)
+<<<<<<< HEAD
         return 1;
     
     t_node *head = create_node_list(shell->token_space);
@@ -144,3 +163,11 @@ int split(t_minishell *shell)
     free(shell->token_space);
     return 0;
 } 
+=======
+        return (1);
+    shell->token_list = create_node_list(shell->token_space);
+    put_type(&shell);
+    free_token_space(shell->token_space);
+    return (0);
+}
+>>>>>>> f26bb66 (new)
