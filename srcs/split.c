@@ -3,18 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/01 16:55:35 by asaadeh          ###   ########.fr       */
-=======
-<<<<<<< HEAD
-/*   Updated: 2025/03/03 14:59:08 by fghanem          ###   ########.fr       */
-=======
-/*   Updated: 2025/03/08 14:24:28 by fghanem          ###   ########.fr       */
->>>>>>> f26bb66 (new)
->>>>>>> 5213311 (new)
+/*   Created: 2025/03/03 14:59:08 by fghanem           #+#    #+#             */
+/*   Updated: 2025/03/10 12:28:26 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,52 +33,52 @@ int split_operation(t_minishell *shell, char operator)
     len = ft_strlen(temp);
     while (i < len)
     {
-        if (temp[i] == operator && operator == '|')
+        if (temp[i] == operator)
         {
-            if (i == 0 || i == len - 1) 
+            if ((i == 0 || i == len - 1 )&& operator == '|') 
             {
                 printf("%s\n", "syntax error near unexpected token");
                 free(temp);
                 return 1;
             }
-            if (i > 0 && temp[i - 1] != ' ') 
+        if (i > 0 && temp[i - 1] != ' ') 
+        {
+            // Create a new string with extra space for the new space
+            new_len = len + 1; // Space before the operator
+            char *new_temp = malloc(new_len + 1);
+            if (!new_temp)
             {
-                // Create a new string with extra space for the new space
-                new_len = len + 1; // Space before the operator
-                char *new_temp = malloc(new_len + 1);
-                if (!new_temp)
-                {
-                    free(temp);
-                    return 1; // Memory allocation error
-                }
-                // Copy the part before the operator and the space
-                ft_memcpy(new_temp, temp, i);
-                new_temp[i] = ' '; // Add space
-                ft_memcpy(new_temp + i + 1, temp + i, len - i + 1);
                 free(temp);
-                temp = new_temp;
-                len = new_len;
-                i++; // Move index forward due to the inserted space
+                return 1; // Memory allocation error
             }
-            // Add space after operator if not present
-            if (i + 1 < len && temp[i + 1] != ' ') 
-            {
-                new_len = len + 1; // Space after the operator
-                char *new_temp = malloc(new_len + 1);
-                if (!new_temp)
-                {
-                    free(temp);
-                    return 1; // Memory allocation error
-                }
-                // Copy the part before the operator, add space, and then the rest
-                ft_memcpy(new_temp, temp, i + 1);
-                new_temp[i + 1] = ' ';
-                ft_memcpy(new_temp + i + 2, temp + i + 1, len - i);
-                free(temp);
-                temp = new_temp;
-                len = new_len;
-            }
+            // Copy the part before the operator and the space
+            ft_memcpy(new_temp, temp, i);
+            new_temp[i] = ' '; // Add space
+            ft_memcpy(new_temp + i + 1, temp + i, len - i + 1);
+            free(temp);
+            temp = new_temp;
+            len = new_len;
+            i++; // Move index forward due to the inserted space
         }
+        // Add space after operator if not present
+        if (i + 1 < len && temp[i + 1] != ' ') 
+        {
+            new_len = len + 1; // Space after the operator
+            char *new_temp = malloc(new_len + 1);
+            if (!new_temp)
+            {
+                free(temp);
+                return 1; // Memory allocation error
+            }
+            // Copy the part before the operator, add space, and then the rest
+            ft_memcpy(new_temp, temp, i + 1);
+            new_temp[i + 1] = ' ';
+            ft_memcpy(new_temp + i + 2, temp + i + 1, len - i);
+            free(temp);
+            temp = new_temp;
+            len = new_len;
+        }
+    }
         i++;  // Move to the next character
     }
     free(shell->name);
@@ -103,7 +95,7 @@ int split(t_minishell *shell)
     }
     while (shell->name[i])
     {
-        if (shell->name[i] == '|' || shell->name[i] == '<' ||shell->name[i] == '>'|| shell->name[i] == '-')
+        if (shell->name[i] == '|' || shell->name[i] == '<' ||shell->name[i] == '>')
         {
             if (split_operation(shell, shell->name[i]) == 1)
                 return (1);
@@ -115,27 +107,16 @@ int split(t_minishell *shell)
                 printf("%s\n", "Invalid quotes");
                 return (1);
             }
-<<<<<<< HEAD
-           qoutes_handling(shell,shell->name[i]);
-        }    
-=======
-<<<<<<< HEAD
-        qoutes_handling(shell,shell->name[i]);
-    }    
-=======
-            qoutes_handling(shell,shell->name[i]);
-        }    
->>>>>>> f26bb66 (new)
->>>>>>> 5213311 (new)
+            qoutes_handling(shell, shell->name[i]);
+        }
         i++;
     }
     if (split_space(shell) == 1)
-<<<<<<< HEAD
         return 1;
-    
     t_node *head = create_node_list(shell->token_space);
     if (head)
     {
+        printf("%s\n", "----------before-------------");
         t_node *current = head;
         while (current != NULL)
         {
@@ -145,6 +126,7 @@ int split(t_minishell *shell)
             current = current->next;
         }
         printf(" -> NULL\n");
+    
         current = head;
         while (current != NULL)
         {
@@ -153,21 +135,21 @@ int split(t_minishell *shell)
             free(temp->node);
             free(temp);
         }
+        // free(head);
     }
-    i = 0;
-    while (shell->token_space[i])
-    {
-        free(shell->token_space[i]);
-        i++;
-    }
-    free(shell->token_space);
-    return 0;
-} 
-=======
-        return (1);
+//     i = 0;
+//     while (shell->token_space[i])
+//     {
+//         free(shell->token_space[i]);
+//         i++;
+//     }
+//     free(shell->token_space);
+//     return 0;
+// }
+        // return (1);
     shell->token_list = create_node_list(shell->token_space);
+    // shell->token_list = head;
     put_type(&shell);
     free_token_space(shell->token_space);
     return (0);
 }
->>>>>>> f26bb66 (new)
