@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/08 14:27:06 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:38:03 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,8 @@ void free_minishell(t_minishell *shell)
         free_cmd_list(shell->cmd_list);
     free_token_space(shell->token_space);
     free(shell->name);
-    free(shell->token_type);
     free(shell);
 }
-
 void free_and_exit(t_minishell *shell)
 {
     free_minishell(shell);

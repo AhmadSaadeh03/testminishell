@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/03 17:16:45 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:46:23 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int split_space(t_minishell *shell)
         return 1;
     while (shell->name[i])
     {
-        if (shell->name[i] == '"')
+        if (shell->name[i] == '"'|| shell->name[i] == 39)
             inside_quotes = !inside_quotes;  // Toggle quote state
 
         if (shell->name[i] == ' ' && inside_quotes)
@@ -112,7 +112,7 @@ int split_operation(t_minishell *shell, char operator)
         }
         
         // Handle quotes and treat everything inside as one token
-        if (temp[i] == '"' && operator == '"')
+        if ((temp[i] == '"' && operator == '"') || (temp[i] == 39 && operator == 39))
         {
             if (!inside_quotes)
             {
@@ -180,7 +180,7 @@ int split(t_minishell *shell)
     }
     while (shell->name[i])
     {
-        if (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>' || shell->name[i] == '"')
+        if (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>' || shell->name[i] == '"' || shell->name[i] == 39)
         {
             if (split_operation(shell, shell->name[i]) == 1)
                 return 1;
