@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   initilize.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/08 10:57:52 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:26:53 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
+
+t_minishell *init_shell(t_minishell *shell)
+{
+    shell = NULL;
+    shell = malloc(sizeof(t_minishell));
+    if (!shell)
+    {
+        perror("Memory allocation failed for shell.\n");
+        exit(1);
+    }
+    shell->token_list = NULL;
+    shell->cmd_list = NULL;
+    shell->token_space = NULL;
+    shell->name = NULL;
+    return(shell);
+}
 
 t_node *create_node_list(char **tokens) 
 {
@@ -48,63 +64,5 @@ t_node *create_node_list(char **tokens)
         }
         i++;
     }
-    return (head);
-}
-
-void    init_cmd(t_cmd **cmd)
-{
-    t_cmd   *temp;
-
-    temp = NULL;
-    temp = malloc(sizeof(t_cmd));
-    if(!temp)
-    {
-        perror("failed to allocate structer command");
-        return ;
-    }
-    temp->file_in = NULL;
-    temp->file_out = NULL;
-    temp->args = NULL;
-    temp->args = (char **)malloc(sizeof(char *) * 50);
-    if(!temp->args)
-    {
-        perror("failed to allocate arguments");
-        free(temp);
-        return ;
-    }
-    temp->next = NULL;
-    (*cmd) = temp;
-}
-
-t_minishell *init_shell(t_minishell *shell)
-{
-    shell = NULL;
-    shell = malloc(sizeof(t_minishell));
-    if (!shell)
-    {
-        perror("Memory allocation failed for shell.\n");
-        exit(1);
-    }
-    shell->token_list = NULL;
-    shell->cmd_list = NULL;
-    shell->token_space = NULL;
-    shell->name = NULL;
-    return(shell);
-}
-
-int init_token(t_tokentype *token)
-{
-    if (!token)
-        return 0;  // Return failure if the token pointer is NULL
-    //token = malloc(sizeof(t_tokentype));
-    // Initialize primitive types
-    token->pipe = '\0';
-    token->redirect_out = '\0';
-    token->redirect_in = '\0';
-
-    // Initialize pointers to NULL
-    token->append = NULL;
-    token->quoted = NULL;
-
-    return 1;  // Return success
+    return head;
 }

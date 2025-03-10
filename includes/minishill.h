@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishill.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 15:31:17 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/10 12:13:12 by fghanem          ###   ########.fr       */
+/*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
+/*   Updated: 2025/03/10 13:14:51 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,23 +73,20 @@ int split_space(t_minishell *shell);
 int qoutes_handling(t_minishell *shell,char qoute);
 // int init_operation(t_minishell *shell);
 int qoutes_handling(t_minishell *shell,char qoute);
-
 void    parsing(t_minishell **shell);
 void    init_cmd(t_cmd **cmd);
 // void    print(t_minishell **shell);
 void    print(t_minishell **shell);
 void    print(t_minishell **shell);
-
 void free_minishell(t_minishell *shell);
 void free_token_space(char **token_space);
 void free_cmd(t_cmd **cmd);
 t_minishell *init_shell(t_minishell *shell);
 int init_token(t_tokentype *token);
-
 t_node  *fix_redirection(t_node *list);
-
 void    put_type(t_minishell **shell);
 t_node  *fix_redirection(t_node *list);
 void    prt_list(t_minishell **shell);
 void free_and_exit(t_minishell *shell);
 void free_node(t_node *to_free);
+void process_node_list(t_minishell *shell);

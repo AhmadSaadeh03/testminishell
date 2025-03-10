@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/10 12:27:07 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/10 13:19:33 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
+
+void    init_cmd(t_cmd **cmd)
+{
+    t_cmd   *temp;
+
+    temp = NULL;
+    temp = malloc(sizeof(t_cmd));
+    if(!temp)
+    {
+        perror("failed to allocate structer command");
+        return ;
+    }
+    temp->file_in = NULL;
+    temp->file_out = NULL;
+    temp->args = NULL;
+    temp->args = (char **)malloc(sizeof(char *) * 50);
+    if(!temp->args)
+    {
+        perror("failed to allocate arguments");
+        free(temp);
+        return ;
+    }
+    temp->next = NULL;
+    (*cmd) = temp;
+}
 
 void    set_cmd(t_cmd *cmd, char *file_name, int flag)
 {
