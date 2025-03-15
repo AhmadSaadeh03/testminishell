@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/10 13:38:54 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/15 14:42:56 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int closed_quotes(t_minishell *shell, char qoute);
 //void split_quotes(t_minishell *shell, char operator);
 int split_space(t_minishell *shell);
 // int init_operation(t_minishell *shell);
-int qoutes_handling(t_minishell *shell,char qoute);
+// int qoutes_handling(t_minishell *shell,char qoute);
 // int init_operation(t_minishell *shell);
 void    parsing(t_minishell **shell);
 void    init_cmd(t_cmd **cmd);
@@ -79,3 +79,4 @@ void    prt_list(t_minishell **shell);
 void free_and_exit(t_minishell *shell);
 void free_node(t_node *to_free);
 void process_node_list(t_minishell *shell);
+int handle_quote(t_minishell *shell ,char operator);
