@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:42:38 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/15 15:57:33 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/15 17:01:02 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,57 @@ int split_space(t_minishell *shell)
 {
     int i = 0;
     int  j = 0;
-    int inside_quotes = 0;
+    int inside_quotes_double = 0;
+    int inside_quotes_single = 0;
     char *temp = (char *)malloc(sizeof(char) * (ft_strlen(shell->name) + 1));
     
     if (!temp)
         return 1;
-    while (shell->name[i])
+    // while (shell->name[i])
+    // {
+    //     if ((shell->name[i] == '"' || shell->name[i] == 39) && !inside_quotes)
+    //     {
+    //         inside_quotes = !inside_quotes;  // Toggle quote state
+    //     }
+    //     else if ((shell->name[i] == '"' || shell->name[i] == 39) && inside_quotes)
+    //         inside_quotes = !inside_quotes;
+    //     if (shell->name[i] == ' ' && inside_quotes)
+    //         temp[j++] = '\a';  // Replace space with a non-printable character
+    //     else
+    //         temp[j++] = shell->name[i];
+    //     i++;
+    // }
+    while (shell->name[i]) 
+{
+    if (shell->name[i] == '"' && !inside_quotes_double && !inside_quotes_single) 
     {
-        if ((shell->name[i] == '"' || shell->name[i] == 39) && !inside_quotes)
-        {
-            inside_quotes = !inside_quotes;  // Toggle quote state
-        }
-        else if ((shell->name[i] == '"' || shell->name[i] == 39) && inside_quotes)
-            inside_quotes = !inside_quotes;
-        if (shell->name[i] == ' ' && inside_quotes)
-            temp[j++] = '\a';  // Replace space with a non-printable character
-        else
-            temp[j++] = shell->name[i];
-        i++;
+        inside_quotes_double = !inside_quotes_double;  // Toggle double quote state
     }
+    else if (shell->name[i] == '"' && inside_quotes_double) 
+    {
+        inside_quotes_double = !inside_quotes_double;
+    }
+
+    if (shell->name[i] == 39 && !inside_quotes_single && !inside_quotes_double) 
+    {
+        inside_quotes_single = !inside_quotes_single;  // Toggle single quote state
+    }
+    else if (shell->name[i] == 39 && inside_quotes_single) 
+    {
+        inside_quotes_single = !inside_quotes_single;
+    }
+
+    if (shell->name[i] == ' ' && (inside_quotes_single || inside_quotes_double)) 
+    {
+        temp[j++] = '\a';  // Replace space with a non-printable character inside quotes
+    }
+    else 
+    {
+        temp[j++] = shell->name[i];
+    }
+    
+    i++;
+}
     temp[j] = '\0';
     shell->token_space = ft_split(temp, ' ');
     if (!shell->token_space) {
