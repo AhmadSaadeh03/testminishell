@@ -3,136 +3,173 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/10 13:19:33 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:38:30 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
 
-void    init_cmd(t_cmd **cmd)
+void    set_cmd(t_cmd *cmd, char *file_name, char *var, t_type type)
 {
-    t_cmd   *temp;
-
-    temp = NULL;
-    temp = malloc(sizeof(t_cmd));
-    if(!temp)
+    if (type == TOKEN_REDIRECT_IN || type == TOKEN_HEREDOC)
     {
-        perror("failed to allocate structer command");
-        return ;
-    }
-    temp->file_in = NULL;
-    temp->file_out = NULL;
-    temp->args = NULL;
-    temp->args = (char **)malloc(sizeof(char *) * 50);
-    if(!temp->args)
-    {
-        perror("failed to allocate arguments");
-        free(temp);
-        return ;
-    }
-    temp->next = NULL;
-    (*cmd) = temp;
-}
-
-void    set_cmd(t_cmd *cmd, char *file_name, int flag)
-{
-    if (flag == 0)
+        cmd->redirect = ft_strdup(var);
         cmd->file_in = ft_strdup(file_name);
-    else
+    }
+    else if (type == TOKEN_REDIRECT_OUT || type == TOKEN_APPEND)
+    {
+        if (type == TOKEN_APPEND)
+            cmd->append = 1;
+        cmd->redirect = ft_strdup(var);
         cmd->file_out = ft_strdup(file_name);
+    }
 }
 
-void    parsing(t_minishell **shell)
+void    define_cmd(t_minishell **shell)
+{
+    t_node  *temp;
+
+    temp = (*shell)->token_list;
+    temp->cmd_type = COMMAND;
+    temp = temp->next;
+    while (temp)
+    {
+        if (temp->cmd_type == TOKEN_PIPE && temp->next)
+        {
+            temp->next->cmd_type = COMMAND;
+            temp = temp->next;
+        }
+        temp = temp->next;
+    }
+}
+
+int    parsing(t_minishell **shell)
 {
     t_node  *temp;
     t_cmd   *cmd;
     t_cmd   *cmd2;
-    int     i;
 
+    if (put_type(shell) == 1)
+        return (1);
+    define_cmd(shell);
+    prt_list(shell);
     init_cmd(&cmd);
-    i = 0;
+    if (!cmd)
+        return(1);
     temp = (*shell)->token_list;
     cmd2 = cmd;
+    fill_cmd(cmd2, temp);
+    (*shell)->cmd_list = &cmd;
+    // print(shell);
+    return(0);
+}
+
+void    fill_cmd(t_cmd  *cmd2, t_node *temp)
+{
+    int i;
+
+    i = 0;
     while (temp)
     {
-        if (temp->next && temp->cmd_type == TOKEN_REDIRECT_IN)
-            set_cmd(cmd2, temp->next->node, 0);
-        else if (temp->next && temp->cmd_type == TOKEN_REDIRECT_OUT)
-            set_cmd(cmd2, temp->next->node, 1);
-        else if (temp->next && temp->cmd_type == TOKEN_APPEND)
-            set_cmd(cmd2, temp->next->node, 1);
-        else if (temp->next && temp->cmd_type == TOKEN_HEREDOC)
-            set_cmd(cmd2, temp->next->node, 0);
+        if(temp->next && temp->cmd_type != TOKEN_PIPE && temp->cmd_type != TOKEN_ARG && temp->cmd_type != COMMAND)
+            set_cmd(cmd2, temp->next->node, temp->node, temp->cmd_type);
         else if (temp->cmd_type == TOKEN_PIPE && temp->next)
         {
             if (cmd2)
             {
                 init_cmd(&cmd2->next);
                 cmd2 = cmd2->next;
+                cmd2->pipe = ft_strdup("|");
+                if(!cmd2->pipe)
+                return ;
                 i = 0;
             }
         }
-        else if (temp->node)
+        else if (temp->node && (temp->cmd_type == TOKEN_ARG || temp->cmd_type == COMMAND))
         {
-            cmd2->args[i++] = ft_strdup(temp->node);
-            cmd2->args[i] = NULL;
+            cmd2->args[i] = ft_strdup(temp->node);
+            if(!cmd2->args[i])
+            return ;
+            cmd2->args[++i] = NULL;
         }
         temp = temp->next;
     }
-    (*shell)->cmd_list = &cmd;
-    print(shell);
 }
 
-void    put_type(t_minishell **shell)
+int    put_type(t_minishell **shell)
 {
     t_node  *temp;
 
     temp = (*shell)->token_list;
     temp = fix_redirection(temp);
+    if (!temp)
+        return (1);
     while (temp)
     {
         if (temp->next && (ft_strcmp(temp->node , "<") == 0))
+        {
             temp->cmd_type = TOKEN_REDIRECT_IN;
+            temp->next->cmd_type = FILEIN;
+            temp = temp->next;
+        }
         else if (temp->next && (ft_strcmp(temp->node , ">") == 0))
+        {
             temp->cmd_type = TOKEN_REDIRECT_OUT;
+            temp->next->cmd_type = FILEOUT;
+            temp = temp->next;
+        }
         else if (temp->next && (ft_strcmp(temp->node , ">>") == 0))
+        {
             temp->cmd_type = TOKEN_APPEND;
+            temp->next->cmd_type = FILEOUT;
+            temp = temp->next;
+        }
         else if (temp->next && (ft_strcmp(temp->node , "<<") == 0))
+        {
             temp->cmd_type = TOKEN_HEREDOC;
+            temp->next->cmd_type = FILEIN;
+            temp = temp->next;
+        }
         else if (ft_strcmp(temp->node , "|") == 0 && temp->next)
             temp->cmd_type = TOKEN_PIPE;
         else
-            temp->cmd_type = TOKEN_WORD;
+            temp->cmd_type = TOKEN_ARG;
         temp = temp->next;
     }
-    prt_list(shell);
-    parsing(shell);
+    return (0);
 }
 
-void    print(t_minishell **shell)
-{
-    t_cmd   *temp;
-    int i =0;
+// void    print(t_minishell **shell)
+// {
+//     t_cmd   *temp;
+//     int i =0;
     
-    temp = (*(*shell)->cmd_list);
-    while (temp)
-    {
-        i = 0;
-        while(temp->args[i])
-            printf("\nargs : %s\n", temp->args[i++]);
-        if(temp->file_in)
-            printf("file_in: %s\n", temp->file_in);
-        if (temp->file_out)
-            printf("file_out: %s\n", temp->file_out);
-        if(temp->next)
-            printf("next -> CMD \n\n");
-        temp = temp->next;
-    }
-    free(temp);
-}
+//     temp = (*(*shell)->cmd_list);
+//     while (temp)
+//     {
+//         i = 0;
+//         while(temp->args[i])
+//             printf("\nargs : %s\n", temp->args[i++]);
+//         if(temp->file_in)
+//             printf("file_in: %s\n", temp->file_in);
+//         if (temp->file_out)
+//             printf("file_out: %s\n", temp->file_out);
+//         if(temp->next)
+//             printf(" next -> CMD \n\n");
+//         temp = temp->next;
+//     }
+//     printf("\n **********cmd*********\n");
+//     t_node  *tmp = (*shell)->token_list;
+//     while (tmp)
+//     {
+//         if(tmp->cmd_type == COMMAND)
+//             printf("cmd : %s \n", tmp->node);
+//         tmp = tmp->next;
+//     }
+// }
 
 t_node  *fix_redirection(t_node *list)
 {
@@ -142,34 +179,31 @@ t_node  *fix_redirection(t_node *list)
     temp = list;
     while(temp)
     {
-        if (temp->next && ((ft_strcmp(temp->node , "<") == 0) && (ft_strcmp(temp->next->node , "<") == 0)))
+        if (temp->next && temp->next->next && ((ft_strcmp(temp->node , "<") == 0) && (ft_strcmp(temp->next->node , "<") == 0)))
         {
             to_free = temp->next;
             temp->next = temp->next->next;
             free_node(to_free);
             free(temp->node);
             temp->node = ft_strdup("<<");
+            if (!temp->node)
+                return (NULL);
             temp = temp->next;
         }
-        if (temp->next && ((ft_strcmp(temp->node , ">") == 0) && (ft_strcmp(temp->next->node , ">") == 0)))
+        if (temp->next && temp->next->next && ((ft_strcmp(temp->node , ">") == 0) && (ft_strcmp(temp->next->node , ">") == 0)))
         {
             to_free = temp->next;
             temp->next = temp->next->next;
             free_node(to_free);
             free(temp->node);
             temp->node = ft_strdup(">>");
+            if (!temp->node)
+                return (NULL);
             temp = temp->next;
-                
         }
         temp = temp->next;
     }
     return (list);
-}
-
-void free_node(t_node *to_free)
-{
-    free(to_free->node);
-    free(to_free);
 }
 
 void    prt_list(t_minishell **shell)
@@ -185,7 +219,7 @@ void    prt_list(t_minishell **shell)
             printf(" -> ");
         current = current->next;
     }
-    // printf(" -> NULL\n");
+    printf(" -> NULL\n");
     // current = (*shell)->token_list;
     // while (current != NULL)
     // {
@@ -195,19 +229,3 @@ void    prt_list(t_minishell **shell)
     //     free(temp);
     // }
 }
-
-// void    def_cmd(t_minishell **shell)
-// {
-//     t_cmd   *cmd;
-//     int     i;
-
-//     i = 0;
-//     cmd = (*(*shell)->cmd_list);
-//     while(cmd)
-//     {
-//         while (cmd->args[i])
-//         {
-//             if (ft_strcmp(cmd->args, "ls"));
-//         }
-//     }
-// }
