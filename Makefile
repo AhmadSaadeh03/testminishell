@@ -11,7 +11,7 @@ LIBFT_DIR = libft
 
 LIBFT_A = libft/libft.a
 
-NAME = Minishell
+NAME = minishell
 
 
 
