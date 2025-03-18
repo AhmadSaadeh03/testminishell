@@ -159,6 +159,12 @@ int    put_type(t_minishell **shell)
              printf("file_out: %s\n", temp->file_out);
          if(temp->next)
              printf(" next -> CMD \n\n");
+         if (temp->append && temp->redirect)
+             printf("append : %s\n", temp->redirect);
+         else if (!temp->append && temp->rediect)
+             printf("here-document  : %s \n", temp->redirect);
+         if (temp->pipe)
+            printf("pipe : %s\n", temp->pipe);
          temp = temp->next;
      }
      printf("\n **********cmd*********\n");
