@@ -63,7 +63,7 @@ int    parsing(t_minishell **shell)
     cmd2 = cmd;
     fill_cmd(cmd2, temp);
     (*shell)->cmd_list = &cmd;
-    // print(shell);
+    print(shell);
     return(0);
 }
 
@@ -142,34 +142,34 @@ int    put_type(t_minishell **shell)
     return (0);
 }
 
-// void    print(t_minishell **shell)
-// {
-//     t_cmd   *temp;
-//     int i =0;
+ void    print(t_minishell **shell)
+ {
+     t_cmd   *temp;
+     int i =0;
     
-//     temp = (*(*shell)->cmd_list);
-//     while (temp)
-//     {
-//         i = 0;
-//         while(temp->args[i])
-//             printf("\nargs : %s\n", temp->args[i++]);
-//         if(temp->file_in)
-//             printf("file_in: %s\n", temp->file_in);
-//         if (temp->file_out)
-//             printf("file_out: %s\n", temp->file_out);
-//         if(temp->next)
-//             printf(" next -> CMD \n\n");
-//         temp = temp->next;
-//     }
-//     printf("\n **********cmd*********\n");
-//     t_node  *tmp = (*shell)->token_list;
-//     while (tmp)
-//     {
-//         if(tmp->cmd_type == COMMAND)
-//             printf("cmd : %s \n", tmp->node);
-//         tmp = tmp->next;
-//     }
-// }
+     temp = (*(*shell)->cmd_list);
+     while (temp)
+     {
+         i = 0;
+         while(temp->args[i])
+             printf("\nargs : %s\n", temp->args[i++]);
+         if(temp->file_in)
+             printf("file_in: %s\n", temp->file_in);
+         if (temp->file_out)
+             printf("file_out: %s\n", temp->file_out);
+         if(temp->next)
+             printf(" next -> CMD \n\n");
+         temp = temp->next;
+     }
+     printf("\n **********cmd*********\n");
+     t_node  *tmp = (*shell)->token_list;
+     while (tmp)
+     {
+         if(tmp->cmd_type == COMMAND)
+             printf("cmd : %s \n", tmp->node);
+         tmp = tmp->next;
+     }
+ }
 
 t_node  *fix_redirection(t_node *list)
 {
