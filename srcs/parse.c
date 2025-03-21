@@ -146,7 +146,7 @@ int    put_type(t_minishell **shell)
  {
      t_cmd   *temp;
      int i =0;
-    
+
      temp = (*(*shell)->cmd_list);
      while (temp)
      {
@@ -159,9 +159,9 @@ int    put_type(t_minishell **shell)
              printf("file_out: %s\n", temp->file_out);
          if(temp->next)
              printf(" next -> CMD \n\n");
-         if (temp->append && temp->redirect)
+         if (temp->append && ft_strcmp(temp->redirect ,">>") == 0)
              printf("append : %s\n", temp->redirect);
-         else if (!temp->append && temp->rediect)
+         else if (!temp->append && ft_strcmp(temp->redirect ,"<<") == 0)
              printf("here-document  : %s \n", temp->redirect);
          if (temp->pipe)
             printf("pipe : %s\n", temp->pipe);
