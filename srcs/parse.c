@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/22 14:01:59 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:15:10 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,8 @@ void    print(t_minishell **shell)
 //             printf("pipe : %s\n", temp->pipe);
 //         temp = temp->next;
 //     }
-     printf("\n **********cmd*********\n");
-     t_node  *tmp = (*shell)->token_list;
+    printf("\n **********cmd*********\n");
+    t_node  *tmp = (*shell)->token_list;
     while (tmp)
     {
         if(tmp->cmd_type == COMMAND)
