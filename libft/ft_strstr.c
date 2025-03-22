@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 11:51:26 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/22 12:29:54 by fghanem          ###   ########.fr       */
+/*   Created: 2025/03/22 12:22:16 by fghanem           #+#    #+#             */
+/*   Updated: 2025/03/22 12:23:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strcmp(char *s1, char *s2)
+char    *ft_strstr(const char *big, const char *little)
 {
-	int	i;
+    char *b;
+    char *l;
 
-	i = 0;
-	while ((s1[i] == s2[i]) && (s1[i] != '\0'))
-		i++;
-	return (s1[i] - s2[i]);
+    b = (char *)big;
+    l = (char *)little;
+    if (!(*little))
+    {
+        return ((char *)(b));
+    }
+    while (*b)
+    {
+        if (strncmp(b, l, strlen(l)) == 0)
+        {
+            return ((char *)b);
+        }
+        b++;
+    }
+    return (NULL);
 }

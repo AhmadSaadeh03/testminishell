@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/15 15:51:10 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:03:33 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_minishell *init_shell(t_minishell *shell)
         return (NULL);
     }
     shell->token_list = NULL;
-    shell->cmd_list = NULL;
+    // shell->cmd_list = NULL;
     shell->token_space = NULL;
     shell->name = NULL;
     return(shell);
@@ -72,29 +72,30 @@ t_node  *create_node_list(char **tokens)
     return (head);
 }
 
-void    init_cmd(t_cmd **cmd)
-{
-    t_cmd   *temp;
+// void    init_cmd(t_cmd **cmd)
+// {
+//     t_cmd   *temp;
 
-    temp = NULL;
-    temp = malloc(sizeof(t_cmd));
-    if (!temp)
-    {
-        perror("failed to allocate structer command");
-        // free(temp);
-        return ;
-    }
-    temp->file_in = NULL;
-    temp->file_out = NULL;
-    temp->pipe = NULL;
-    temp->args = NULL;
-    temp->args = (char **)malloc(sizeof(char *) * ARGS_MAX);
-    if (!temp->args)
-    {
-        perror("failed to allocate arguments");
-        free_cmd_list(temp);
-        return ;
-    }
-    temp->next = NULL;
-    (*cmd) = temp;
-}
+//     temp = NULL;
+//     temp = malloc(sizeof(t_cmd));
+//     if (!temp)
+//     {
+//         perror("failed to allocate structer command");
+//         // free(temp);
+//         return ;
+//     }
+//     temp->append = 0;
+//     temp->file_in = NULL;
+//     temp->file_out = NULL;
+//     temp->pipe = NULL;
+//     temp->args = NULL;
+//     temp->args = (char **)malloc(sizeof(char *) * ARGS_MAX);
+//     if (!temp->args)
+//     {
+//         perror("failed to allocate arguments");
+//         free_cmd_list(temp);
+//         return ;
+//     }
+//     temp->next = NULL;
+//     (*cmd) = temp;
+// }

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/17 12:47:40 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/22 13:30:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,5 +187,6 @@ void process_node_list(t_minishell *shell)
         i++;
     }
     free(shell->token_space);
-    parsing(&shell);
+    if(parsing(&shell) == 1)
+        return ;
 }

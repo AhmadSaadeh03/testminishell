@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:19:57 by asaadeh           #+#    #+#             */
-/*   Updated: 2024/12/14 17:13:52 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/03/22 12:31:57 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,6 @@ void	ft_putnbr_fd(int n, int fd);
 char	**ft_split(char const *s, char c);
 size_t	i_len(long n);
 char	**ft_free(char **ptr);
+char    *ft_strstr(const char *big, const char *little);
+char    *ft_strncpy(char *dst, const char *src, size_t n);
 #endif
