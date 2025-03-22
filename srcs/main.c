@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/17 12:43:26 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:07:48 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-void ahmad(t_cmd **cmd)
-{
-    t_cmd *temp;
+// void ahmad(t_cmd **cmd)
+// {
+//     t_cmd *temp;
 
-    // Allocate memory for the t_cmd structure
-    temp = malloc(sizeof(t_cmd));
-    if (!temp)
-    {
-        perror("Memory allocation failed for command structure");
-        return;
-    }
+//     // Allocate memory for the t_cmd structure
+//     temp = malloc(sizeof(t_cmd));
+//     if (!temp)
+//     {
+//         perror("Memory allocation failed for command structure");
+//         return;
+//     }
 
-    // Initialize fields to default values
-    temp->args = NULL;       // No arguments initially
-    temp->file_in = NULL;    // No input file initially
-    temp->file_out = NULL;   // No output file initially
-    temp->redirect = NULL;   // No redirection initially
-    temp->append = 0;        // Append flag initially set to 0
-    temp->pipe = NULL;       // No pipe initially
-    temp->next = NULL;       // No next command initially
+//     // Initialize fields to default values
+//     temp->args = NULL;       // No arguments initially
+//     temp->file_in = NULL;    // No input file initially
+//     temp->file_out = NULL;   // No output file initially
+//     temp->redirect = NULL;   // No redirection initially
+//     temp->append = 0;        // Append flag initially set to 0
+//     temp->pipe = NULL;       // No pipe initially
+//     temp->next = NULL;       // No next command initially
 
-    *cmd = temp;  // Set the caller's pointer to the newly initialized structure
-}
+//     *cmd = temp;  // Set the caller's pointer to the newly initialized structure
+// }
 
 int main(void)
 {
