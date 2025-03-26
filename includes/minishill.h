@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishill.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/26 13:50:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:41:57 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ t_env   *create_env(char *env_var);
 t_env   *copy_env_to_list();
 void    my_setenv(t_env **env_list, char *name, char *value, int overwrite);
 char    *my_getenv(t_env *env_list, char *name);
-
+int handle_operation(t_minishell *shell);
 void print_env_list(t_env *env_list);
 #endif

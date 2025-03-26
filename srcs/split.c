@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/22 13:30:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:43:01 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int split_operation(t_minishell *shell, char operator)
     {
         if (temp[i] == operator)
         {
-            if ((i == 0 || i == len - 1) && (operator == '|')) 
-            {
-                printf("syntax error near unexpected token\n");
-                free(temp);
-                return 1;
-            }
+            // if ((i == 0 || i == len - 1) && (operator == '|')) 
+            // {
+            //     printf("syntax error near unexpected token\n");
+            //     //free(temp);
+            //     return 1;
+            // }
             if (i > 0 && temp[i - 1] != ' ') 
             {
                 new_len = len + 1; // Space before the operator
@@ -134,17 +134,17 @@ int split(t_minishell *shell)
     {
         if (shell->name[i] == 39 || shell->name[i] == '"')
         {
-            // printf("\n beff : %d", i);
             if (closed_quotes(shell, shell->name[i]) == 1)
             {
                 printf("Error: Unclosed quotes\n");
                 return(1);
             }
-            i = (handle_quote(shell,shell->name[i]) + i + 1);
-            // printf("\n after : %d\n", i);
+        i = (handle_quote(shell,shell->name[i]) + i + 1);
         }
         if (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>')
         {
+            if (handle_operation(shell) == 1)
+                return 1;
             if (split_operation(shell, shell->name[i]) == 1)
                 return 1;
         }
@@ -180,6 +180,25 @@ void process_node_list(t_minishell *shell)
     //         free(temp);
     //     }
     // }
+    if (shell->token_list && shell->token_list->next == NULL && shell->token_list->node && 
+    (shell->token_list->node[0] == '|' || shell->token_list->node[0] == '<' || shell->token_list->node[0] == '>'))
+    {
+        printf("minishell: syntax error near unexpected token `|'\n");
+       //free_node_list(shell->token_list);  // Free the token list before exiting
+        return;
+    }
+    t_node *temp = shell->token_list;
+    while (temp->next)
+    {
+        temp = temp->next;
+    }
+    if ((ft_strcmp(temp->node,">") == 0 || ft_strcmp(temp->node,"<") == 0|| ft_strcmp(temp->node,"|") == 0 )
+    && temp->next == NULL)
+    {
+        printf("syntax error near unexpected token\n");
+        return;
+    }
+
     int i = 0;
     while (shell->token_space[i])
     {
