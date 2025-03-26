@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:19:57 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/22 12:31:57 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/26 12:05:29 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,6 @@ size_t	i_len(long n);
 char	**ft_free(char **ptr);
 char    *ft_strstr(const char *big, const char *little);
 char    *ft_strncpy(char *dst, const char *src, size_t n);
+char    *ft_strcat(char *dest, const char *src);
+char    *ft_strcpy(char *dest, const char *src);
 #endif

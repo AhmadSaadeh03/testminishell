@@ -6,18 +6,22 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/03/22 15:26:08 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:50:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "../libft/libft.h"
-#include <stdio.h>
-#include <string.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-#define ARGS_MAX 100
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../libft/libft.h"
+# include <stdio.h>
+# include <string.h>
+
+
+/// global var
 
 typedef enum s_type
 {
@@ -46,6 +50,13 @@ typedef struct s_minishell
     t_node *token_list;
 }   t_minishell;
 
+typedef struct  s_env
+{
+    char    *env_name;
+    char    *value;
+    struct  s_env   *next;
+}   t_env;
+
 int split_operation(t_minishell *shell, char operator);
 t_node *create_node_list(char **tokens);
 int split(t_minishell *shell);
@@ -71,3 +82,14 @@ void    free_tokens(t_node *list);
 int	handle_quote(t_minishell *shell, char operator);
 
 void    expand(t_minishell *shell);
+
+char    *handle_env(char *str, t_env *env_list);
+char    *ft_trim_quotes(char *s1);
+char    *ft_strjoin_free(char *s1, char *s2);
+t_env   *create_env(char *env_var);
+t_env   *copy_env_to_list();
+void    my_setenv(t_env **env_list, char *name, char *value, int overwrite);
+char    *my_getenv(t_env *env_list, char *name);
+
+void print_env_list(t_env *env_list);
+#endif
