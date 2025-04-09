@@ -6,12 +6,12 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/17 12:44:02 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/09 11:55:25 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
-        
+
 int closed_quotes(t_minishell *shell, char qoute) // this function to check that the qoutes are closed even number
 {
     int i;
@@ -29,6 +29,7 @@ int closed_quotes(t_minishell *shell, char qoute) // this function to check that
         return(0);
     return(1);
 }
+
 int	handle_quote(t_minishell *shell, char operator)
 {
 	int	i;

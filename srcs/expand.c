@@ -6,31 +6,28 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/26 14:27:16 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/09 13:35:43 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
 
-void    expand(t_minishell *shell)
+void    expand(t_minishell *shell, t_env *env_list)
 {
     t_node  *temp;
     char    *new;
-    t_env   *env_list;
     int     i;
 
     i = 0;
-    env_list = copy_env_to_list();
-    // print_env_list(env_list);
     temp = shell->token_list;
     while (temp)
     {
-        if (temp->cmd_type == COMMAND && ft_strcmp(temp->node, "export") == 0 && temp->next)
-        {
-            temp = temp->next;
+        // if (temp->cmd_type == COMMAND && ft_strcmp(temp->node, "export") == 0 && temp->next)
+        // {
+        //     temp = temp->next;
             
-            // my_setenv(env_list, temp->)
-        }
+        //     // my_setenv(env_list, temp->)
+        // }
         if (temp->cmd_type == TOKEN_ARG)
         {
             if (temp->node[0] == '"')
@@ -67,109 +64,45 @@ void    expand(t_minishell *shell)
     }
 }
 
-char    *handle_env(char *str, t_env *env_list)
+char    *my_getenv(t_env *env_list, char *name)
 {
-    char    *new;
-    char    *start;
-    char    *sign;
-    int     len_bef;
-    char    *beff;
-    char    *var_start;
-    char    *var_end;
-    int      var_len;
-    char    *var_name;
-    char    *var_val;
-
-    new = ft_strdup("");
-    start = str;
-    sign = ft_strchr(start, '$');
-    while(sign != NULL)
-    {
-        len_bef = sign - start;
-        beff = ft_substr(start, 0, len_bef);
-        new = ft_strjoin_free(new, beff);
-        var_start = sign + 1;
-        var_end = var_start;
-        while(*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-            var_end++;
-        var_len = var_end - var_start;
-        var_name = ft_substr(var_start, 0, var_len);
-        var_val = my_getenv(env_list, var_name);
-        free(var_name);
-        if(var_val)
-            new = ft_strjoin_free(new, ft_strdup(var_val));
-        start = var_end;
-        sign = ft_strchr(start, '$');
-    }
-    new = ft_strjoin_free(new, ft_strdup(start));
-    return (new);
-}
-
-char    *ft_strjoin_free(char *s1, char *s2)
-{
-    size_t  len1;
-    size_t  len2;
-    char    *joined;
-
-    len1 = ft_strlen(s1);
-    len2 = ft_strlen(s2);
-    joined = malloc(len1 + len2 + 1);
-    if (!joined)
-        return(NULL);
-    ft_strcpy(joined, s1);
-    ft_strcat(joined, s2);
-    free(s1);
-    free(s2);
-    return(joined);
-}
-
-t_env   *copy_env_to_list()
-{
-    extern  char    **environ;
-    t_env   *head;
-    t_env   *tail;
-    int     i;
-    t_env   *new_node;  
-
-    head = NULL;
-    tail = NULL;
-    i = 0;
-    while(environ[i])
-    {
-        new_node = create_env(environ[i]);
-        if (!new_node)
+        t_env   *temp;
+        temp = env_list;
+        while (temp)
         {
-            i++;
-            continue;
+                if (ft_strcmp(temp->env_name, name) == 0)
+                {
+                        return (temp->value);
+                }
+                temp = temp->next;
         }
-        if (!head)
-            head = new_node;
-        else
-            tail->next = new_node;
-        tail = new_node;
-        i++;
-    }
-    return (head);
+        return (NULL);
 }
 
-t_env   *create_env(char *env_var)
+void    my_setenv(t_env **env_list, char *name, char *value, int overwrite)
 {
-    t_env   *node;
-    char    *sign_equal;
+        t_env   *temp;
+        t_env   *new_node;
 
-    node = malloc(sizeof(t_env));
-    if (!node)
-        return (NULL);
-    sign_equal = ft_strchr(env_var, '=');
-    if (!sign_equal)
-    {
-        free(node);
-        return (NULL);
-    }
-    *sign_equal = '\0';
-    node->env_name = ft_strdup(env_var);
-    node->value = ft_strdup(sign_equal + 1);
-    *sign_equal = '=';
-    node->next = NULL;
-    return (node);
+        temp = *env_list;
+        while (temp)
+        {
+                if (ft_strcmp(temp->env_name, name) == 0)
+                {
+                        if (overwrite)
+                        {
+                                free(temp->value);
+                                temp->value = ft_strdup(value);
+                        }
+                        return ;
+                }
+                temp = temp->next;
+        }
+        new_node = malloc(sizeof(t_env));
+        if (!new_node)
+                return ;
+        new_node->env_name = ft_strdup(name);
+        new_node->value = ft_strdup(value);
+        new_node->next = *env_list;
+        *env_list = new_node;
 }

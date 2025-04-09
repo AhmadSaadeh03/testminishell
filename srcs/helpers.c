@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:42:51 by fghanem           #+#    #+#             */
-/*   Updated: 2025/03/26 14:08:10 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/09 13:32:51 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,52 +31,87 @@ char    *ft_trim_quotes(char *s1)
         return (ft_substr(s1, start, end - start + 1));
 }
 
-char    *my_getenv(t_env *env_list, char *name)
+void restore_spaces(char **tokens)
 {
-        t_env   *temp;
-        temp = env_list;
-        while (temp)
+        int i = 0, j;
+
+        while (tokens[i])
         {
-                if (ft_strcmp(temp->env_name, name) == 0)
+                j = 0;
+                while (tokens[i][j])
                 {
-                        return (temp->value);
+                        if (tokens[i][j] == '\a')
+                                tokens[i][j] = ' ';
+                        j++;
                 }
-                temp = temp->next;
+                i++;
         }
+}
+
+char *replace_spaces_inside_quotes(const char *input)
+{
+        int i;
+        int j;
+        int inside_double;
+        int inside_single;
+        char *temp;
+
+        i = 0;
+        j = 0;
+        inside_double = 0;
+        inside_single = 0;
+        temp = malloc(ft_strlen(input) + 1);
+        if (!temp)
         return (NULL);
-}
-
-void    my_setenv(t_env **env_list, char *name, char *value, int overwrite)
-{
-        t_env   *temp;
-        t_env   *new_node;
-
-        temp = *env_list;
-        while (temp)
+        while (input[i])
         {
-                if (ft_strcmp(temp->env_name, name) == 0)
-                {
-                        if (overwrite)
-                        {
-                                free(temp->value);
-                                temp->value = ft_strdup(value);
-                        }
-                        return ;
-                }
-                temp = temp->next;
+                if (input[i] == '"' && !inside_double && !inside_single)
+                        inside_double = 1;
+                else if (input[i] == '"' && inside_double)
+                        inside_double = 0;
+                else if (input[i] == '\'' && !inside_single && !inside_double)
+                        inside_single = 1;
+                else if (input[i] == '\'' && inside_single)
+                        inside_single = 0;
+                if (input[i] == ' ' && (inside_single || inside_double))
+                        temp[j++] = '\a';
+                else
+                        temp[j++] = input[i];
+                i++;
         }
-        new_node = malloc(sizeof(t_env));
-        if (!new_node)
-                return ;
-        new_node->env_name = ft_strdup(name);
-        new_node->value = ft_strdup(value);
-        new_node->next = *env_list;
-        *env_list = new_node;
+        temp[j] = '\0';
+        return (temp);
 }
 
-void print_env_list(t_env *env_list) {
-        while (env_list) {
-                printf("%s=%s\n", env_list->env_name, env_list->value);
-                env_list = env_list->next;
-        }
+char *space_before_op(char *str, int i, int *len)
+{
+        int new_len;
+        char *new_str;
+
+        new_len = *len + 1;
+        new_str = malloc(new_len + 1);
+        if (!new_str)
+                return (NULL);
+        ft_memcpy(new_str, str, i);
+        new_str[i] = ' ';
+        ft_memcpy(new_str + i + 1, str + i, *len - i + 1);
+        free(str);
+        *len = new_len;
+        return (new_str);
+}
+
+char *space_after_op(char *str, int i, int *len)
+{
+        int new_len;
+
+        new_len = *len + 1;
+        char *new_str = malloc(new_len + 1);
+        if (!new_str)
+                return (NULL);
+        ft_memcpy(new_str, str, i + 1);
+        new_str[i + 1] = ' ';
+        ft_memcpy(new_str + i + 2, str + i + 1, *len - i);
+        free(str);
+        *len = new_len;
+        return (new_str);
 }
