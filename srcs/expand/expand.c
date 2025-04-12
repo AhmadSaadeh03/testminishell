@@ -3,63 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/09 13:35:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:34:25 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "../../includes/minishill.h"
 
-void    expand(t_minishell *shell, t_env *env_list)
+void expand(t_minishell *shell,t_env *env_list)
 {
-    t_node  *temp;
-    char    *new;
-    int     i;
+    t_node *temp;
+    char *new;
+    //t_env *env_list;
 
-    i = 0;
+    //env_list = copy_env_to_list();
     temp = shell->token_list;
+
     while (temp)
     {
-        // if (temp->cmd_type == COMMAND && ft_strcmp(temp->node, "export") == 0 && temp->next)
-        // {
-        //     temp = temp->next;
-            
-        //     // my_setenv(env_list, temp->)
-        // }
+        if (temp->cmd_type == COMMAND && ft_strcmp(temp->node, "export") == 0 && temp->next)
+        {
+               // new = handle_export(temp->node,&env_list);
+                temp = temp->next;
+            // my_setenv(env_list, temp->)
+        }
+
         if (temp->cmd_type == TOKEN_ARG)
         {
-            if (temp->node[0] == '"')
-            {
-                new = ft_trim_quotes(temp->node);
-                if(!new)
-                    return ;
-                i = 1;
-                free(temp->node);
-                temp->node = handle_env(new, env_list);
-                if(temp->node)
-                    printf("%s\n", temp->node);
-            }
-            else if (temp->node[0] == 39)
-            {
-                new = ft_trim_quotes(temp->node);
-                if(!new)
-                    return ;
-                free(temp->node);
-                temp->node = ft_strdup(new);
-                if(temp->node)
-                    printf("%s\n", temp->node);
-            }
-            else
-            {
-                new = ft_strdup(temp->node);
-                free(temp->node);
-                temp->node = handle_env(new, env_list);
-                if(temp->node)
-                    printf("%s\n", temp->node);
-            }
+            // Step 1: Handle environment variables
+            new = handle_env(temp->node, env_list);
+            if (!new)
+                return;
+
+            // Step 2: Remove quotes
+            char *final = ft_trim_quotes(new);
+            free(new); // Free the intermediate string
+            if (!final)
+                return;
+                
+            // Update the node with the final processed string
+            free(temp->node);
+            temp->node = final;
+            if (temp->node)
+                printf("%s\n", temp->node);
         }
+
         temp = temp->next;
     }
 }

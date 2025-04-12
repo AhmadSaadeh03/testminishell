@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:16:34 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/09 11:54:04 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/10 18:37:27 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "../../includes/minishill.h"
 
 int handle_operation(t_minishell *shell)
 {

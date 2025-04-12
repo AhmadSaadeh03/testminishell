@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/09 11:57:27 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/10 18:36:57 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "../../includes/minishill.h"
 
 int split_space(t_minishell *shell)
 {

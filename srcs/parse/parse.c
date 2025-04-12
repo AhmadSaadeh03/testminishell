@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/09 11:24:09 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/10 18:37:54 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "../../includes/minishill.h"
 
 void    define_cmd(t_minishell **shell)
 {

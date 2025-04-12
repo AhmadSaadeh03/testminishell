@@ -3,32 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:42:51 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/09 13:32:51 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:39:49 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishill.h"
 
-char    *ft_trim_quotes(char *s1)
+char *ft_trim_quotes(char *str)
 {
-        int             start;
-        int             end;
+    int i, j;
+    char *new_str;
+    int in_double_quotes = 0;
+    int in_single_quotes = 0;
 
-        if (!s1)
-                return (NULL);
-        start = 0;
-        end = ft_strlen(s1) - 1;
-        if (end < 0)
-                return (ft_strdup(""));
-        if ((s1[start] == '"' && s1[end] == '"') || (s1[start] == '\'' && s1[end] == '\''))
+    if (!str)
+        return (NULL);
+
+    new_str = malloc(ft_strlen(str) + 1); // Allocate memory for the new string
+    if (!new_str)
+        return (NULL);
+
+    i = 0;
+    j = 0;
+
+    // Check for leading single or double quotes
+    if (str[i] == '"' || str[i] == '\'')
+    {
+        char quote_type = str[i]; // Store the type of the outer quote (single or double)
+        i++; // Skip the first quote
+        while (str[i]) // Process the rest of the string
         {
-                start++;
-                end--;
+            if (str[i] == quote_type) // If we encounter the closing quote, stop
+                break;
+            new_str[j++] = str[i]; // Copy the character as is
+            i++;
         }
-        return (ft_substr(s1, start, end - start + 1));
+        i++; // Skip the closing quote
+    }
+
+    //Process the string character by character for any quotes inside
+    while (str[i])
+    {
+        if (str[i] == '"') // Handle double quotes inside
+        {
+            if (!in_single_quotes) // Toggle only if not inside single quotes
+                in_double_quotes = !in_double_quotes;
+            new_str[j++] = str[i]; // Preserve the double quote
+        }
+        else if (str[i] == '\'') // Handle single quotes inside
+        {
+            if (!in_double_quotes) // Toggle only if not inside double quotes
+                in_single_quotes = !in_single_quotes;
+            new_str[j++] = str[i]; // Preserve the single quote
+        }
+        else // Copy all other characters
+        {
+            new_str[j++] = str[i];
+        }
+        i++;
+    }
+
+    new_str[j] = '\0'; // Null-terminate the new string
+    return (new_str);
 }
 
 void restore_spaces(char **tokens)

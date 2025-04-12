@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishill.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/09 13:36:09 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:41:35 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@
 # include "../libft/libft.h"
 # include <stdio.h>
 # include <string.h>
-
-
-/// global var
 
 typedef enum s_type
 {
@@ -105,4 +102,6 @@ int has_invalid_repeated_operators(char *str);
 // void print_env_list(t_env *env_list);
 void    prt_list(t_minishell **shell);
 void    print(t_minishell **shell);
+
+char *handle_export(char *str, t_env **env_list);
 #endif

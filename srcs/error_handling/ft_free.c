@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/06 16:25:06 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/10 18:37:23 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishill.h"
+#include "../../includes/minishill.h"
 
 void free_node(t_node *to_free)
 {
