@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/12 13:34:25 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:13:15 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ void expand(t_minishell *shell,t_env *env_list)
 
     while (temp)
     {
-        if (temp->cmd_type == COMMAND && ft_strcmp(temp->node, "export") == 0 && temp->next)
+        if(ft_strcmp(temp->node, "export") == 0 && temp->next) 
         {
-               // new = handle_export(temp->node,&env_list);
                 temp = temp->next;
-            // my_setenv(env_list, temp->)
+                handle_export(temp->node ,&env_list);
         }
-
         if (temp->cmd_type == TOKEN_ARG)
         {
             // Step 1: Handle environment variables
@@ -49,9 +47,10 @@ void expand(t_minishell *shell,t_env *env_list)
             if (temp->node)
                 printf("%s\n", temp->node);
         }
-
         temp = temp->next;
+
     }
+    print_env_list(&env_list);
 }
 
 char    *my_getenv(t_env *env_list, char *name)
@@ -69,7 +68,7 @@ char    *my_getenv(t_env *env_list, char *name)
         return (NULL);
 }
 
-void    my_setenv(t_env **env_list, char *name, char *value, int overwrite)
+void    my_setenv(t_env **env_list, char *name, char *value)
 {
         t_env   *temp;
         t_env   *new_node;
@@ -79,12 +78,8 @@ void    my_setenv(t_env **env_list, char *name, char *value, int overwrite)
         {
                 if (ft_strcmp(temp->env_name, name) == 0)
                 {
-                        if (overwrite)
-                        {
-                                free(temp->value);
-                                temp->value = ft_strdup(value);
-                        }
-                        return ;
+                        free(temp->value);
+                        temp->value = ft_strdup(value);
                 }
                 temp = temp->next;
         }

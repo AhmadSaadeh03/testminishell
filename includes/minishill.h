@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishill.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/10 19:41:35 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/12 17:02:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,22 @@
 # include "../libft/libft.h"
 # include <stdio.h>
 # include <string.h>
+# include <limits.h>
+# include <fcntl.h>
+# include <errno.h>
+
+/// global var
+
+typedef struct s_cmd {
+    char    **cmd_line;         // Command arguments
+    char    *file_in;       // Input file for redirection
+    char *file_out;      // Output file for redirection
+    int append;          // Flag for append mode (>>)
+    char *redirect;      // Type of redirection (e.g., "<", ">", ">>", "<<")
+    struct s_cmd *next;  // Pointer to the next command (for pipes)
+    char *pipe;          // Indicates if this command is part of a pipeline
+    char    *limiter;
+} t_cmd;
 
 typedef enum s_type
 {
@@ -44,6 +60,7 @@ typedef struct s_minishell
 {
     char *name;
     char **token_space;
+    t_cmd   **cmd_list;
     t_node *token_list;
 }   t_minishell;
 
@@ -91,17 +108,31 @@ char    *ft_trim_quotes(char *s1);
 char    *ft_strjoin_free(char *s1, char *s2);
 t_env   *create_env(char *env_var);
 t_env   *copy_env_to_list(char **envp);
-void    my_setenv(t_env **env_list, char *name, char *value, int overwrite);
+void    my_setenv(t_env **env_list, char *name, char *value);
 char    *my_getenv(t_env *env_list, char *name);
 int handle_operation(t_minishell *shell);
 int handle_quotes_and_operators(t_minishell *shell);
 int has_operator_at_edges(char *str, int len);
 int has_invalid_repeated_operators(char *str);
 
-/// print functions 
-// void print_env_list(t_env *env_list);
+// void execute_commands(t_minishell *shell);
+// void execute_redirections(t_cmd *cmd);
+void fill_cmd(t_cmd *cmd, t_node *temp);
+void init_cmd(t_cmd **cmd);
+void    cmd_filling(t_minishell **shell);
+void    set_cmd(t_cmd *cmd, char *file_name, char *var, t_type type);
+void    handle_redirection(t_minishell **shell);
+void    here_doc(t_cmd *cmd);
+void    redirect_out(t_cmd *cmd);
+void    redirect_in(t_cmd *cmd);
+void    handle_export(char *str, t_env **env_list);
+// int is_builtin(char *cmd);
+// void execute_builtin(t_cmd *cmd);
+// void builtin_echo(char **args);
+/// print functions
+void print_env_list(t_env **env_list);
 void    prt_list(t_minishell **shell);
 void    print(t_minishell **shell);
 
-char *handle_export(char *str, t_env **env_list);
+// void    print_tlist(t_minishell **shell);
 #endif

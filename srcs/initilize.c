@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/09 13:29:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:40:54 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,30 @@ t_minishell *init_shell(t_minishell *shell)
     shell->token_space = NULL;
     shell->name = NULL;
     return (shell);
+}
+
+void init_cmd(t_cmd **cmd)
+{
+    *cmd = malloc(sizeof(t_cmd));
+    if (!*cmd)
+    {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    (*cmd)->cmd_line = malloc(100 * sizeof(char *));
+    if (!(*cmd)->cmd_line)
+    {
+        free(*cmd);
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    (*cmd)->cmd_line[0] = NULL;
+    (*cmd)->file_in = NULL;
+    (*cmd)->file_out = NULL;
+    (*cmd)->append = 0;
+    (*cmd)->next = NULL;
+    (*cmd)->pipe = NULL;
+    (*cmd)->limiter = NULL;
 }
 
 t_node *create_node_list(char **tokens)

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/09 13:37:28 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/12 15:55:19 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int main(int arc, char **arv, char **envp)
         add_history(shell->name);
         if (split(shell) == 1)
             free_and_exit(shell);
+        prt_list(&shell);
         expand(shell, env_list);
+        cmd_filling(&shell);
+        print(&shell);
         free(shell->name);
     }
     free_and_exit(shell);

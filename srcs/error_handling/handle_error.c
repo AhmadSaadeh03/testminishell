@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:16:34 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/10 18:37:27 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:34:04 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int handle_operation(t_minishell *shell)
 
 int has_operator_at_edges(char *str, int len)
 {
-    if ((str[0] == '|' || str[0] == '>' || str[0] == '<') ||
-        (str[len - 1] == '|' || str[len - 1] == '>' || str[len - 1] == '<'))
+    if ((str[0] == '|') || (str[len - 1] == '|' || str[len - 1] == '>' || str[len - 1] == '<'))
     {
         printf("minishell: syntax error near unexpected token `newline'\n");
         return (1);

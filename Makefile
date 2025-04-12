@@ -2,8 +2,8 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS =  srcs/main.c srcs/tokeniz/split.c srcs/error_handling/checks.c srcs/initilize.c srcs/parse/parse.c srcs/error_handling/ft_free.c srcs/expand/expand.c \
-	srcs/helpers.c srcs/error_handling/handle_error.c srcs/expand/handle_env.c 
+SRCS =  srcs/main.c srcs/tokeniz/split.c srcs/error_handling/checks.c srcs/initilize.c srcs/parse/parse.c srcs/parse/fill_cmd.c srcs/error_handling/ft_free.c srcs/expand/expand.c \
+	srcs/helpers.c srcs/error_handling/handle_error.c srcs/expand/handle_env.c srcs/parse/handle_redirction.c srcs/expand/handle_export.c
 OBJ = $(SRCS:.c=.o)
 
 LIBFT_DIR = libft
