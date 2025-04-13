@@ -3,30 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/10 18:37:20 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/13 12:49:55 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishill.h"
-int closed_quotes(t_minishell *shell, char qoute) // this function to check that the qoutes are closed even number
-{
-    int i;
-    int c;
+#include "../../includes/minishell.h"
 
-    i = 0;
-    c = 0;
-    while (shell->name[i])
-    {
-        if (shell->name[i] == qoute)
-            c++;
-        i++;
-    }
-    if(c % 2 == 0)
-        return(0);
-    return(1);
+int	closed_quotes(t_minishell *shell, char qoute)
+	// this function to check that the qoutes are closed even number
+{
+	int i;
+	int c;
+
+	i = 0;
+	c = 0;
+	while (shell->name[i])
+	{
+		if (shell->name[i] == qoute)
+			c++;
+		i++;
+	}
+	if (c % 2 == 0)
+		return (0);
+	return (1);
 }
 
 int	handle_quote(t_minishell *shell, char operator)
@@ -40,9 +42,9 @@ int	handle_quote(t_minishell *shell, char operator)
 	inside_quotes = 0;
 	while (shell->name[i])
 	{
-		if (shell->name[i] == operator && !inside_quotes)
+		if (shell->name[i] == operator&& !inside_quotes)
 			inside_quotes = 1;
-		else if (shell->name[i] == operator && inside_quotes)
+		else if (shell->name[i] == operator&& inside_quotes)
 		{
 			inside_quotes = 0;
 		}
