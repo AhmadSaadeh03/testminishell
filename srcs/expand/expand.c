@@ -6,13 +6,13 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 13:20:55 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:42:03 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	expand(t_minishell *shell, t_env *env_list)
+void	expand(t_minishell *shell, t_env **env_list)
 {
 	t_node	*temp;
 	char	*new;
@@ -26,13 +26,13 @@ void	expand(t_minishell *shell, t_env *env_list)
 		if (ft_strcmp(temp->node, "export") == 0 && temp->next)
 		{
 			temp = temp->next;
-			handle_export(temp->node, &env_list);
+			handle_export(temp->node, env_list);
 			// print_env_list(&env_list);
 		}
 		if (temp->cmd_type == TOKEN_ARG)
 		{
 			// Step 1: Handle environment variables
-			new = handle_env(temp->node, env_list);
+			new = handle_env(temp->node, *env_list);
 			if (!new)
 				return ;
 			// Step 2: Remove quotes

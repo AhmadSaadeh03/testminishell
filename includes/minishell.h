@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/13 12:56:15 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:07:07 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void				free_tokens(t_node *list);
 
 int					handle_quote(t_minishell *shell, char operator);
 
-void				expand(t_minishell *shell, t_env *env_list);
+void				expand(t_minishell *shell, t_env **env_list);
 
 char				*space_before_op(char *str, int i, int *len);
 char				*space_after_op(char *str, int i, int *len);
