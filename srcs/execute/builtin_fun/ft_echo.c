@@ -1,0 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
+/*   Updated: 2025/04/21 16:31:24 by fghanem          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../../includes/minishell.h"
+
+void ft_echo(t_minishell *shell, t_cmd *cmd)
+{
+    int i;
+    int newline;
+    int flag_arg;
+
+    i = 1;
+    newline = 1;
+    (void)shell;
+    if(cmd->cmd_line[i][0] == '-')
+    {
+        flag_arg = handle_echo_flag(cmd->cmd_line[i]);
+        if (flag_arg)
+        {
+            newline = !newline;
+            i++;
+        }
+    }
+    while (cmd->cmd_line[i])
+    {
+        printf("%s", cmd->cmd_line[i]);
+        if (cmd->cmd_line[i + 1])
+            printf(" ");
+        i++;
+    }
+    if (newline)
+        printf("\n");
+}
+
+int handle_echo_flag(char *arg)
+{
+    int j;
+
+    j = 0;
+    if (arg[j] == '-' && arg[j + 1] == 'n')
+    {
+        j++;
+        while(arg[j])
+        {
+            if (arg[j] != 'n' && arg[j] != 'e' && arg[j] != 'E')
+                return (0);
+            j++;
+        }
+    }
+    return (1);
+}

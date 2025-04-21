@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/19 15:52:24 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 15:59:56 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_minishell	*init_shell(t_minishell *shell, char **envp)
 	if (!shell->env_list)
 		return (NULL);
 	(*shell->env_list) = copy_env_to_list(envp);
+	shell->last_exit = 0;
 	return (shell);
 }
 

@@ -6,13 +6,13 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 13:22:41 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:07:43 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    get_path_cmd(t_minishell *shell, char **envp,char **args)
+void    get_path_cmd(t_minishell *shell, char **envp, char **args)
 {
     (void)envp;
     char    *path_env;
@@ -24,7 +24,10 @@ void    get_path_cmd(t_minishell *shell, char **envp,char **args)
     cmd_path = NULL;
     path_env = my_getenv((*shell->env_list), "PATH");
     if (!path_env)
+    {
+        printf("bash: ls: No such file or directory\n");
         return ;
+    }
     path = ft_split(path_env, ':');
     i = 0;
     while (path[i])
@@ -46,7 +49,8 @@ void    get_path_cmd(t_minishell *shell, char **envp,char **args)
     else
     {
         printf("Command not found\n");
-        free_minishell(shell);
+        shell->last_exit = 127;
+        // free_minishell(shell);
     }
 }
 

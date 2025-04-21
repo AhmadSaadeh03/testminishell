@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/21 13:22:28 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:04:30 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_minishell
 	t_node			*token_list;
 	t_env			**env_list;
 	char			**envps;
+	int				last_exit;
 }					t_minishell;
 
 
@@ -142,7 +143,17 @@ int		ft_isspace(char c);
 char	**copy_env_list_to_array(t_env *env_list);
 int		get_env_list_size(t_env *env_list);
 char	*join_env_pair(char *name, char *value);
+void    is_builtin(t_minishell *shell, char **envp);
+void ft_echo(t_minishell *shell, t_cmd *cmd);
+int handle_echo_flag(char *arg);
+void    ft_pwd();
+void    ft_env(t_minishell *shell);
+void    ft_export(t_minishell *shell, t_cmd *cmd);
+void    sort_export_list_and_print(t_env **env_list);
+void 	sort_list(t_env **env_list);
+void    swap_nodes(t_env *a, t_env *b);
 
+void    ft_unset(t_minishell *shell, t_cmd *cmd);
 /// print functions
 void				print_env_list(t_env **env_list);
 void				prt_list(t_minishell **shell);

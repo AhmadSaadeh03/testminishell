@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/21 14:34:44 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 15:08:25 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int main(int arc, char **arv, char **envp)
     while (1)
     {
         shell->name = readline("👾Minihell> ");
-        if (!shell->name)
-            free_and_exit(shell);
+        // if (!shell->name)
+        //     free_and_exit(shell);
         if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
         {
             free(shell->name);
@@ -37,7 +37,8 @@ int main(int arc, char **arv, char **envp)
         add_history(shell->name);
         split(shell);
             //free_minishell(shell);
-        get_path_cmd(shell, shell->envps, (*shell->cmd_list)->cmd_line);
+        is_builtin(shell, shell->envps);
+            // get_path_cmd(shell, shell->envps, (*shell->cmd_list)->cmd_line);
         // free_minishell(shell);
     }
     free_and_exit(shell);
