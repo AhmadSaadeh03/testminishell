@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/21 15:08:25 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 19:28:46 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int main(int arc, char **arv, char **envp)
         }
         add_history(shell->name);
         split(shell);
+        //print(shell->cmd_list);
             //free_minishell(shell);
         is_builtin(shell, shell->envps);
             // get_path_cmd(shell, shell->envps, (*shell->cmd_list)->cmd_line);
