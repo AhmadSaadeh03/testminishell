@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 12:49:47 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/19 15:46:23 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ int	split(t_minishell *shell)
 	if (split_space(shell) == 1)
 		return (1);
 	process_node_list(shell);
+	if (expand(shell) == 1)
+		return(1);
+	if (cmd_filling(shell) == 1)
+		return(1);
 	return (0);
 }
 

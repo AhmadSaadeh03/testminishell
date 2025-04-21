@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:49:32 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/14 17:01:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 14:41:14 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ char	*handle_env(char *str, t_env *env_list)
 			free(var_name);
 			if (var_val)
 				new = ft_strjoin_free(new, ft_strdup(var_val));
-			// else // If variable is not found, keep it as-is
-			// 	new = ft_strjoin_free(new, ft_substr(sign, 0, start - sign));
+			 else // If variable is not found, keep it as-is
+				new = ft_strjoin_free(new, ft_substr(sign, 0, start - sign));
 		}
 		else // Handle literal characters
 		{

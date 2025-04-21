@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 12:50:01 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/19 16:29:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,37 @@ void	free_token_space(char **token_space)
 	free(token_space);
 }
 
-void	free_minishell(t_minishell *shell)
+void free_minishell(t_minishell *mini)
 {
-	if (!shell)
-		return ;
-	free_token_space(shell->token_space);
-	free_tokens(shell->token_list);
-	free(shell->name);
-	free(shell);
+	if (!mini)
+		return;
+	free(mini->name);
+	free_token_space(mini->token_space);
+	if (mini->cmd_list && *mini->cmd_list)
+		free_cmd_list(mini->cmd_list);
+	if (mini->token_list)
+		free_tokens(mini->token_list);
+	if (mini->env_list && *mini->env_list)
+		free_env_list(mini->env_list);
+	free(mini->cmd_list);
+	free(mini->env_list);
 }
 
-void	free_and_exit(t_minishell *shell)
+void free_env_list(t_env **env_list)
 {
-	free_minishell(shell);
-	exit(1);
-}
+	t_env *current;
+	t_env *tmp;
 
-void	free_tokens(t_node *list)
-{
-	t_node	*tmp;
-
-	while (list)
+	if (!env_list || !*env_list)
+		return;
+	current = *env_list;
+	while (current)
 	{
-		tmp = list;
-		list = list->next;
-		free(tmp->node);
+		tmp = current;
+		current = current->next;
+		free(tmp->env_name);
+		free(tmp->value);
 		free(tmp);
 	}
+	*env_list = NULL;
 }

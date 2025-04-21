@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 12:48:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/19 15:46:10 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	set_cmd(t_cmd *cmd, char *file_name, char *var, t_type type)
 	}
 }
 
-void	fill_cmd(t_cmd *cmd2, t_node *temp)
+int	fill_cmd(t_cmd *cmd2, t_node *temp)
 {
 	int	i;
 
@@ -59,7 +59,7 @@ void	fill_cmd(t_cmd *cmd2, t_node *temp)
 				cmd2 = cmd2->next;
 				cmd2->pipe = ft_strdup("|");
 				if (!cmd2->pipe)
-					return ;
+					return (1);
 				i = 0;
 			}
 		}
@@ -68,24 +68,27 @@ void	fill_cmd(t_cmd *cmd2, t_node *temp)
 		{
 			cmd2->cmd_line[i] = ft_strdup(temp->node);
 			if (!cmd2->cmd_line[i])
-				return ;
+				return (1);
 			cmd2->cmd_line[++i] = NULL;
 		}
 		temp = temp->next;
 	}
+	return (0);
 }
 
-void	cmd_filling(t_minishell **shell)
+int	cmd_filling(t_minishell *shell)
 {
 	t_cmd	*cmd;
 	t_node	*temp;
 
 	init_cmd(&cmd);
 	if (!cmd)
-		return ;
-	temp = (*shell)->token_list;
-	fill_cmd(cmd, temp);
-	(*shell)->cmd_list = &cmd;
-	free_tokens((*shell)->token_list);
-	handle_redirection(shell);
+		return (1);
+	temp = shell->token_list;
+	if(fill_cmd(cmd, temp) == 1)
+		return (1);
+	shell->cmd_list = &cmd;
+	free_tokens(shell->token_list);
+	handle_redirection(&shell);
+	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/13 12:50:19 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/19 15:52:24 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_minishell	*init_shell(t_minishell *shell)
+t_minishell	*init_shell(t_minishell *shell, char **envp)
 {
 	shell = malloc(sizeof(t_minishell));
 	if (!shell)
@@ -23,6 +23,13 @@ t_minishell	*init_shell(t_minishell *shell)
 	shell->token_list = NULL;
 	shell->token_space = NULL;
 	shell->name = NULL;
+	shell->cmd_list = NULL;
+	shell->env_list = NULL;
+	shell->envps = NULL;
+	shell->env_list = malloc(sizeof(t_env *));
+	if (!shell->env_list)
+		return (NULL);
+	(*shell->env_list) = copy_env_to_list(envp);
 	return (shell);
 }
 

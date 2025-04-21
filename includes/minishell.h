@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/14 15:07:07 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 13:22:28 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <sys/wait.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -57,20 +58,23 @@ typedef struct s_node
 	t_type			cmd_type;
 }					t_node;
 
-typedef struct s_minishell
-{
-	char			*name;
-	char			**token_space;
-	t_cmd			**cmd_list;
-	t_node			*token_list;
-}					t_minishell;
-
 typedef struct s_env
 {
 	char			*env_name;
 	char			*value;
 	struct s_env	*next;
 }					t_env;
+
+typedef struct s_minishell
+{
+	char			*name;
+	char			**token_space;
+	t_cmd			**cmd_list;
+	t_node			*token_list;
+	t_env			**env_list;
+	char			**envps;
+}					t_minishell;
+
 
 int					split_operation(t_minishell *shell, char operator);
 t_node				*create_node_list(char **tokens);
@@ -84,7 +88,7 @@ int					split_space(t_minishell *shell);
 int					parsing(t_minishell **shell);
 void				free_minishell(t_minishell *shell);
 void				free_token_space(char **token_space);
-t_minishell			*init_shell(t_minishell *shell);
+t_minishell			*init_shell(t_minishell *shell, char **envp);
 t_node				*fix_redirection(t_node *list);
 int					put_type(t_minishell **shell);
 void				free_and_exit(t_minishell *shell);
@@ -95,8 +99,7 @@ void				define_cmd(t_minishell **shell);
 void				free_tokens(t_node *list);
 
 int					handle_quote(t_minishell *shell, char operator);
-
-void				expand(t_minishell *shell, t_env **env_list);
+int					expand(t_minishell *shell);
 
 char				*space_before_op(char *str, int i, int *len);
 char				*space_after_op(char *str, int i, int *len);
@@ -116,9 +119,9 @@ int					handle_quotes_and_operators(t_minishell *shell);
 int					has_operator_at_edges(char *str, int len);
 int					has_invalid_repeated_operators(char *str);
 
-void				fill_cmd(t_cmd *cmd, t_node *temp);
+int	fill_cmd(t_cmd *cmd2, t_node *temp);
 void				init_cmd(t_cmd **cmd);
-void				cmd_filling(t_minishell **shell);
+int				cmd_filling(t_minishell *shell);
 void				set_cmd(t_cmd *cmd, char *file_name, char *var,
 						t_type type);
 void				handle_redirection(t_minishell **shell);
@@ -127,6 +130,18 @@ void				redirect_out(t_cmd *cmd);
 void				redirect_in(t_cmd *cmd);
 void				handle_export(char *str, t_env **env_list);
 void				my_unsetenv(t_env **env_list, char *name);
+void	free_env_list(t_env **env_list);
+void	free_cmd_list(t_cmd **cmd_list);
+
+void    get_path_cmd(t_minishell *shell, char **envp,char **args);
+void    execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line);
+int		is_all_whitespace(const char *str);
+int		ft_isspace(char c);
+
+
+char	**copy_env_list_to_array(t_env *env_list);
+int		get_env_list_size(t_env *env_list);
+char	*join_env_pair(char *name, char *value);
 
 /// print functions
 void				print_env_list(t_env **env_list);

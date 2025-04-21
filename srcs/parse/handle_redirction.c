@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 12:48:39 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/19 16:58:58 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ void	redirect_out(t_cmd *cmd)
 	int	fd_out;
 
 	if (cmd->append)
-		fd_out = open(cmd->file_out, O_RDONLY | O_CREAT | O_TRUNC | O_APPEND,
+		fd_out = open(cmd->file_out, O_RDONLY | O_CREAT | O_APPEND,
 				0644);
 	else
 		fd_out = open(cmd->file_out, O_RDONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out < 0)
 		perror(cmd->file_out);
+	// dup2(fd_out, STDIN_FILENO);
 	close(fd_out);
 }
 // <
