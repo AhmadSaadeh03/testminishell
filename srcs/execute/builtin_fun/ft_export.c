@@ -3,15 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 17:18:55 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 19:04:52 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+int ft_get_last_char(char *str)
+{
+    int i = 0;
+    while (str[i])
+    {
+        if (str[i]== '=')
+            return 0;
+        i++;
+    }
+    return 1;
+}
 void    ft_export(t_minishell *shell, t_cmd *cmd)
 {
     int i;
@@ -26,7 +37,15 @@ void    ft_export(t_minishell *shell, t_cmd *cmd)
     {
         while (cmd->cmd_line[i])
         {
-            handle_export(cmd->cmd_line[i], shell->env_list);
+            if (ft_get_last_char(cmd->cmd_line[i]) == 0)
+            {
+                printf("cmd line is %s\n",cmd->cmd_line[i]);
+                handle_export(cmd->cmd_line[i], shell->env_list);
+                // if(!cmd->cmd_line[i+1])
+                //     break;
+            }
+            else
+                break;
             i++;
         }
     }

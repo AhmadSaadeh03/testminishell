@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:51:55 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 13:17:27 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 19:13:23 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,31 @@ void	handle_export(char *str, t_env **env_list)
 	before_equal[j] = '\0';
 	printf("var name :  %s\n", before_equal);
 	
-	i++;
+	i++;//skip equal
 	j = 0;
+int in_double_quote = 0;
+
 	while (str[i])
 	{
+		// Toggle the double-quote flag
+		if (str[i] == '"')
+		{
+			in_double_quote = !in_double_quote;
+			i++; // Skip the quote character
+			continue;
+		}
+
+		// Break only if not inside double quotes and the character is not alphanumeric
+		if (!in_double_quote && !ft_isalnum(str[i]))
+			break;
+
 		after_equal[j] = str[i];
 		i++;
 		j++;
 	}
-	after_equal[j] = '\0';
+	after_equal[j] = '\0'; // Null-terminate the string
 	printf("var value :  %s\n", after_equal);
-	if (after_equal && before_equal)
+	if (before_equal)
 		my_setenv(env_list, before_equal, after_equal);
 	free(after_equal);
 	free(before_equal);

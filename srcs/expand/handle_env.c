@@ -3,73 +3,113 @@
 /*                                                        :::      ::::::::   */
 /*   handle_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:49:32 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 14:41:14 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/21 18:22:17 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+
+char	*remove_all_spaces(char *str)
+{
+	int i = 0;
+	int j = 0;
+	char *ptr;
+	ptr = malloc(sizeof(char));
+	while (str[i])
+	{
+		if (str[i] == ' ')
+			i++;
+		ptr[j] = str[i];
+		i++;
+		j++;
+	}
+	return ptr;
+}
 char	*handle_env(char *str, t_env *env_list)
 {
-	char	*new;
-	char	*start;
-	char	*sign;
-	int		in_single_quotes;
-	int		in_double_quotes;
-	char	*var_start;
-	char	*var_name;
-	char	*var_val;
+    char	*new;
+    int		i;
+    int		in_single_quotes;
+    int		in_double_quotes;
+    //char	*var_start;
+    char	*var_name;
+    char	*var_val;
 
-	in_single_quotes = 0;
-	in_double_quotes = 0;
-	new = ft_strdup("");
-	start = str;
-	while (*start)
+    in_single_quotes = 0;
+    in_double_quotes = 0;
+    new = ft_strdup("");
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '\'') // Handle single quotes
+        {
+            if (!in_double_quotes)
+                // Toggle single quotes only if not inside double quotes
+                in_single_quotes = !in_single_quotes;
+            else // If inside double quotes, preserve the single quote
+                new = ft_strjoin_free(new, ft_substr(str, i, 1));
+            i++; // Skip the single quote
+        }
+        else if (str[i] == '"') // Handle double quotes
+        {
+            if (!in_single_quotes)
+                // Toggle double quotes only if not inside single quotes
+                in_double_quotes = !in_double_quotes;
+            else // If inside single quotes, preserve the double quote
+                new = ft_strjoin_free(new, ft_substr(str, i, 1));
+            i++; // Skip the double quote
+        }
+	else if (str[i] == '$' && !in_single_quotes && !ft_isalnum(str[i+1]) && str[i] != '_')
 	{
-		if (*start == '\'') // Handle single quotes
+		//int count = 0;
+		int temp;
+		temp = i;
+		i = 0;
+		while (str[i])
+			i++;
+		new = malloc(sizeof(char) * (i + 1));
+		i = temp;
+		int j = 0;
+		while (str[i])
 		{
-			if (!in_double_quotes)
-			// Toggle single quotes only if not inside double quotes
-				in_single_quotes = !in_single_quotes;
-			else // If inside double quotes, preserve the single quote
-				new = ft_strjoin_free(new, ft_substr(start, 0, 1));
-			start++; // Skip the single quote
+			new[j] = str[i];
+			j++;
+			i++;
 		}
-		else if (*start == '"') // Handle double quotes
-		{
-			if (!in_single_quotes)
-			// Toggle double quotes only if not inside single quotes
-				in_double_quotes = !in_double_quotes;
-			else // If inside single quotes, preserve the double quote
-				new = ft_strjoin_free(new, ft_substr(start, 0, 1));
-			start++; // Skip the double quote
-		}
-		else if (*start == '$' && !in_single_quotes)
-			// Expand only if not in single quotes
-		{
-			sign = start;
-			start++; // Skip the '$'
-			var_start = start;
-			while (*start && (ft_isalnum(*start) || *start == '_'))
-				start++;
-			var_name = ft_substr(var_start, 0, start - var_start);
-			var_val = my_getenv(env_list, var_name);
-			free(var_name);
-			if (var_val)
-				new = ft_strjoin_free(new, ft_strdup(var_val));
-			 else // If variable is not found, keep it as-is
-				new = ft_strjoin_free(new, ft_substr(sign, 0, start - sign));
-		}
-		else // Handle literal characters
-		{
-			new = ft_strjoin_free(new, ft_substr(start, 0, 1));
-			start++;
-		}
+		new[j] = '\0';
 	}
-	return (new);
+	else if (str[i] == '$' && !in_single_quotes && (str[i+1] >= '1' && str[i+1] <='9'))
+		i+=2;
+        else if (str[i] == '$' && !in_single_quotes && ft_isalpha(str[i+1]))
+        {
+         	// int sign = i;
+        	i++; // Skip the '$'
+		// if (in_double_quotes)
+		// 	str = remove_all_spaces(str);
+		int var_start = i;
+		while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+			i++;
+		var_name = ft_substr(str, var_start, i - var_start);
+		var_val = my_getenv(env_list, var_name);
+		free(var_name);
+		// if (in_double_quotes)
+		// 	new = remove_all_spaces(str);
+		if (var_val)
+			new = ft_strjoin_free(new, ft_strdup(var_val));
+		//     else // If variable is not found, keep it as-is
+		//         new = ft_strjoin_free(new, ft_substr(str, sign, i - sign));
+        }
+        else // Handle literal characters
+        {
+            new = ft_strjoin_free(new, ft_substr(str, i, 1));
+            i++;
+        }
+    }
+    return (new);
 }
 
 char	*ft_strjoin_free(char *s1, char *s2)
