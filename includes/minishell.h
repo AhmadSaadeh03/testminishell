@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/21 19:25:10 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/22 17:21:48 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char				*space_after_op(char *str, int i, int *len);
 char				*replace_spaces_inside_quotes(const char *input);
 void				restore_spaces(char **tokens);
 
-char				*handle_env(char *str, t_env *env_list);
+char	*handle_env(char *str, t_env *env_list);
 char				*ft_trim_quotes(char *s1);
 char				*ft_strjoin_free(char *s1, char *s2);
 t_env				*create_env(char *env_var);
@@ -152,8 +152,14 @@ void    ft_export(t_minishell *shell, t_cmd *cmd);
 void    sort_export_list_and_print(t_env **env_list);
 void 	sort_list(t_env **env_list);
 void    swap_nodes(t_env *a, t_env *b);
-
+void    ft_exit(t_minishell *shell, t_cmd *cmd);
+void    ft_cd(t_minishell *shell, t_cmd *cmd);
 void    ft_unset(t_minishell *shell, t_cmd *cmd);
+int is_valid_number_format(const char *arg, int *sign, long *number);
+
+void    handle_exit_status(char *exit,char *arg);
+// int skip_spaces(char *arg, int i);
+int check_digit(const char *arg);
 /// print functions
 void				print_env_list(t_env **env_list);
 void				prt_list(t_minishell **shell);

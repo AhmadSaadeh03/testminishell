@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 17:07:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:24:24 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void    get_path_cmd(t_minishell *shell, char **envp, char **args)
     {
         printf("Command not found\n");
         shell->last_exit = 127;
-        // free_minishell(shell);
     }
 }
 
@@ -67,7 +66,9 @@ void    execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_
         if (execve(cmd_path, cmd_line, envp) == -1)
         {
             perror("Execve");
-            free_and_exit(shell);
+            shell->last_exit = 127;
+            // exit(shell->last_exit);
+            // free_and_exit(shell);
         }
     }
     else

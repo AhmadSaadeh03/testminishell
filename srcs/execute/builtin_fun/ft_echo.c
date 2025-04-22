@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 16:31:24 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/22 17:21:09 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ void ft_echo(t_minishell *shell, t_cmd *cmd)
     int i;
     int newline;
     int flag_arg;
+    char    *exit;
 
     i = 1;
     newline = 1;
     (void)shell;
-    if(cmd->cmd_line[i][0] == '-')
+    if (cmd->cmd_line[i][0] == '-')
     {
         flag_arg = handle_echo_flag(cmd->cmd_line[i]);
         if (flag_arg)
@@ -30,9 +31,19 @@ void ft_echo(t_minishell *shell, t_cmd *cmd)
             i++;
         }
     }
+    exit = ft_itoa(shell->last_exit);
+    {
+        
+	}
     while (cmd->cmd_line[i])
     {
-        printf("%s", cmd->cmd_line[i]);
+        if (cmd->cmd_line[i][0] == '$' && cmd->cmd_line[i][1] == '?')
+        {
+            handle_exit_status(exit, cmd->cmd_line[i]);
+            i++;
+        }
+        else
+            printf("%s", cmd->cmd_line[i]);
         if (cmd->cmd_line[i + 1])
             printf(" ");
         i++;
@@ -57,4 +68,16 @@ int handle_echo_flag(char *arg)
         }
     }
     return (1);
+}
+
+void    handle_exit_status(char *exit,char *arg)
+{
+    char *suffix;
+    char *joined;
+    
+    suffix = ft_strdup(arg + 2);
+    joined = ft_strjoin(exit, suffix);
+    printf("%s", joined);
+    free(suffix);
+    free(joined);
 }

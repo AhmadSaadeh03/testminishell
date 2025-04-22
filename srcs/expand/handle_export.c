@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:51:55 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 19:42:47 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:34:10 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_export(char *str, t_env **env_list)
     int		j;
     char	*before_equal;
     char	*after_equal;
-
+    int     in_double_quote;
     i = 0;
     j = 0;
     before_equal = ft_strdup("");
@@ -30,12 +30,10 @@ void	handle_export(char *str, t_env **env_list)
         j++;
     }
     before_equal[j] = '\0';
-    printf("var name :  %s\n", before_equal);
-    
-    i++; // Skip equal
+    // printf("var name :  %s\n", before_equal);
+    i++;
     j = 0;
-    int in_double_quote = 0;
-
+    in_double_quote = 0;
     while (str[i])
     {
         if (str[i] == '"')
@@ -44,12 +42,12 @@ void	handle_export(char *str, t_env **env_list)
             i++;
             continue;
         }
-       	if (in_double_quote || ft_isalnum(str[i]) || str[i] == ' ' 
-	|| (!in_double_quote && !ft_isalnum(str[i])))
-	{
-   	 after_equal[j] = str[i];
-    		j++;
-	}
+        if (in_double_quote || ft_isalnum(str[i]) || str[i] == ' ' 
+            || (!in_double_quote && !ft_isalnum(str[i])))
+        {
+            after_equal[j] = str[i];
+            j++;
+        }
         else
         {
             break;
@@ -57,21 +55,9 @@ void	handle_export(char *str, t_env **env_list)
         i++;
     }
     after_equal[j] = '\0';
-    printf("var value :  %s\n", after_equal);
-
+    // printf("var value :  %s\n", after_equal);
     if (before_equal)
         my_setenv(env_list, before_equal, after_equal);
-
     free(after_equal);
     free(before_equal);
 }
-
-// void    sort_env_list(t_env **env_list)
-// {
-//     int i;
-//     int count;
-
-//     i = 0;
-//     count i = 0;
-//     while()
-// }

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 14:40:14 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/22 17:22:01 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,17 @@ int	expand(t_minishell *shell)
 	char	*new;
 	char	*final;
 
-	//t_env *env_list;
-	//env_list = copy_env_to_list();
 	temp = shell->token_list;
 	while (temp)
 	{
-		// if (ft_strcmp(temp->node, "export") == 0 && temp->next)
-		// {
-		// 	temp = temp->next;
-		// 	handle_export(temp->node, shell->env_list);
-		// 	// print_env_list(&env_list);
-		// }
 		if (temp->cmd_type == TOKEN_ARG)
 		{
-			// Step 1: Handle environment variables
 			new = handle_env(temp->node, (*shell->env_list));
 			if (!new)
 				return (1);
 			// Step 2: Remove quotes
 			final = ft_trim_quotes(new);
-			free(new); // Free the intermediate string
+			free(new);
 			if (!final)
 				return (1);
 			// Update the node with the final processed string
