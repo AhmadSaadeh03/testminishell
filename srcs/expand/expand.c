@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 13:58:02 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 16:57:28 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,11 @@ void	my_unsetenv(t_env **env_list, char *name)
 			free(temp->env_name);
 			free(temp->value);
 			free(temp);
-			// printf("Removed variable: %s\n", name);
 			return ;
 		}
 		prev = temp;
 		temp = temp->next;
 	}
-	// printf("Variable not found: %s\n", name);
 }
 
 char	*my_getenv(t_env *env_list, char *name)
@@ -83,8 +81,6 @@ char	*my_getenv(t_env *env_list, char *name)
 	}
 	return (NULL);
 }
-
-/// deletee
 
 void	print_env_list(t_env **env_list)
 {

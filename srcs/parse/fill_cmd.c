@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 16:37:39 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/26 17:02:56 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ void	store_last_arg(t_minishell *shell)
 		}
 		arr++;
 	}
-	
-    	while (cmd->cmd_line[i + 1])
-    		i++;   
-    	shell->last_arg = malloc(sizeof(char) * ft_strlen(cmd->cmd_line[i]) + 1);
+	while (cmd->cmd_line[i + 1])
+		i++;   
+    shell->last_arg = malloc(sizeof(char) * ft_strlen(cmd->cmd_line[i]) + 1);
 	while (cmd->cmd_line[i][j])
 	{
 		shell->last_arg[j] = cmd->cmd_line[i][j];

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:51:55 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/22 10:34:10 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 17:01:25 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,17 @@ void	handle_export(char *str, t_env **env_list)
     char	*before_equal;
     char	*after_equal;
     int     in_double_quote;
+    int after_length;
+
     i = 0;
     j = 0;
-    before_equal = ft_strdup("");
-    after_equal = ft_strdup("");
+    after_length = 0;
+    while (str[i] && str[i] != '=')
+        i++;
+    before_equal = malloc((i + 1) * sizeof(char));
+    if (!before_equal)
+        return;
+    i = 0;
     while (str[i] && str[i] != '=')
     {
         before_equal[j] = str[i];
@@ -30,9 +37,14 @@ void	handle_export(char *str, t_env **env_list)
         j++;
     }
     before_equal[j] = '\0';
-    // printf("var name :  %s\n", before_equal);
     i++;
     j = 0;
+    after_length = ft_strlen(str + i);
+    after_equal = malloc((after_length + 1) * sizeof(char));
+    {
+        free(before_equal);
+        return ;
+    }
     in_double_quote = 0;
     while (str[i])
     {
@@ -55,7 +67,6 @@ void	handle_export(char *str, t_env **env_list)
         i++;
     }
     after_equal[j] = '\0';
-    // printf("var value :  %s\n", after_equal);
     if (before_equal)
         my_setenv(env_list, before_equal, after_equal);
     free(after_equal);
