@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:49:32 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/22 17:24:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:01:59 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,25 +62,25 @@ char	*handle_env(char *str, t_env *env_list)
                 new = ft_strjoin_free(new, ft_substr(str, i, 1));
             i++; // Skip the double quote
         }
-		else if (str[i] == '$' && !in_single_quotes && !ft_isalnum(str[i+1]) && str[i] != '_')
-		{
-			//int count = 0;
-			int temp;
-			temp = i;
-			i = 0;
-			while (str[i])
-			i++;
-			new = malloc(sizeof(char) * (i + 1));
-			i = temp;
-			int j = 0;
-			while (str[i])
-			{
-				new[j] = str[i];
-				j++;
-				i++;
-			}
-			new[j] = '\0';
-		}
+		// else if (str[i] == '$' && !in_single_quotes && !ft_isalnum(str[i+1]) && str[i] != '_')
+		// {
+		// 	//int count = 0;
+		// 	int temp;
+		// 	temp = i;
+		// 	i = 0;
+		// 	while (str[i])
+		// 	i++;
+		// 	new = malloc(sizeof(char) * (i + 1));
+		// 	i = temp;
+		// 	int j = 0;
+		// 	while (str[i])
+		// 	{
+		// 		new[j] = str[i];
+		// 		j++;
+		// 		i++;
+		// 	}
+		// 	new[j] = '\0';
+		// }
 		else if (str[i] == '$' && !in_single_quotes && (str[i+1] >= '1' && str[i+1] <= '9'))
 			i += 2;
 		else if (str[i] == '$' && !in_single_quotes && ft_isalpha(str[i+1]))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 19:04:52 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:56:26 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,24 @@ int ft_get_last_char(char *str)
     }
     return 1;
 }
-void    ft_export(t_minishell *shell, t_cmd *cmd)
+void    ft_export(t_minishell *shell, char **cmd_line)
 {
     int i;
 
     i = 1;
-    if (cmd->cmd_line[i] == NULL)
+    if (cmd_line[i] == NULL)
     {
         sort_export_list_and_print(shell->env_list);
         return ;
     }
     else
     {
-        while (cmd->cmd_line[i])
+        while (cmd_line[i])
         {
-            if (ft_get_last_char(cmd->cmd_line[i]) == 0)
+            if (ft_get_last_char(cmd_line[i]) == 0)
             {
-                printf("cmd line is %s\n",cmd->cmd_line[i]);
-                handle_export(cmd->cmd_line[i], shell->env_list);
+                // printf("cmd line is %s\n",cmd_line[i]);
+                handle_export(cmd_line[i], shell->env_list);
                 // if(!cmd->cmd_line[i+1])
                 //     break;
             }

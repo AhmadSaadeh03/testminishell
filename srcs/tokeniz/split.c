@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 15:46:23 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:10:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	split_space(t_minishell *shell)
 {
 	char	*temp;
 
+	temp = NULL;
 	temp = replace_spaces_inside_quotes(shell->name);
 	if (!temp)
 		return (1);
@@ -23,10 +24,11 @@ int	split_space(t_minishell *shell)
 	free(temp);
 	if (!shell->token_space)
 	{
-		printf("Error: Failed to split the input\n");
+		ft_putstr_fd("Error: Failed to split the input\n", 2);
 		return (1);
 	}
 	restore_spaces(shell->token_space);
+	process_node_list(shell);
 	return (0);
 }
 
@@ -70,15 +72,19 @@ int	split(t_minishell *shell)
 {
 	if (!*shell->name || !shell->name)
 		return (1);
-	if (handle_quotes_and_operators(shell))
-		return (1);
-	if (split_space(shell) == 1)
-		return (1);
-	process_node_list(shell);
+	handle_quotes_and_operators(shell);
+	split_space(shell);
+		// return (1);
+	// process_node_list(shell);
+	parsing(&shell);
 	if (expand(shell) == 1)
+	{
+		// printf("vfg\n\n\n\n\n");
 		return(1);
-	if (cmd_filling(shell) == 1)
-		return(1);
+	}
+	cmd_filling(shell);
+		// return(1)
+	// is_builtin(shell);
 	return (0);
 }
 
@@ -93,16 +99,12 @@ int	handle_quotes_and_operators(t_minishell *shell)
 		{
 			if (closed_quotes(shell, shell->name[i]) == 1)
 			{
-				printf("Error: Unclosed quotes\n");
+				ft_putstr_fd("Error: Unclosed quotes\n", 2);
 				return (1);
 			}
-			i = handle_quote(shell, shell->name[i]) + i + 1;
 		}
-		if (shell->name[i] == '|' || shell->name[i] == '<'
-			|| shell->name[i] == '>')
+		if (shell->name[i] && (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>'))
 		{
-			if (handle_operation(shell) == 1)
-				return (1);
 			if (split_operation(shell, shell->name[i]) == 1)
 				return (1);
 		}
@@ -121,7 +123,7 @@ void	process_node_list(t_minishell *shell)
 		(shell->token_list->node[0] == '|' || shell->token_list->node[0] == '<'
 				|| shell->token_list->node[0] == '>'))
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return ;
 	}
 	temp = shell->token_list;
@@ -130,10 +132,8 @@ void	process_node_list(t_minishell *shell)
 	if ((ft_strcmp(temp->node, ">") == 0 || ft_strcmp(temp->node, "<") == 0
 			|| ft_strcmp(temp->node, "|") == 0) && temp->next == NULL)
 	{
-		printf("syntax error near unexpected token\n");
+		ft_putstr_fd("syntax error near unexpected token\n", 2);
 		return ;
 	}
-	free_token_space(shell->token_space);
-	if (parsing(&shell) == 1)
-		return ;
+	free_array(shell->token_space);
 }

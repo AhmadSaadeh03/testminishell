@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 15:46:10 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:52:33 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,21 @@ void	set_cmd(t_cmd *cmd, char *file_name, char *var, t_type type)
 	{
 		if (type == TOKEN_HEREDOC && ft_strcmp(var, "<<") == 0)
 		{
-			cmd->limiter = ft_strdup(file_name);
-			cmd->redirect = ft_strdup(var);
+			cmd->limiter = add_cmd(file_name, cmd->limiter);
+			cmd->redirect = add_cmd(var, cmd->redirect);
 		}
 		else
 		{
-			cmd->redirect = ft_strdup(var);
-			cmd->file_in = ft_strdup(file_name);
+			cmd->redirect = add_cmd(var, cmd->redirect);
+			cmd->file_in = add_cmd(file_name, cmd->redirect);
 		}
 	}
 	else if (type == TOKEN_REDIRECT_OUT || type == TOKEN_APPEND)
 	{
 		if (type == TOKEN_APPEND)
 			cmd->append = 1;
-		cmd->redirect = ft_strdup(var);
-		cmd->file_out = ft_strdup(file_name);
+		cmd->redirect = add_cmd(var, cmd->redirect);
+		cmd->file_out = add_cmd(file_name, cmd->file_out);
 	}
 }
 
@@ -55,24 +55,27 @@ int	fill_cmd(t_cmd *cmd2, t_node *temp)
 		{
 			if (cmd2)
 			{
-				init_cmd(&cmd2->next);
 				cmd2 = cmd2->next;
-				cmd2->pipe = ft_strdup("|");
-				if (!cmd2->pipe)
+				cmd2= init_cmd();
+				if (!cmd2)
 					return (1);
+				// cmd2->pipe = add_cmd("|", cmd2->pipe);
+				// if (!cmd2->pipe)
+				// 	return (1);
 				i = 0;
 			}
 		}
 		else if (temp->node && (temp->cmd_type == TOKEN_ARG
 					|| temp->cmd_type == COMMAND))
 		{
-			cmd2->cmd_line[i] = ft_strdup(temp->node);
+			cmd2->cmd_line[i] = add_cmd(temp->node, cmd2->cmd_line[i]);
 			if (!cmd2->cmd_line[i])
 				return (1);
-			cmd2->cmd_line[++i] = NULL;
+			i++;
 		}
 		temp = temp->next;
 	}
+	cmd2->cmd_line[i] = NULL;
 	return (0);
 }
 
@@ -81,14 +84,33 @@ int	cmd_filling(t_minishell *shell)
 	t_cmd	*cmd;
 	t_node	*temp;
 
-	init_cmd(&cmd);
+	// printf("filling\n\n\n\n\n");
+	cmd = init_cmd();
 	if (!cmd)
 		return (1);
 	temp = shell->token_list;
-	if(fill_cmd(cmd, temp) == 1)
+	if (fill_cmd(cmd, temp) == 1)
 		return (1);
 	shell->cmd_list = &cmd;
 	free_tokens(shell->token_list);
-	handle_redirection(&shell);
+	// handle_redirection(&shell);
 	return (0);
+}
+
+char	*add_cmd(char *token, char *cmd)
+{
+	int		i;
+
+	i = 0;
+	cmd = NULL;
+	cmd = malloc(sizeof(char) * ft_strlen(token) + 1);
+	if (!cmd)
+		return (NULL);
+	while (token[i])
+	{
+		cmd[i] = token[i];
+		i++;
+	}
+	cmd[i] = '\0';
+	return (cmd);
 }

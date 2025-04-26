@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/21 19:25:19 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/04/26 11:12:49 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,44 +138,44 @@ void	prt_list(t_minishell **shell)
 	printf(" -> NULL\n");
 }
 
-void	print(t_minishell **shell)
-{
-	// printf("\n**********cmd*********\n");
-	t_cmd *tmp = (*(*shell)->cmd_list);
-	int i;
+// void	print(t_minishell **shell)
+// {
+// 	// printf("\n**********cmd*********\n");
+// 	t_cmd *tmp = (*(*shell)->cmd_list);
+// 	int i;
 
-	while (tmp)
-	{
-		i = 0;
+// 	while (tmp)
+// 	{
+// 		i = 0;
 
-		// Print command and args
-		while (tmp->cmd_line && tmp->cmd_line[i])
-		{
-			printf("cmd_line : %s\n", tmp->cmd_line[i]);
-			i++;
-		}
+// 		// Print command and args
+// 		while (tmp->cmd_line && tmp->cmd_line[i])
+// 		{
+// 			printf("cmd_line : %s\n", tmp->cmd_line[i]);
+// 			i++;
+// 		}
 
-		// Print redirections
-		if (tmp->redirect)
-		{
-			if (tmp->append)
-				printf("append : %s\n", tmp->redirect);
-			else
-				printf("redirect : %s\n", tmp->redirect);
-		}
-		if (tmp->file_out)
-			printf("file_out : %s\n", tmp->file_out);
-		if (tmp->file_in)
-			printf("file_in  : %s\n", tmp->file_in);
+// 		// Print redirections
+// 		if (tmp->redirect)
+// 		{
+// 			if (tmp->append)
+// 				printf("append : %s\n", tmp->redirect);
+// 			else
+// 				printf("redirect : %s\n", tmp->redirect);
+// 		}
+// 		if (tmp->file_out)
+// 			printf("file_out : %s\n", tmp->file_out);
+// 		if (tmp->file_in)
+// 			printf("file_in  : %s\n", tmp->file_in);
 
-		// Print pipe if exists
-		if (tmp->pipe)
-			printf("pipe     : %s\n", tmp->pipe);
+// 		// Print pipe if exists
+// 		if (tmp->pipe)
+// 			printf("pipe     : %s\n", tmp->pipe);
 
-		// Move to next command if there is one
-		if (tmp->next)
-			printf("NEXT CMD\n");
+// 		// Move to next command if there is one
+// 		if (tmp->next)
+// 			printf("NEXT CMD\n");
 
-		tmp = tmp->next;
-	}
-}
+// 		tmp = tmp->next;
+// 	}
+// }

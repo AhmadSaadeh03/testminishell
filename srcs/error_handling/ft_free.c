@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 16:29:50 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:19:27 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,34 @@ void	free_node(t_node *to_free)
 	free(to_free);
 }
 
-void	free_token_space(char **token_space)
+void	free_array(char **array)
 {
 	int	i;
 
 	i = 0;
-	if (!token_space)
+	if (!array)
 		return ;
-	while (token_space[i])
-		free(token_space[i++]);
-	free(token_space);
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		array[i] = NULL;
+		i++;
+	}
+	free(array);
 }
 
-void free_minishell(t_minishell *mini)
+void free_minishell(t_minishell *shell)
 {
-	if (!mini)
-		return;
-	free(mini->name);
-	free_token_space(mini->token_space);
-	if (mini->cmd_list && *mini->cmd_list)
-		free_cmd_list(mini->cmd_list);
-	if (mini->token_list)
-		free_tokens(mini->token_list);
-	if (mini->env_list && *mini->env_list)
-		free_env_list(mini->env_list);
-	free(mini->cmd_list);
-	free(mini->env_list);
+    // if (!shell)
+    //     return ;
+	
+	// free_cmd(shell->cmd_list);
+	// free_env_list(shell->env_list);
+	// free_array(shell->envps);
+	// free_array()
+    free(shell);
 }
+
 
 void free_env_list(t_env **env_list)
 {

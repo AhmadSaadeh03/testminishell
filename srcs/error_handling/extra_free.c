@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 16:30:17 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:45:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,32 +31,24 @@ void	free_tokens(t_node *list)
 	}
 }
 
-void free_cmd_list(t_cmd **cmd_list)
+void	free_cmd(t_cmd **cmd)
 {
-	t_cmd *current;
-	t_cmd *tmp;
-	int i;
+	t_cmd	*curr;
+	// int		i;
 
-	if (!cmd_list || !*cmd_list)
-		return;
-	current = *cmd_list;
-	while (current)
+	curr = *cmd;
+	// i = 0;
+	while (curr)
 	{
-		tmp = current;
-		current = current->next;
-		if (tmp->cmd_line)
-		{
-			i = 0;
-			while (tmp->cmd_line[i])
-				free(tmp->cmd_line[i++]);
-			free(tmp->cmd_line);
-		}
-		free(tmp->file_in);
-		free(tmp->file_out);
-		free(tmp->redirect);
-		free(tmp->pipe);
-		free(tmp->limiter);
-		free(tmp);
+		free_array(curr->cmd_line);
+		// free_array(curr->cmd_line);
+		free(curr->file_in);
+		free(curr->file_out);
+		free(curr->limiter);
+		free(curr->redirect);
+		// if (curr->next != NULL)
+		curr = curr->next;
 	}
-	*cmd_list = NULL;
+	free(cmd);
 }
+

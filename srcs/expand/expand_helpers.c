@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:27:25 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 16:48:30 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 11:45:53 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	**copy_env_list_to_array(t_env *env_list)
 	char **env_array;
 	char *joined;
 
+	env_array = NULL;
 	i = 0;
 	size = get_env_list_size(env_list);
 	env_array = malloc(sizeof(char *) * (size + 1));

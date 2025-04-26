@@ -6,15 +6,14 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/22 16:24:24 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 14:01:14 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    get_path_cmd(t_minishell *shell, char **envp, char **args)
+void    get_path_cmd(t_minishell *shell, char **args)
 {
-    (void)envp;
     char    *path_env;
     int     i;
     char    **path;
@@ -25,7 +24,7 @@ void    get_path_cmd(t_minishell *shell, char **envp, char **args)
     path_env = my_getenv((*shell->env_list), "PATH");
     if (!path_env)
     {
-        printf("bash: ls: No such file or directory\n");
+        ft_putstr_fd("bash: ls: No such file or directory\n", 2);
         return ;
     }
     path = ft_split(path_env, ':');
@@ -44,11 +43,16 @@ void    get_path_cmd(t_minishell *shell, char **envp, char **args)
         free(temp);
         i++;
     }
+	shell->envps = copy_env_list_to_array((*shell->env_list));
+    if (!shell->envps)
+        return ;
     if (cmd_path)
-        execute_cmd(cmd_path, shell, envp, args);
+        execute_cmd(cmd_path, shell, shell->envps, args);
     else
     {
-        printf("Command not found\n");
+        free_array(shell->envps);
+        ft_putstr_fd(args[0], 2);
+        ft_putstr_fd(": command not found\n",2);
         shell->last_exit = 127;
     }
 }
@@ -58,7 +62,6 @@ void    execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_
     pid_t   pid;
     t_env   *env_list;
 
-    // (void)envp;
     pid = fork();
     env_list = (*shell->env_list);
     if (pid == 0)

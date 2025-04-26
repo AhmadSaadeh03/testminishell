@@ -6,14 +6,17 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/21 15:59:56 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:53:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_minishell	*init_shell(t_minishell *shell, char **envp)
+t_minishell	*init_shell(char **envp)
 {
+	t_minishell	*shell;
+
+	shell = NULL;
 	shell = malloc(sizeof(t_minishell));
 	if (!shell)
 	{
@@ -34,28 +37,32 @@ t_minishell	*init_shell(t_minishell *shell, char **envp)
 	return (shell);
 }
 
-void	init_cmd(t_cmd **cmd)
+t_cmd	*init_cmd()
 {
-	*cmd = malloc(sizeof(t_cmd));
-	if (!*cmd)
+	t_cmd	*cmd;
+	
+	cmd = NULL;
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
 	{
 		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
+		return (NULL);
+		// exit(EXIT_FAILURE);
 	}
-	(*cmd)->cmd_line = malloc(100 * sizeof(char *));
-	if (!(*cmd)->cmd_line)
+	cmd->cmd_line = malloc(50 * sizeof(char *));
+	if (!cmd->cmd_line)
 	{
-		free(*cmd);
+		free(cmd);
 		perror("Memory allocation failed");
-		exit(EXIT_FAILURE);
+		return (NULL);
+		// exit(EXIT_FAILURE);
 	}
-	(*cmd)->cmd_line[0] = NULL;
-	(*cmd)->file_in = NULL;
-	(*cmd)->file_out = NULL;
-	(*cmd)->append = 0;
-	(*cmd)->next = NULL;
-	(*cmd)->pipe = NULL;
-	(*cmd)->limiter = NULL;
+	cmd->file_in = NULL;
+	cmd->file_out = NULL;
+	cmd->append = 0;
+	cmd->limiter = NULL;
+	cmd->next = NULL;
+	return (cmd);
 }
 
 t_node	*create_node_list(char **tokens)

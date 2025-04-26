@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/22 17:22:01 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 13:58:02 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ int	expand(t_minishell *shell)
 			new = handle_env(temp->node, (*shell->env_list));
 			if (!new)
 				return (1);
+			// printf("djdj\n\n\n\n\n");
 			// Step 2: Remove quotes
 			final = ft_trim_quotes(new);
-			free(new);
 			if (!final)
 				return (1);
+			// free(new);
 			// Update the node with the final processed string
 			free(temp->node);
 			temp->node = final;
 		}
 		temp = temp->next;
 	}
-	shell->envps = copy_env_list_to_array((*shell->env_list));
 	return (0);
 }
 

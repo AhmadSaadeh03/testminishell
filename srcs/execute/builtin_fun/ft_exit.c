@@ -6,37 +6,45 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/22 16:16:30 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:15:00 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void ft_exit(t_minishell *shell, t_cmd *cmd)
+void ft_exit(t_minishell *shell, char **cmd_line)
 {
     int i;
     int exit_status;
 
     i = 1;
-    if (cmd->cmd_line[i] == NULL)
-        exit(EXIT_SUCCESS);
-    if (cmd->cmd_line[i + 1] != NULL)
+    if (cmd_line[i] == NULL)
     {
-        printf("exit: too many arguments\n");
+        // free_minishell(shell);
+        exit(EXIT_SUCCESS);
+    }
+    if (cmd_line[i + 1] != NULL)
+    {
+        ft_putstr_fd("exit: too many arguments\n", 2);
         return ;
     }
-    if (check_digit(cmd->cmd_line[i]) != 3)
+    if (check_digit(cmd_line[i]) != 3)
     {
-        if (check_digit(cmd->cmd_line[i]) == 2)
+        if (check_digit(cmd_line[i]) == 2)
+        {
+            // free_minishell(shell);
             exit(2);
+        }
         else
         {
             perror("exit: not numeric argument");
+            // free_minishell(shell);
             exit(EXIT_FAILURE);
         }
     }
-    exit_status = ft_atoi(cmd->cmd_line[i]);
+    exit_status = ft_atoi(cmd_line[i]);
     shell->last_exit = exit_status;
+    // free_minishell(shell);
     exit(exit_status);
 }
 
