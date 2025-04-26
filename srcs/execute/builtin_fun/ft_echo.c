@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/23 17:00:59 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 16:38:30 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ void ft_echo(t_minishell *shell, char **cmd_line)
             shell->last_exit = 0;
             free(exit);
             i++;
+        }
+        else if (cmd_line[i][0] == '$' && cmd_line[i][1] == '_')
+        {
+            printf("%s",shell->print_last_arg);
+            //free(shell->last_arg);
         }
         else
             printf("%s", cmd_line[i]);

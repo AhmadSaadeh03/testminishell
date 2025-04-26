@@ -74,6 +74,8 @@ typedef struct s_minishell
 	t_env			**env_list;
 	char			**envps;
 	int				last_exit;
+	char			*last_arg;
+	char 			*print_last_arg;
 }					t_minishell;
 
 

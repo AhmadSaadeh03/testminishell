@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 15:57:30 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 14:01:14 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,13 @@ void    execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_
     env_list = (*shell->env_list);
     if (pid == 0)
     {
-        execve(cmd_path, cmd_line, envp);
-        free_minishell(shell);
+        if (execve(cmd_path, cmd_line, envp) == -1)
+        {
+            perror("Execve");
+            shell->last_exit = 127;
+            // exit(shell->last_exit);
+            // free_and_exit(shell);
+        }
     }
     else
         waitpid(pid, NULL, 0);

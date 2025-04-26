@@ -3,14 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   fill_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 13:52:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 16:37:39 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	store_last_arg(t_minishell *shell)
+{
+    t_cmd	*cmd;
+    int		i;
+	int j = 0;
+
+    cmd = *shell->cmd_list; 
+    i = 0;
+    int arr = 0;
+	while (cmd->cmd_line[arr])
+	{
+		if (cmd->cmd_line[arr][0] == '$' && cmd->cmd_line[arr][1] == '_')
+		{
+			shell->print_last_arg = shell->last_arg; 
+			return;
+		}
+		arr++;
+	}
+	
+    	while (cmd->cmd_line[i + 1])
+    		i++;   
+    	shell->last_arg = malloc(sizeof(char) * ft_strlen(cmd->cmd_line[i]) + 1);
+	while (cmd->cmd_line[i][j])
+	{
+		shell->last_arg[j] = cmd->cmd_line[i][j];
+		j++;
+	}
+	shell->last_arg[j] = '\0';
+	//printf("Last argument: %s\n", shell->last_arg);
+}
 
 void	set_cmd(t_cmd *cmd, char *file_name, char *var, t_type type)
 {
@@ -92,6 +123,7 @@ int	cmd_filling(t_minishell *shell)
 	if (fill_cmd(cmd, temp) == 1)
 		return (1);
 	shell->cmd_list = &cmd;
+	store_last_arg(shell);
 	free_tokens(shell->token_list);
 	// handle_redirection(&shell);
 	return (0);

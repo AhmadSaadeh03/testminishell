@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 16:04:36 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:19:27 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ void free_minishell(t_minishell *shell)
     // if (!shell)
     //     return ;
 	
-	free_cmd(shell->cmd_list);
+	// free_cmd(shell->cmd_list);
 	// free_env_list(shell->env_list);
 	// free_array(shell->envps);
 	// free_array()
     free(shell);
-	shell = NULL;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/26 16:26:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 11:56:20 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int main(int arc, char **arv, char **envp)
         // free(shell->name);
     }
     // free_minishell(shell);
-    shell = NULL;
+    free(shell);
     // free_and_exit(&shell);
     return (0);
 }

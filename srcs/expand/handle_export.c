@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:51:55 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 16:18:58 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:34:10 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	handle_export(char *str, t_env **env_list)
     j = 0;
     before_equal = ft_strdup("");
     after_equal = ft_strdup("");
-    if (!before_equal)
-        
     while (str[i] && str[i] != '=')
     {
         before_equal[j] = str[i];
@@ -32,6 +30,7 @@ void	handle_export(char *str, t_env **env_list)
         j++;
     }
     before_equal[j] = '\0';
+    // printf("var name :  %s\n", before_equal);
     i++;
     j = 0;
     in_double_quote = 0;

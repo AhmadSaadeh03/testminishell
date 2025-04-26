@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 16:06:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:21:34 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void    is_builtin(t_minishell *shell, char **cmd_line)
         ft_exit(shell, cmd_line);
     else
         get_path_cmd(shell, cmd_line);
+    // free_minishell(shell);
 }
 
 void    ft_cd(t_minishell *shell, char **cmd_line)
@@ -52,7 +53,7 @@ void    ft_cd(t_minishell *shell, char **cmd_line)
         if (chdir(cmd_line[1]) != 0)
             perror("cd");
     }
-    // free(path);
+    free(path);
 }
 
 void    ft_pwd()

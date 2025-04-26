@@ -29,6 +29,8 @@ t_minishell	*init_shell(char **envp)
 	shell->cmd_list = NULL;
 	shell->env_list = NULL;
 	shell->envps = NULL;
+	shell->last_arg = NULL;
+	shell->print_last_arg = NULL;
 	shell->env_list = malloc(sizeof(t_env *));
 	if (!shell->env_list)
 		return (NULL);
