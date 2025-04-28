@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 16:58:58 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:28:53 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_redirection(t_minishell **shell)
 {
 	t_cmd	*cmd;
 
-	cmd = (*(*shell)->cmd_list);
+	cmd = (*shell)->cmd_list;
 	while (cmd)
 	{
 		if (cmd->file_in)

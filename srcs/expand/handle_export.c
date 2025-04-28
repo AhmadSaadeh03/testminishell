@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:51:55 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 17:01:25 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 13:48:01 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handle_export(char *str, t_env **env_list)
         i++;
     before_equal = malloc((i + 1) * sizeof(char));
     if (!before_equal)
-        return;
+        return ;
     i = 0;
     while (str[i] && str[i] != '=')
     {
@@ -40,7 +40,8 @@ void	handle_export(char *str, t_env **env_list)
     i++;
     j = 0;
     after_length = ft_strlen(str + i);
-    after_equal = malloc((after_length + 1) * sizeof(char));
+    after_equal = malloc((after_length) * sizeof(char) + 1);
+    if (!after_equal)
     {
         free(before_equal);
         return ;
@@ -61,9 +62,7 @@ void	handle_export(char *str, t_env **env_list)
             j++;
         }
         else
-        {
             break;
-        }
         i++;
     }
     after_equal[j] = '\0';

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 15:15:00 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:00:04 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void ft_exit(t_minishell *shell, char **cmd_line)
     i = 1;
     if (cmd_line[i] == NULL)
     {
-        // free_minishell(shell);
+        free_minishell(shell);
         exit(EXIT_SUCCESS);
     }
     if (cmd_line[i + 1] != NULL)

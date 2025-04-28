@@ -6,13 +6,13 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 15:21:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 16:58:37 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    is_builtin(t_minishell *shell, char **cmd_line)
+void    exec_builtin(t_minishell *shell, char **cmd_line)
 {
     char    **envp;
 

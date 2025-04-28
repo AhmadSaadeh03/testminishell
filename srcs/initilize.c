@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/26 13:53:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:51:40 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_minishell	*init_shell(char **envp)
 	shell->envps = NULL;
 	shell->last_arg = NULL;
 	shell->print_last_arg = NULL;
-	shell->env_list = malloc(sizeof(t_env *));
+	shell->env_list = malloc(sizeof(t_env));
 	if (!shell->env_list)
 		return (NULL);
 	(*shell->env_list) = copy_env_to_list(envp);
@@ -61,6 +61,7 @@ t_cmd	*init_cmd()
 	}
 	cmd->file_in = NULL;
 	cmd->file_out = NULL;
+	cmd->redirect = NULL;
 	cmd->append = 0;
 	cmd->limiter = NULL;
 	cmd->next = NULL;

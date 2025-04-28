@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:49:32 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 17:36:32 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:18:59 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*remove_all_spaces(char *str)
 	char *ptr;
 
 	ptr = NULL;
-	ptr = malloc(sizeof(char) * ft_strlen(str) + 2);
+	ptr = malloc(sizeof(char) * ft_strlen(str) + 1);
 	if (!ptr)
 		return (NULL);
 	while (str[i])
@@ -30,7 +30,7 @@ char	*remove_all_spaces(char *str)
 		i++;
 		j++;
 	}
-	ptr[j + 1] = '\0';
+	ptr[j] = '\0';
 	return (ptr);
 }
 
@@ -106,7 +106,7 @@ char	*handle_env(char *str, t_env *env_list)
 						new = ft_strjoin_free(new, ptr);
 					else
 					{
-						new = ft_strjoin_free(new, ft_strdup(""));
+						new = ft_strjoin_free(new, "");
 					}
 				}
 			}
@@ -115,12 +115,9 @@ char	*handle_env(char *str, t_env *env_list)
 				var_val = my_getenv(env_list, var_name);
 				free(var_name);
 				if (var_val)
-					new = ft_strjoin_free(new, var_val);
+					new = ft_strjoin_free(new, ft_strdup(var_val));
 				else
-				{
-					var_name = "";
-					new = ft_strjoin_free(new, ft_strdup(var_name));
-				}
+					new = ft_strjoin_free(new, ft_strdup(""));
 			}
         }
         else

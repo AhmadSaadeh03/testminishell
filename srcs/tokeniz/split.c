@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 15:10:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:11:40 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,5 @@ void	process_node_list(t_minishell *shell)
 		ft_putstr_fd("syntax error near unexpected token\n", 2);
 		return ;
 	}
-	free_array(shell->token_space);
+	// free_array(shell->token_space);
 }

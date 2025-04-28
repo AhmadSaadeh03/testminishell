@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/26 13:59:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 16:58:53 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int		ft_isspace(char c);
 char	**copy_env_list_to_array(t_env *env_list);
 int		get_env_list_size(t_env *env_list);
 char	*join_env_pair(char *name, char *value);
-void    is_builtin(t_minishell *shell, char **cmd_line);
+void    exec_builtin(t_minishell *shell, char **cmd_line);
 void ft_echo(t_minishell *shell, char **cmd_line);
 int handle_echo_flag(char *arg);
 void    ft_pwd();
@@ -162,7 +162,7 @@ void    new_prompt(t_minishell *shell);
 void    handle_exit_status(char *exit,char *arg);
 // int skip_spaces(char *arg, int i);
 int check_digit(const char *arg);
-char	*add_cmd(char *token, char *cmd);
+char	*add_cmd(char *token);
 /// print functions
 void				print_env_list(t_env **env_list);
 void				prt_list(t_minishell **shell);
