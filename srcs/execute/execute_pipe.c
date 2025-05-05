@@ -64,7 +64,7 @@ int open_pipes(t_pipes *pipe_data)
     pipe_data->pipe_fd = malloc(sizeof(int) * 2 * (pipe_count));
     if (!pipe_data->pipe_fd)
         return (1);
-    while (i <= pipe_count)
+    while (i < pipe_count)
     {
         if (pipe(&pipe_data->pipe_fd[i * 2]) == -1)
         {
@@ -91,7 +91,7 @@ void    run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int  i)
     {
         if (i > 0)
             dup2(pipe_data->pipe_fd[(i - 1) * 2], STDIN_FILENO);
-        else if (i < (pipe_data->cmd_count - 1))
+        if (i < (pipe_data->cmd_count - 1))
             dup2(pipe_data->pipe_fd[i * 2 + 1], STDOUT_FILENO);
         close_fd(pipe_data);
         execute_one_cmd(shell, cmd);
