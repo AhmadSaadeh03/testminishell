@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 13:45:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/03 15:42:41 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	free_cmd(t_cmd **cmd)
 	{
 		free_array(curr->cmd_line);
 		// free_array(curr->cmd_line);
-		free(curr->file_in);
-		free(curr->file_out);
-		free(curr->limiter);
+		// free(curr->file_in);
+		// free(curr->file_out);
+		// free(curr->limiter);
 		free(curr->redirect);
 		// if (curr->next != NULL)
 		curr = curr->next;

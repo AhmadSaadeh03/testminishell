@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 13:56:26 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/02 13:58:34 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void    sort_export_list_and_print(t_env **env_list)
             printf("declare -x %s\n", sorted_list->env_name);
         sorted_list = sorted_list->next;
     }
-    free_env_list(&sorted_list);
+    free_env_list(sorted_list);
 }
 
 void sort_list(t_env **env_list)
@@ -99,7 +99,7 @@ void    swap_nodes(t_env *a, t_env *b)
 {
     char *tmp_name;
     char *tmp_value;
-    
+
     tmp_value = a->value;
     tmp_name = a->env_name;
     a->env_name = b->env_name;

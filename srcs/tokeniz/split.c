@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/28 15:11:40 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/29 17:09:34 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	split_space(t_minishell *shell)
 	}
 	restore_spaces(shell->token_space);
 	process_node_list(shell);
+	free_array(shell->token_space);
+    shell->token_space = NULL;
 	return (0);
 }
 
@@ -72,19 +74,16 @@ int	split(t_minishell *shell)
 {
 	if (!*shell->name || !shell->name)
 		return (1);
-	handle_quotes_and_operators(shell);
+	if (handle_quotes_and_operators(shell) == 1)
+		return (1);
 	split_space(shell);
-		// return (1);
-	// process_node_list(shell);
 	parsing(&shell);
 	if (expand(shell) == 1)
 	{
-		// printf("vfg\n\n\n\n\n");
 		return(1);
 	}
-	cmd_filling(shell);
-		// return(1)
-	// is_builtin(shell);
+	if (cmd_filling(shell) == 1)
+		return 1;
 	return (0);
 }
 
@@ -105,6 +104,8 @@ int	handle_quotes_and_operators(t_minishell *shell)
 		}
 		if (shell->name[i] && (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>'))
 		{
+			if (handle_operation(shell) == 1)
+				return (1);
 			if (split_operation(shell, shell->name[i]) == 1)
 				return (1);
 		}
@@ -124,7 +125,8 @@ void	process_node_list(t_minishell *shell)
 				|| shell->token_list->node[0] == '>'))
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-		return ;
+		free_tokens(shell->token_list);
+		free_array(shell->token_space);
 	}
 	temp = shell->token_list;
 	while (temp->next)
@@ -133,7 +135,7 @@ void	process_node_list(t_minishell *shell)
 			|| ft_strcmp(temp->node, "|") == 0) && temp->next == NULL)
 	{
 		ft_putstr_fd("syntax error near unexpected token\n", 2);
-		return ;
+		free_tokens(shell->token_list);
+		free_array(shell->token_space);
 	}
-	// free_array(shell->token_space);
 }

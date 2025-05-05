@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:49:32 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/28 14:18:59 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/03 11:13:20 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*remove_all_spaces(char *str)
 	char *ptr;
 
 	ptr = NULL;
-	ptr = malloc(sizeof(char) * ft_strlen(str) + 1);
+	ptr = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!ptr)
 		return (NULL);
 	while (str[i])
@@ -81,7 +81,7 @@ char	*handle_env(char *str, t_env *env_list)
 			var_name = ft_strdup("./minishell");
 			if (!var_name)
 				return (NULL);
-			new = ft_strjoin_free(new, ft_strdup(var_name));
+			new = ft_strjoin_free(new, var_name);
 		}
 		else if (str[i] == '$' && !in_single_quotes && (str[i+1] >= '1' && str[i+1] <= '9'))//numbers
 			i += 2;
@@ -131,21 +131,30 @@ char	*handle_env(char *str, t_env *env_list)
 
 char	*ft_strjoin_free(char *s1, char *s2)
 {
-	size_t	len1;
-	size_t	len2;
+	size_t	len1 = 0;
+	size_t	len2 = 0;
 	char	*joined;
 
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	joined = malloc(len1 + len2 + 1);
+	joined = malloc((len1 + len2 ) + 1);
 	if (!joined)
 		return (NULL);
 	ft_strcpy(joined, s1);
-	ft_strcat(joined, s2);
-	free(s1);
-	free(s2);
+	ft_strcat(joined , s2);
+	if (s1)
+	{
+        free(s1);
+		s1 = NULL;
+	}
+    if (s2)
+	{
+		free(s2);
+		s2 = NULL;
+	}
 	return (joined);
 }
+
 
 t_env	*copy_env_to_list(char **envp)
 {

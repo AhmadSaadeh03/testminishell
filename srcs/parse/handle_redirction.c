@@ -6,80 +6,121 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/28 15:28:53 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:28:21 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_redirection(t_minishell **shell)
+int	handle_redirection(t_cmd *cmd)
 {
-	t_cmd	*cmd;
+	t_redirect *redir;
 
-	cmd = (*shell)->cmd_list;
-	while (cmd)
+	if (cmd->heredoc_flag == 1)
+		exec_heredoc(cmd);
+	redir = cmd->redirect;
+	while (redir)
 	{
-		if (cmd->file_in)
-			redirect_in(cmd);
-		if (cmd->file_out)
-			redirect_out(cmd);
-		cmd = cmd->next;
+		if (redir->type == TOKEN_REDIRECT_IN)
+		{
+			if (redirect_in(redir->file_name) == 1)
+				return (1);
+		}
+		else if (redir->type == TOKEN_REDIRECT_OUT || redir->type == TOKEN_APPEND)
+		{
+			if (redirect_out(redir->file_name, redir->type) == 1)
+				return (1);
+		}
+		redir = redir->next;
 	}
+	return (0);
 }
 // >
-void	redirect_out(t_cmd *cmd)
+int	redirect_out(char *file_name, t_type type)
 {
 	int	fd_out;
 
-	if (cmd->append)
-		fd_out = open(cmd->file_out, O_RDONLY | O_CREAT | O_APPEND,
-				0644);
-	else
-		fd_out = open(cmd->file_out, O_RDONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd_out < 0)
-		perror(cmd->file_out);
-	// dup2(fd_out, STDIN_FILENO);
-	close(fd_out);
+	if (type == TOKEN_REDIRECT_OUT || type == TOKEN_APPEND)
+	{
+		if (type == TOKEN_APPEND)
+			fd_out = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			fd_out = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd_out == -1)
+		{
+			perror("redirect_out");
+			return (1);
+		}
+		dup2(fd_out, STDOUT_FILENO);
+		close(fd_out);
+	}
+	return (0);
 }
-// <
-void	redirect_in(t_cmd *cmd)
+
+int	redirect_in(char *file_name)
 {
 	int	fd_in;
 
-	if (ft_strcmp(cmd->redirect, "<<") == 0)
-		here_doc(cmd);
-	fd_in = open(cmd->file_in, O_RDONLY);
-	if (fd_in < 0)
-		perror(cmd->file_in);
+	fd_in = open(file_name, O_RDONLY);
+	if (fd_in == -1)
+	{
+		perror(file_name);
+		return (1);
+	}
+	dup2(fd_in, STDIN_FILENO);
 	close(fd_in);
+	return (0);
 }
 
-// << not working yet
-
-void	here_doc(t_cmd *cmd)
+void	exec_heredoc(t_cmd *cmd)
 {
-	int		pipefd[2];
+	t_here	*herd;
+	t_here *last;
+	int fd[2];
+
+	if (pipe(fd) == -1)
+		ft_putstr_fd("Error\n", 2);
+	herd = cmd->heredocs;
+	while (herd)
+	{
+		herd->content = read_input(herd->limt, herd->content);
+		herd = herd->next;
+	}
+	last = cmd->heredocs;
+	while (last && last->next)
+		last = last->next;
+	if (last && last->content)
+	{
+		write(fd[1], last->content, ft_strlen(last->content));
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+	}
+}
+
+char	*read_input(char *limiter, char	*cont)
+{
 	char	*line;
 
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return ;
-	}
+	cont = add_cmd("");
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			break ;
-		if (ft_strcmp(line, cmd->limiter) == 0)
+		if(!line)
+			break;
+		if (line[0] == '\0')
+		{
+			free(line);
+			continue ;
+		}
+		if (ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(pipefd[1], line, ft_strlen(line));
-		write(pipefd[1], "\n", 1);
+		cont = ft_strjoin(cont, line);
+		cont = ft_strjoin(cont, "\n");
 		free(line);
 	}
-	close(pipefd[1]);
-	close(pipefd[0]);
+	return (cont);
 }

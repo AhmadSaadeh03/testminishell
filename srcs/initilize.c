@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/28 15:51:40 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:10:48 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ t_minishell	*init_shell(char **envp)
 	shell->print_last_arg = NULL;
 	shell->env_list = malloc(sizeof(t_env));
 	if (!shell->env_list)
+	{
+		free(shell);
 		return (NULL);
+	}
 	(*shell->env_list) = copy_env_to_list(envp);
 	shell->last_exit = 0;
 	return (shell);
@@ -42,14 +45,13 @@ t_minishell	*init_shell(char **envp)
 t_cmd	*init_cmd()
 {
 	t_cmd	*cmd;
-	
+
 	cmd = NULL;
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
 		perror("Memory allocation failed");
 		return (NULL);
-		// exit(EXIT_FAILURE);
 	}
 	cmd->cmd_line = malloc(50 * sizeof(char *));
 	if (!cmd->cmd_line)
@@ -57,13 +59,14 @@ t_cmd	*init_cmd()
 		free(cmd);
 		perror("Memory allocation failed");
 		return (NULL);
-		// exit(EXIT_FAILURE);
 	}
-	cmd->file_in = NULL;
-	cmd->file_out = NULL;
 	cmd->redirect = NULL;
-	cmd->append = 0;
-	cmd->limiter = NULL;
+	cmd->heredoc_flag = 0;
+	cmd->redir_flag = 0;
+	cmd->pipes.cmd_count = 0;
+	cmd->pipes.pipe_fd = 0;
+	cmd->heredocs = NULL;
+	// cmd->pipes = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/28 16:58:37 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/02 13:56:52 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void    exec_builtin(t_minishell *shell, char **cmd_line)
 {
-    char    **envp;
+    // char    **envp;
 
-    // if (!shell || !(*shell->cmd_list))
-    //     return;
-    envp = shell->envps;
+    if (!shell || !(*shell->cmd_list))
+        return;
+    // envp = shell->envps;
     if (ft_strcmp(cmd_line[0], "echo") == 0)
         ft_echo(shell, cmd_line);
     else if (ft_strcmp(cmd_line[0], "cd") == 0)
@@ -34,7 +34,7 @@ void    exec_builtin(t_minishell *shell, char **cmd_line)
     else if (ft_strcmp(cmd_line[0], "exit") == 0)
         ft_exit(shell, cmd_line);
     else
-        get_path_cmd(shell, cmd_line);
+        return ;
     // free_minishell(shell);
 }
 
@@ -73,4 +73,24 @@ void    ft_unset(t_minishell *shell, char **cmd_line)
         my_unsetenv(shell->env_list, cmd_line[1]);
     else
         return ;
+}
+
+int is_builtin(char *cmd)
+{
+    if (ft_strcmp(cmd, "echo") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "cd") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "pwd") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "env") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "export") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "unset") == 0)
+        return (1);
+    else if (ft_strcmp(cmd, "exit") == 0)
+        return (1);
+    else
+        return (0);
 }

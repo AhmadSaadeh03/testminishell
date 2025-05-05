@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 18:10:19 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/28 16:58:53 by fghanem          ###   ########.fr       */
+/*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
+/*   Updated: 2025/05/05 17:22:09 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,21 @@
 # include <string.h>
 
 /// global var
-
-typedef struct s_cmd
+typedef struct s_here
 {
-	char			**cmd_line;
-	char			*file_in;
-	char			*file_out;
-	int				append;
-	char			*redirect;
-	// char			*pipe;
-	char			*limiter;
-	struct s_cmd	*next;
-}	t_cmd;
+	char	*limt;
+	char	*content;
+	struct s_here	*next;
+}	t_here;
+
+typedef struct s_pipes
+{
+	int	cmd_count;
+	int	*pipe_fd;
+	int	prev_fd;
+	pid_t	*pid;
+}	t_pipes;
+
 
 typedef enum s_type
 {
@@ -50,6 +53,24 @@ typedef enum s_type
 	COMMAND,
 	FILEOUT,
 }					t_type;
+
+typedef	struct s_redirect
+{
+	char			*file_name;
+	t_type				type;
+	struct s_redirect	*next;
+}	t_redirect;
+
+typedef struct s_cmd
+{
+	char			**cmd_line;
+	int				heredoc_flag;
+	int				redir_flag;
+	t_redirect 		*redirect;
+	t_here			*heredocs;
+	t_pipes			pipes;
+	struct s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_node
 {
@@ -91,6 +112,7 @@ int					split_space(t_minishell *shell);
 int					parsing(t_minishell **shell);
 void				free_minishell(t_minishell *shell);
 void	free_array(char **array);
+void	add_redirect(t_cmd *cmd, char *file_name, t_type type);
 t_minishell	*init_shell(char **envp);
 t_node				*fix_redirection(t_node *list);
 int					put_type(t_minishell **shell);
@@ -125,15 +147,13 @@ int					has_invalid_repeated_operators(char *str);
 int	fill_cmd(t_cmd *cmd2, t_node *temp);
 t_cmd	*init_cmd();
 int				cmd_filling(t_minishell *shell);
-void				set_cmd(t_cmd *cmd, char *file_name, char *var,
-						t_type type);
-void				handle_redirection(t_minishell **shell);
-void				here_doc(t_cmd *cmd);
-void				redirect_out(t_cmd *cmd);
-void				redirect_in(t_cmd *cmd);
+void	add_redirect(t_cmd *cmd, char *file_name, t_type type);
+int	handle_redirection(t_cmd *cmd);
+int	redirect_out(char *file_name, t_type type);
+int	redirect_in(char *file_name);
 void				handle_export(char *str, t_env **env_list);
 void				my_unsetenv(t_env **env_list, char *name);
-void	free_env_list(t_env **env_list);
+void free_env_list(t_env *head);
 void	free_cmd(t_cmd **cmd);
 
 void    get_path_cmd(t_minishell *shell, char **args);
@@ -158,14 +178,38 @@ void    ft_exit(t_minishell *shell, char **cmd_line);
 void    ft_cd(t_minishell *shell, char **cmd_line);
 void    ft_unset(t_minishell *shell, char **cmd_line);
 int is_valid_number_format(const char *arg, int *sign, long *number);
-void    new_prompt(t_minishell *shell);
+// void    new_prompt(t_minishell *shell);
 void    handle_exit_status(char *exit,char *arg);
 // int skip_spaces(char *arg, int i);
 int check_digit(const char *arg);
 char	*add_cmd(char *token);
+void    free_here_list(t_here *heredocs);
+t_here	*creat_heredoc(char	*limit);
+void	add_heredoc(t_cmd *cmd, char *limit);
+void	exec_heredoc(t_cmd *cmd);
+char	*read_input(char *limiter, char	*cont);
+void free_cmd_Aaa(t_cmd *cmd);
+int is_builtin(char *cmd);
+void    execute_one_cmd(t_minishell *shell, t_cmd *cmd);
+
+void    external_cmd(t_minishell *shell, t_cmd *cmd);
+void    exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl);
+int  check_cmd_path(t_minishell *shell, char **cmd_line);
+
+int	handle_operation(t_minishell *shell);
+void	free_start(t_minishell *shell);
+void    exec_red_only(t_cmd *cmd, t_minishell *shell);
+void    exec_pipe(t_minishell *shell);
+void    executing(t_minishell *shell);
+void    exec_pipe(t_minishell *shell);
+int cmd_count(t_cmd *cmd);
+int open_pipes(t_pipes *pipe_data);
+void    run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int  i);
+void    close_fd(t_pipes *pipe_data);
+
 /// print functions
 void				print_env_list(t_env **env_list);
 void				prt_list(t_minishell **shell);
-void				print(t_minishell **shell);
+void print_cmd_list(t_cmd *head);
 
 #endif

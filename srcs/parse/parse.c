@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 11:12:49 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/02 15:07:42 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	parsing(t_minishell **shell)
 	if (put_type(shell) == 1)
 		return (1);
 	define_cmd(shell);
+	// prt_list(shell);
 	// print(shell);
 	return (0);
 }

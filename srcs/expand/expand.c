@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/28 14:58:47 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/04/28 19:40:51 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	expand(t_minishell *shell)
 			final = ft_trim_quotes(new);
 			if (!final)
 				return (1);
-			// free(new);
+			free(new);
 			// Update the node with the final processed string
 			free(temp->node);
 			temp->node = final;
