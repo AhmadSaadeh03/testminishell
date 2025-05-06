@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/05 14:28:21 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:55:29 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	exec_heredoc(t_cmd *cmd)
 	herd = cmd->heredocs;
 	while (herd)
 	{
-		herd->content = read_input(herd->limt, herd->content);
+		herd->content = read_input(herd->limt);
 		herd = herd->next;
 	}
 	last = cmd->heredocs;
@@ -96,19 +96,24 @@ void	exec_heredoc(t_cmd *cmd)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
+		// free_here_list(herd);
 	}
 }
 
-char	*read_input(char *limiter, char *cont)
+char	*read_input(char *limiter)
 {
 	char	*line;
+	char	*cont;
 
 	cont = add_cmd("");
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			free(cont);
 			break ;
+		}
 		if (line[0] == '\0')
 		{
 			free(line);

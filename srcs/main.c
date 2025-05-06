@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/06 17:10:18 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:21:13 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,18 @@ int	main(int arc, char **arv, char **envp)
 		add_history(shell->name);
 		if (split(shell) == 1)
 		{
-			free_exit(shell);
+			free_minishell(shell);
 			continue ;
 		}
 		executing(shell);
 		if (*(shell->cmd_list))
 			free_cmd(*(shell->cmd_list));
 		free(shell->cmd_list);
+        if (shell->token_space)
+		    free_array(shell->token_space);
+        // free_minishell(shell);
 	}
-	free_exit(shell);
+    free_env_list(*(shell->env_list));
 	return (0);
 }
 

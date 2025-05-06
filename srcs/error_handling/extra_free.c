@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extra_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 17:05:57 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:52:02 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	free_cmd(t_cmd *cmd)
 
 void	free_here_list(t_here *heredocs)
 {
+	printf("hhhhhhhhhhhhhhh\n");
 	t_here	*tmp;
 
 	if (!heredocs)

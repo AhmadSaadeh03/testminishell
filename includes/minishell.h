@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 14:42:01 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:54:04 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ t_cmd					*init_cmd(void);
 char					*space_before_op(char *str, int i, int *len);
 char					*space_after_op(char *str, int i, int *len);
 char					*replace_spaces_inside_quotes(const char *input);
-char					*read_input(char *limiter, char *cont);
+char					*read_input(char *limiter);
 char					*my_getenv(t_env *env_list, char *name);
 char					**copy_env_list_to_array(t_env *env_list);
 char					*join_env_pair(char *name, char *value);

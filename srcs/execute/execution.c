@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 16:02:07 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:48:56 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,21 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 	if (pid == -1)
 	{
 		perror("fork");
-		free_minishell(shell);
+		free_exit(shell);
 		return ;
 	}
 	if (pid == 0)
 	{
 		if (handle_redirection(cmd) == 1)
 		{
-			free_minishell(shell);
+			free_exit(shell);
 			exit(1);
 		}
 		if (fl == 1)
 			exec_builtin(shell, cmd->cmd_line);
 		else
 			get_path_cmd(shell, cmd->cmd_line);
-		free_minishell(shell);
+		free_exit(shell);
 		exit(0);
 	}
 	else
@@ -82,10 +82,10 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	{
 		if (handle_redirection(cmd) == 1)
 		{
-			free_minishell(shell);
+			free_exit(shell);
 			exit(1);
 		}
-		free_minishell(shell);
+		free_exit(shell);
 		exit(0);
 	}
 	else

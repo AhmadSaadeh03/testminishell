@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 16:00:15 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 21:34:55 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,12 @@ void	run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 		if (i < (pipe_data->cmd_count - 1))
 			dup2(pipe_data->pipe_fd[i * 2 + 1], STDOUT_FILENO);
 		close_fd(pipe_data);
-		execute_one_cmd(shell, cmd);
 		free(pipe_data->pid);
-		free_minishell(shell);
+		execute_one_cmd(shell, cmd);
+		free_exit(shell);
 		exit(0);
 	}
+    // free(pipe_data->pid);
 }
 
 void	close_fd(t_pipes *pipe_data)
@@ -112,4 +113,5 @@ void	close_fd(t_pipes *pipe_data)
 		i++;
 	}
 	free(pipe_data->pipe_fd);
+    // free(pipe_data->pid);
 }
