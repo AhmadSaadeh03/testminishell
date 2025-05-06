@@ -14,7 +14,7 @@
 
 int	handle_redirection(t_cmd *cmd)
 {
-	t_redirect *redir;
+	t_redirect	*redir;
 
 	if (cmd->heredoc_flag == 1)
 		exec_heredoc(cmd);
@@ -26,7 +26,8 @@ int	handle_redirection(t_cmd *cmd)
 			if (redirect_in(redir->file_name) == 1)
 				return (1);
 		}
-		else if (redir->type == TOKEN_REDIRECT_OUT || redir->type == TOKEN_APPEND)
+		else if (redir->type == TOKEN_REDIRECT_OUT
+				|| redir->type == TOKEN_APPEND)
 		{
 			if (redirect_out(redir->file_name, redir->type) == 1)
 				return (1);
@@ -75,8 +76,8 @@ int	redirect_in(char *file_name)
 void	exec_heredoc(t_cmd *cmd)
 {
 	t_here	*herd;
-	t_here *last;
-	int fd[2];
+	t_here	*last;
+	int		fd[2];
 
 	if (pipe(fd) == -1)
 		ft_putstr_fd("Error\n", 2);
@@ -98,7 +99,7 @@ void	exec_heredoc(t_cmd *cmd)
 	}
 }
 
-char	*read_input(char *limiter, char	*cont)
+char	*read_input(char *limiter, char *cont)
 {
 	char	*line;
 
@@ -106,8 +107,8 @@ char	*read_input(char *limiter, char	*cont)
 	while (1)
 	{
 		line = readline("> ");
-		if(!line)
-			break;
+		if (!line)
+			break ;
 		if (line[0] == '\0')
 		{
 			free(line);

@@ -14,17 +14,19 @@
 
 char	*remove_all_spaces(char *str)
 {
-	int i = 0;
-	int j = 0;
-	char *ptr;
+	int		i;
+	int		j;
+	char	*ptr;
 
+	i = 0;
+	j = 0;
 	ptr = NULL;
 	ptr = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!ptr)
 		return (NULL);
 	while (str[i])
 	{
-		while (str[i] == ' ' && str[i+1] == ' ')
+		while (str[i] == ' ' && str[i + 1] == ' ')
 			i++;
 		ptr[j] = str[i];
 		i++;
@@ -42,6 +44,8 @@ char	*handle_env(char *str, t_env *env_list)
 	int		in_double_quotes;
 	char	*var_name;
 	char	*var_val;
+	int		var_start;
+	char	*ptr;
 
 	in_single_quotes = 0;
 	in_double_quotes = 0;
@@ -51,50 +55,52 @@ char	*handle_env(char *str, t_env *env_list)
 	if (!new)
 		return (NULL);
 	i = 0;
-    while (str[i])
-    {
-        if (str[i] == '\'')
-        {
-            if (!in_double_quotes)
-                in_single_quotes = !in_single_quotes;
-            else
-                new = ft_strjoin_free(new, ft_substr(str, i, 1));
-            i++;
-        }
-        else if (str[i] == '"')
-        {
-            if (!in_single_quotes)
-                in_double_quotes = !in_double_quotes;
-            else
-                new = ft_strjoin_free(new, ft_substr(str, i, 1));
-            i++;
-        }
-		else if (str[i] == '$' && !in_single_quotes && !ft_isalnum(str[i+1]) && str[i] != '_')//special char
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			if (!in_double_quotes)
+				in_single_quotes = !in_single_quotes;
+			else
+				new = ft_strjoin_free(new, ft_substr(str, i, 1));
+			i++;
+		}
+		else if (str[i] == '"')
+		{
+			if (!in_single_quotes)
+				in_double_quotes = !in_double_quotes;
+			else
+				new = ft_strjoin_free(new, ft_substr(str, i, 1));
+			i++;
+		}
+		else if (str[i] == '$' && !in_single_quotes && !ft_isalnum(str[i + 1])
+				&& str[i] != '_') //special char
 		{
 			i++;
 			var_name = "$";
 			new = ft_strjoin_free(new, ft_strdup(var_name));
 		}
-		else if (str[i] == '$' && !in_single_quotes && str[i+1] == '0')
+		else if (str[i] == '$' && !in_single_quotes && str[i + 1] == '0')
 		{
-			i+=2;
+			i += 2;
 			var_name = ft_strdup("./minishell");
 			if (!var_name)
 				return (NULL);
 			new = ft_strjoin_free(new, var_name);
 		}
-		else if (str[i] == '$' && !in_single_quotes && (str[i+1] >= '1' && str[i+1] <= '9'))//numbers
+		else if (str[i] == '$' && !in_single_quotes && (str[i + 1] >= '1'
+					&& str[i + 1] <= '9')) //numbers
 			i += 2;
-		else if (str[i] == '$' && !in_single_quotes && ft_isalpha(str[i+1]))
+		else if (str[i] == '$' && !in_single_quotes && ft_isalpha(str[i + 1]))
 		{
 			i++;
-			int var_start = i;
+			var_start = i;
 			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 				i++;
 			var_name = ft_substr(str, var_start, i - var_start);
 			if (!var_name)
 				return (NULL);
-			char *ptr = NULL;
+			ptr = NULL;
 			if (!in_double_quotes)
 			{
 				var_val = my_getenv(env_list, var_name);
@@ -119,42 +125,43 @@ char	*handle_env(char *str, t_env *env_list)
 				else
 					new = ft_strjoin_free(new, ft_strdup(""));
 			}
-        }
-        else
-        {
-            new = ft_strjoin_free(new, ft_substr(str, i, 1));
-            i++;
-        }
-    }
-    return (new);
+		}
+		else
+		{
+			new = ft_strjoin_free(new, ft_substr(str, i, 1));
+			i++;
+		}
+	}
+	return (new);
 }
 
 char	*ft_strjoin_free(char *s1, char *s2)
 {
-	size_t	len1 = 0;
-	size_t	len2 = 0;
+	size_t	len1;
+	size_t	len2;
 	char	*joined;
 
+	len1 = 0;
+	len2 = 0;
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	joined = malloc((len1 + len2 ) + 1);
+	joined = malloc((len1 + len2) + 1);
 	if (!joined)
 		return (NULL);
 	ft_strcpy(joined, s1);
-	ft_strcat(joined , s2);
+	ft_strcat(joined, s2);
 	if (s1)
 	{
-        free(s1);
+		free(s1);
 		s1 = NULL;
 	}
-    if (s2)
+	if (s2)
 	{
 		free(s2);
 		s2 = NULL;
 	}
 	return (joined);
 }
-
 
 t_env	*copy_env_to_list(char **envp)
 {

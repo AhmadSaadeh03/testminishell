@@ -6,28 +6,30 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:27:25 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/26 17:01:45 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 17:14:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int get_env_list_size(t_env *env_list)
+int	get_env_list_size(t_env *env_list)
 {
-    int count = 0;
-    while (env_list)
-    {
-        count++;
-        env_list = env_list->next;
-    }
-    return count;
+	int	count;
+
+	count = 0;
+	while (env_list)
+	{
+		count++;
+		env_list = env_list->next;
+	}
+	return (count);
 }
 
 char	*join_env_pair(char *name, char *value)
 {
-	size_t name_len;
-	size_t value_len;
-	char *joined;
+	size_t	name_len;
+	size_t	value_len;
+	char	*joined;
 
 	name_len = ft_strlen(name);
 	value_len = ft_strlen(value);
@@ -42,10 +44,10 @@ char	*join_env_pair(char *name, char *value)
 
 char	**copy_env_list_to_array(t_env *env_list)
 {
-	int i;
-	int size;
-	char **env_array;
-	char *joined;
+	int		i;
+	int		size;
+	char	**env_array;
+	char	*joined;
 
 	env_array = NULL;
 	i = 0;

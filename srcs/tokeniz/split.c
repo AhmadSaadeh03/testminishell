@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/29 17:09:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 16:42:27 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@ int	split_space(t_minishell *shell)
 	if (!temp)
 		return (1);
 	shell->token_space = ft_split(temp, ' ');
-	free(temp);
 	if (!shell->token_space)
 	{
 		ft_putstr_fd("Error: Failed to split the input\n", 2);
 		return (1);
 	}
+	free(temp);
+	free(shell->name);
 	restore_spaces(shell->token_space);
 	process_node_list(shell);
 	free_array(shell->token_space);
-    shell->token_space = NULL;
+	shell->token_space = NULL;
 	return (0);
 }
 
@@ -66,7 +67,8 @@ int	split_operation(t_minishell *shell, char operator)
 		i++;
 	}
 	free(shell->name);
-	shell->name = temp;
+	shell->name = add_cmd(temp);
+	free(temp);
 	return (0);
 }
 
@@ -76,14 +78,14 @@ int	split(t_minishell *shell)
 		return (1);
 	if (handle_quotes_and_operators(shell) == 1)
 		return (1);
-	split_space(shell);
-	parsing(&shell);
+	if (split_space(shell) == 1)
+		return (1);
+	if (parsing(&shell) == 1)
+		return (1);
 	if (expand(shell) == 1)
-	{
-		return(1);
-	}
+		return (1);
 	if (cmd_filling(shell) == 1)
-		return 1;
+		return (1);
 	return (0);
 }
 
@@ -102,7 +104,8 @@ int	handle_quotes_and_operators(t_minishell *shell)
 				return (1);
 			}
 		}
-		if (shell->name[i] && (shell->name[i] == '|' || shell->name[i] == '<' || shell->name[i] == '>'))
+		if (shell->name[i] && (shell->name[i] == '|' || shell->name[i] == '<'
+				|| shell->name[i] == '>'))
 		{
 			if (handle_operation(shell) == 1)
 				return (1);

@@ -12,13 +12,16 @@
 
 #include "../../includes/minishell.h"
 
-char *ft_trim_quotes(char *str)
+char	*ft_trim_quotes(char *str)
 {
-	int i, j;
-	char *new_str;
-	int in_double_quotes = 0;
-	int in_single_quotes = 0;
+	char	*new_str;
+	int		in_double_quotes;
+	int		in_single_quotes;
+	char	quote_type;
 
+	int i, j;
+	in_double_quotes = 0;
+	in_single_quotes = 0;
 	if (!str)
 		return (NULL);
 	new_str = malloc(ft_strlen(str) + 1);
@@ -28,13 +31,13 @@ char *ft_trim_quotes(char *str)
 	j = 0;
 	if (str[i] == '"' || str[i] == '\'')
 	{
-		char quote_type = str[i];
+		quote_type = str[i];
 		new_str[j++] = str[i];
 		i++;
 		while (str[i])
 		{
 			if (str[i] == quote_type)
-				break;
+				break ;
 			new_str[j++] = str[i];
 			i++;
 		}

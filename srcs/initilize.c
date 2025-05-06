@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:28:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/05 16:10:48 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 14:42:17 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ t_minishell	*init_shell(char **envp)
 	shell->cmd_list = NULL;
 	shell->env_list = NULL;
 	shell->envps = NULL;
-	shell->last_arg = NULL;
-	shell->print_last_arg = NULL;
 	shell->env_list = malloc(sizeof(t_env));
 	if (!shell->env_list)
 	{
@@ -42,7 +40,7 @@ t_minishell	*init_shell(char **envp)
 	return (shell);
 }
 
-t_cmd	*init_cmd()
+t_cmd	*init_cmd(void)
 {
 	t_cmd	*cmd;
 
@@ -66,7 +64,6 @@ t_cmd	*init_cmd()
 	cmd->pipes.cmd_count = 0;
 	cmd->pipes.pipe_fd = 0;
 	cmd->heredocs = NULL;
-	// cmd->pipes = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -76,7 +73,7 @@ t_node	*create_node_list(char **tokens)
 	int		i;
 	t_node	*head;
 	t_node	*current;
-		t_node *new_node;
+	t_node	*new_node;
 
 	i = 0;
 	current = NULL;

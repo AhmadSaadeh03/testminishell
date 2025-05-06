@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 
 int	closed_quotes(t_minishell *shell, char qoute)
-	// this function to check that the qoutes are closed even number
+// this function to check that the qoutes are closed even number
 {
 	int i;
 	int c;

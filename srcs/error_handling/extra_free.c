@@ -6,22 +6,18 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/03 15:42:41 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 17:05:57 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_and_exit(t_minishell *shell)
-{
-	free_minishell(shell);
-	exit(1);
-}
-
 void	free_tokens(t_node *list)
 {
 	t_node	*tmp;
 
+	if (!list)
+		return ;
 	while (list)
 	{
 		tmp = list;
@@ -31,24 +27,72 @@ void	free_tokens(t_node *list)
 	}
 }
 
-void	free_cmd(t_cmd **cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	t_cmd	*curr;
-	// int		i;
+	t_cmd	*temp;
+	int		i;
 
-	curr = *cmd;
-	// i = 0;
-	while (curr)
+	while (cmd)
 	{
-		free_array(curr->cmd_line);
-		// free_array(curr->cmd_line);
-		// free(curr->file_in);
-		// free(curr->file_out);
-		// free(curr->limiter);
-		free(curr->redirect);
-		// if (curr->next != NULL)
-		curr = curr->next;
+		i = 0;
+		temp = cmd;
+		cmd = cmd->next;
+		if (temp->cmd_line)
+		{
+			while (temp->cmd_line[i])
+				free(temp->cmd_line[i++]);
+			free(temp->cmd_line);
+		}
+		free_here_list(temp->heredocs);
+		free_redir_list(temp->redirect);
+		free(temp);
 	}
-	free(cmd);
 }
 
+void	free_here_list(t_here *heredocs)
+{
+	t_here	*tmp;
+
+	if (!heredocs)
+		return ;
+	while (heredocs)
+	{
+		tmp = heredocs->next;
+		if (heredocs->limt)
+			free(heredocs->limt);
+		if (heredocs->content)
+			free(heredocs->content);
+		free(heredocs);
+		heredocs = tmp;
+	}
+}
+
+void	free_redir_list(t_redirect *redir)
+{
+	t_redirect	*temp;
+
+	if (!redir)
+		return ;
+	while (redir)
+	{
+		temp = redir->next;
+		if (redir->file_name)
+			free(redir->file_name);
+		free(redir);
+		redir = temp;
+	}
+}
+
+void	free_exit(t_minishell *shell)
+{
+	free_array(shell->envps);
+	if (*(shell->cmd_list))
+		free_cmd(*(shell->cmd_list));
+	free(shell->cmd_list);
+	free_env_list(*(shell->env_list));
+	free(shell->env_list);
+	if (shell->token_space)
+		free_array(shell->token_space);
+	free(shell);
+	shell = NULL;
+}

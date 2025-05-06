@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/03 15:42:23 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/06 17:16:35 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	free_array(char **array)
 	i = 0;
 	if (!array)
 		return ;
-	while (array[i] != NULL)
+	while (array[i])
 	{
 		free(array[i]);
 		array[i] = NULL;
 		i++;
 	}
-	// free(array);
+	free(array);
 }
 
 void	free_start(t_minishell *shell)
@@ -51,32 +51,34 @@ void	free_start(t_minishell *shell)
 	// free(shell->print_last_arg);
 }
 
-void free_minishell(t_minishell *shell)
+void	free_minishell(t_minishell *shell)
 {
 	free_array(shell->envps);
-	// free_cmd_Aaa(*(shell->cmd_list));
-	// free(shell->cmd_list);
+	if (*(shell->cmd_list))
+	{
+		free_cmd(*(shell->cmd_list));
+	}
+	free(shell->cmd_list);
 	free_env_list(*(shell->env_list));
 	free(shell->env_list);
-	free(shell->last_arg);
-	free(shell->print_last_arg);
 	if (shell->token_space)
 		free_array(shell->token_space);
-    // free(shell);
+	free(shell);
+	shell = NULL;
 }
 
-void free_env_list(t_env *head)
+void	free_env_list(t_env *head)
 {
 	t_env	*temp;
 
-    while (head)
-    {
-        temp = head;
-        head = head->next;
-        if (temp->env_name)
-            free(temp->env_name);
-        if (temp->value)
-            free(temp->value);
-        free(temp);
-    }
+	while (head)
+	{
+		temp = head;
+		head = head->next;
+		if (temp->env_name)
+			free(temp->env_name);
+		if (temp->value)
+			free(temp->value);
+		free(temp);
+	}
 }
