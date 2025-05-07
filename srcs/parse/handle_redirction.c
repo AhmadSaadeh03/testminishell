@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:55:29 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 16:42:04 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	handle_redirection(t_cmd *cmd)
 {
 	t_redirect	*redir;
 
-	if (cmd->heredoc_flag == 1)
-		exec_heredoc(cmd);
 	redir = cmd->redirect;
 	while (redir)
 	{
@@ -80,11 +78,22 @@ void	exec_heredoc(t_cmd *cmd)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
+	{
 		ft_putstr_fd("Error\n", 2);
+		return ;
+	}
 	herd = cmd->heredocs;
 	while (herd)
 	{
 		herd->content = read_input(herd->limt);
+		if (!herd->content)
+		{
+			ft_putstr_fd("error here-doc\n", 2);
+			free_here_list(herd);
+			close(fd[0]);
+			close(fd[1]);
+			return ;
+		}
 		herd = herd->next;
 	}
 	last = cmd->heredocs;
@@ -92,11 +101,21 @@ void	exec_heredoc(t_cmd *cmd)
 		last = last->next;
 	if (last && last->content)
 	{
-		write(fd[1], last->content, ft_strlen(last->content));
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
+		if (write(fd[1], last->content, ft_strlen(last->content)) == -1)
+        {
+            ft_putstr_fd("Error writing to pipe\n", 2);
+            close(fd[1]);
+            free_here_list(cmd->heredocs);
+            return;
+        }
+        close(fd[1]);
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+        {
+            ft_putstr_fd("Error redirecting stdin\n", 2);
+            close(fd[0]);
+            return ;
+        }
 		close(fd[0]);
-		// free_here_list(herd);
 	}
 }
 
@@ -104,15 +123,19 @@ char	*read_input(char *limiter)
 {
 	char	*line;
 	char	*cont;
+	char	*tmp;
 
 	cont = add_cmd("");
+	if (!cont)
+		return (NULL);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 		{
+			printf("read_line error\n");
 			free(cont);
-			break ;
+			return (NULL);
 		}
 		if (line[0] == '\0')
 		{
@@ -124,8 +147,22 @@ char	*read_input(char *limiter)
 			free(line);
 			break ;
 		}
-		cont = ft_strjoin(cont, line);
-		cont = ft_strjoin(cont, "\n");
+		tmp = ft_strjoin(cont, line);
+		free(cont);
+		if (!tmp)
+		{
+			free(line);
+			return (NULL);
+		}
+		cont = tmp;
+		tmp = ft_strjoin(cont, "\n");
+		free(cont);
+		if (!tmp)
+		{
+			free(line);
+			return (NULL);
+		}
+		cont = tmp;
 		free(line);
 	}
 	return (cont);

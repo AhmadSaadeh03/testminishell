@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extra_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:52:02 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 12:22:12 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	free_cmd(t_cmd *cmd)
 
 void	free_here_list(t_here *heredocs)
 {
-	printf("hhhhhhhhhhhhhhh\n");
 	t_here	*tmp;
 
 	if (!heredocs)
@@ -77,8 +76,7 @@ void	free_redir_list(t_redirect *redir)
 	while (redir)
 	{
 		temp = redir->next;
-		if (redir->file_name)
-			free(redir->file_name);
+		free(redir->file_name);
 		free(redir);
 		redir = temp;
 	}
@@ -86,9 +84,9 @@ void	free_redir_list(t_redirect *redir)
 
 void	free_exit(t_minishell *shell)
 {
-	free_array(shell->envps);
 	if (*(shell->cmd_list))
 		free_cmd(*(shell->cmd_list));
+	// free_array(shell->envps);
 	free(shell->cmd_list);
 	free_env_list(*(shell->env_list));
 	free(shell->env_list);

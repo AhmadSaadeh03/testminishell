@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 16:57:51 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/07 17:08:33 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,6 @@ int	fill_cmd(t_cmd *cmd2, t_node *temp)
 			cmd2->cmd_line[i] = add_cmd(temp->node);
 			if (!cmd2->cmd_line[i])
 			{
-				// while (--i >= 0)
-				// 	free(cmd2->cmd_line[i]);
-				// free(cmd2->cmd_line);
-				// cmd2->cmd_line = NULL;
 				return (1);
 			}
 			i++;
@@ -106,9 +102,7 @@ int	cmd_filling(t_minishell *shell)
 	}
 	temp = shell->token_list;
 	if (fill_cmd(*(shell->cmd_list), temp) == 1)
-	{
 		return (1);
-	}
 	free_tokens(shell->token_list);
 	return (0);
 }

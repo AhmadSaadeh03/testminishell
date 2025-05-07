@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/06 21:21:13 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 16:23:52 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ int	main(int arc, char **arv, char **envp)
 	while (1)
 	{
 		shell->name = readline("👾Minihell> ");
+		// printf("%s\n", shell->name);
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 		{
-			free(shell->name);
+			// free(shell->name);
 			continue ;
 		}
 		add_history(shell->name);
@@ -43,9 +44,9 @@ int	main(int arc, char **arv, char **envp)
 			free_cmd(*(shell->cmd_list));
 		free(shell->cmd_list);
         if (shell->token_space)
-		    free_array(shell->token_space);
-        // free_minishell(shell);
+			free_array(shell->token_space);
 	}
+    clear_history();
     free_env_list(*(shell->env_list));
 	return (0);
 }

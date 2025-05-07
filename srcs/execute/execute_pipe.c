@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:34:55 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 17:09:34 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,20 @@ void	exec_pipe(t_minishell *shell)
 		return ;
 	while (curr)
 	{
-		run_cmd(shell, curr, &pipe_data, i);
+		if ((curr->heredoc_flag == 1 || curr->redir_flag == 1) && curr->cmd_line[0] == NULL)
+			exec_red_only(curr, shell);
+		else
+			run_cmd(shell, curr, &pipe_data, i);
 		curr = curr->next;
 		i++;
 	}
 	close_fd(&pipe_data);
 	i = 0;
 	while (i < pipe_data.cmd_count)
-		waitpid(pipe_data.pid[i++], NULL, 0);
+	{
+		waitpid(pipe_data.pid[i], NULL, 0);
+		i++;
+	}
 	free(pipe_data.pid);
 }
 
@@ -65,7 +71,7 @@ int	open_pipes(t_pipes *pipe_data)
 		return (1);
 	while (i < pipe_count)
 	{
-		if (pipe(&pipe_data->pipe_fd[i * 2]) == -1)
+		if (pipe(pipe_data->pipe_fd + (i * 2)) == -1)
 		{
 			perror("pipe");
 			free(pipe_data->pipe_fd);
@@ -94,12 +100,11 @@ void	run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 		if (i < (pipe_data->cmd_count - 1))
 			dup2(pipe_data->pipe_fd[i * 2 + 1], STDOUT_FILENO);
 		close_fd(pipe_data);
-		free(pipe_data->pid);
 		execute_one_cmd(shell, cmd);
 		free_exit(shell);
+		// free(pipe_data->pid);
 		exit(0);
 	}
-    // free(pipe_data->pid);
 }
 
 void	close_fd(t_pipes *pipe_data)
@@ -109,9 +114,9 @@ void	close_fd(t_pipes *pipe_data)
 	i = 0;
 	while (i < (pipe_data->cmd_count - 1) * 2)
 	{
-		close(pipe_data->pipe_fd[i]);
+		if (pipe_data->pipe_fd[i] >= 0)
+			close(pipe_data->pipe_fd[i]);
 		i++;
 	}
 	free(pipe_data->pipe_fd);
-    // free(pipe_data->pid);
 }

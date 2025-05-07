@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:48:56 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 17:02:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,22 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 	}
 	if (pid == 0)
 	{
+		if (cmd->heredoc_flag == 1)
+        {
+            exec_heredoc(cmd);
+            free_exit(shell);
+            exit(0);
+        }
 		if (handle_redirection(cmd) == 1)
 		{
+			free_here_list(cmd->heredocs);
 			free_exit(shell);
 			exit(1);
 		}
 		if (fl == 1)
 			exec_builtin(shell, cmd->cmd_line);
 		else
-			get_path_cmd(shell, cmd->cmd_line);
+			get_path_cmd(shell, cmd->cmd_line);	
 		free_exit(shell);
 		exit(0);
 	}
@@ -80,7 +87,13 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	}
 	if (pid == 0)
 	{
-		if (handle_redirection(cmd) == 1)
+		if (cmd->heredoc_flag == 1)
+        {
+            exec_heredoc(cmd);
+            free_exit(shell);
+            exit(0);
+        }
+		if (cmd->redir_flag == 1 && handle_redirection(cmd) == 1)
 		{
 			free_exit(shell);
 			exit(1);

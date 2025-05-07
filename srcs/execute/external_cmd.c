@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:41:21 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/07 16:25:15 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void	external_cmd(t_minishell *shell, t_cmd *cmd)
 	if ((cmd->heredoc_flag == 1 || cmd->redir_flag == 1))
 		exec_red_cmd(cmd, shell, 0);
 	else
+	{
 		get_path_cmd(shell, cmd->cmd_line);
+	}
 }
 
 void	get_path_cmd(t_minishell *shell, char **args)
@@ -57,7 +59,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	if (cmd_path)
 	{
 		execute_cmd(cmd_path, shell, shell->envps, args);
-		// free_array(shell->envps);
+		free_array(shell->envps);
 		free(cmd_path);
 	}
 	else if (!cmd_path && check_cmd_path(shell, args) == 0)
@@ -65,7 +67,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 		ft_putstr_fd(args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		shell->last_exit = 127;
-		// free_exit(shell);
+		free_array(shell->envps);
 	}
 	free_array(path);
 }
@@ -85,7 +87,7 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 			ft_putstr_fd(": command not found\n", 2);
 		}
 		free_exit(shell);
-		// exit(0);
+		exit(0);
 	}
 	else
 		waitpid(pid, NULL, 0);
