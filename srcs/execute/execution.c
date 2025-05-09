@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/07 17:02:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/09 19:45:50 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ void	executing(t_minishell *shell)
 	if (cmd && cmd->next)
 		exec_pipe(shell);
 	else
+	{
 		execute_one_cmd(shell, cmd);
+	}
 }
 
 void	execute_one_cmd(t_minishell *shell, t_cmd *cmd)
@@ -67,7 +69,7 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 		if (fl == 1)
 			exec_builtin(shell, cmd->cmd_line);
 		else
-			get_path_cmd(shell, cmd->cmd_line);	
+			get_path_cmd(shell, cmd->cmd_line);
 		free_exit(shell);
 		exit(0);
 	}

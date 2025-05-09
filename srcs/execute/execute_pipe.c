@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/07 17:09:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/09 20:22:34 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,26 @@ void	exec_pipe(t_minishell *shell)
 	pipe_data = curr->pipes;
 	i = 0;
 	pipe_data.cmd_count = cmd_count(curr);
+	pipe_data.pid = NULL;
+	pipe_data.pipe_fd = NULL;
 	if (open_pipes(&pipe_data) != 0)
+	{
+		if (pipe_data.pipe_fd)
+			free(pipe_data.pipe_fd);
 		return ;
+	}
 	pipe_data.pid = malloc(sizeof(pid_t) * pipe_data.cmd_count);
 	if (!pipe_data.pid)
+	{
+		free(pipe_data.pipe_fd);
 		return ;
+	}
+	while (i < pipe_data.cmd_count)
+	{
+		pipe_data.pid[i] = -1;
+		i++;
+	}
+	i = 0;
 	while (curr)
 	{
 		if ((curr->heredoc_flag == 1 || curr->redir_flag == 1) && curr->cmd_line[0] == NULL)
@@ -40,7 +55,8 @@ void	exec_pipe(t_minishell *shell)
 	i = 0;
 	while (i < pipe_data.cmd_count)
 	{
-		waitpid(pipe_data.pid[i], NULL, 0);
+		if (pipe_data.pid[i] != -1)
+			waitpid(pipe_data.pid[i], NULL, 0);
 		i++;
 	}
 	free(pipe_data.pid);
@@ -75,6 +91,7 @@ int	open_pipes(t_pipes *pipe_data)
 		{
 			perror("pipe");
 			free(pipe_data->pipe_fd);
+			pipe_data->pipe_fd = NULL;
 			return (1);
 		}
 		i++;
@@ -102,7 +119,7 @@ void	run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 		close_fd(pipe_data);
 		execute_one_cmd(shell, cmd);
 		free_exit(shell);
-		// free(pipe_data->pid);
+		free(pipe_data->pid);
 		exit(0);
 	}
 }
@@ -110,13 +127,20 @@ void	run_cmd(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 void	close_fd(t_pipes *pipe_data)
 {
 	int	i;
+	int	fd_count;
 
+	if (!pipe_data->pipe_fd)
+		return ;
+
+	fd_count = (pipe_data->cmd_count - 1) * 2;
 	i = 0;
-	while (i < (pipe_data->cmd_count - 1) * 2)
+	while (i < fd_count)
 	{
 		if (pipe_data->pipe_fd[i] >= 0)
 			close(pipe_data->pipe_fd[i]);
 		i++;
 	}
 	free(pipe_data->pipe_fd);
+	pipe_data->pipe_fd = NULL;
 }
+
