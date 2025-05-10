@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 13:59:56 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 14:21:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,16 @@ void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 	}
 	if (last && last->content)
 	{
-		char *str = handle_env(last->content, *(shell->env_list));
-		if(str)
+		if (ft_strchr(last->content, '$'))
 		{
-			free(last->content);
-			last->content = str;
+			char *str = handle_env(last->content, *(shell->env_list));
+			if(str)
+			{
+				free(last->content);
+				last->content = str;
+			}
 		}
 		write(fd[1], last->content, ft_strlen(last->content));
-	
 	}
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
@@ -128,7 +130,6 @@ char	*read_input(char *limiter)
 		if (!line)
 		{
 			printf("read_line error\n");
-			free(cont);
 			break ;
 		}
 		if (line[0] == '\0')

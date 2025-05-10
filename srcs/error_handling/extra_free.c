@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:29:56 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 14:06:12 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 17:07:24 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	free_exit(t_minishell *shell)
 {
 	if (*(shell->cmd_list))
 		free_cmd(*(shell->cmd_list));
-	// free_array(shell->envps);
 	free(shell->cmd_list);
 	free_env_list(*(shell->env_list));
 	free(shell->env_list);

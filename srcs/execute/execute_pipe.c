@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 14:04:24 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 17:31:55 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,17 @@ static void	free_pipe_data(t_pipes *pipe_data)
 	pipe_data->cmd_count = 0;
 }
 
-void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
+void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell, t_pipes pipe_data)
 {
+	(void)pipe_data;
 	while (cmd)
 	{
-		if (cmd->heredoc_flag)
-			exec_heredoc(cmd, shell);
+		if (cmd->heredoc_flag && cmd->cmd_line[0] == NULL)
+		exec_red_only(cmd, shell);
+		else if (is_builtin(cmd->cmd_line[0]) == 1 && cmd->heredoc_flag == 1)
+		exec_red_cmd(cmd, shell, 1);
+		else if (is_builtin(cmd->cmd_line[0]) == 0 && cmd->heredoc_flag == 1)
+		exec_red_cmd(cmd, shell, 0);
 		cmd = cmd->next;
 	}
 }
@@ -88,9 +93,9 @@ void	exec_pipe(t_minishell *shell)
 
 	cmd_list = *(shell->cmd_list);
 	cmd = *(shell->cmd_list);
-	preprocess_heredocs(cmd_list, shell);
 	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)
 		return ;
+	preprocess_heredocs(cmd_list, shell, pipe_data);
 	i = 0;
 	while (cmd)
 	{
@@ -105,10 +110,16 @@ void	exec_pipe(t_minishell *shell)
 		if (pipe_data.pid[i] == 0)
 		{
 			if (i > 0)
-				dup2(pipe_data.pipe_fd[(i - 1) * 2], STDIN_FILENO);
+			dup2(pipe_data.pipe_fd[(i - 1) * 2], STDIN_FILENO);
 			if (i < pipe_data.cmd_count - 1)
-				dup2(pipe_data.pipe_fd[i * 2 + 1], STDOUT_FILENO);
+			dup2(pipe_data.pipe_fd[i * 2 + 1], STDOUT_FILENO);
 			close_fd(&pipe_data);
+			// if (cmd->heredoc_flag == 1)
+			// {
+			// 	free_pipe_data(&pipe_data);
+			// 	free_exit(shell);
+			// 	exit(0);
+			// }
 			if (cmd->redir_flag)
 				handle_redirection(cmd, shell);
 			if (cmd->cmd_line[0] && is_builtin(cmd->cmd_line[0]))

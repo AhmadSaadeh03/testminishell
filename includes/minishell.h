@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 13:42:16 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 17:25:09 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,24 +177,22 @@ char					*add_cmd(char *token);
 void					free_here_list(t_here *heredocs);
 t_here					*creat_heredoc(char *limit);
 void					add_heredoc(t_cmd *cmd, char *limit);
-void	exec_heredoc(t_cmd *cmd, t_minishell *shell);
+void					exec_heredoc(t_cmd *cmd, t_minishell *shell);
 void					free_cmd(t_cmd *cmd);
 void					execute_one_cmd(t_minishell *shell, t_cmd *cmd);
 void					free_redir_list(t_redirect *redir);
 
 void					external_cmd(t_minishell *shell, t_cmd *cmd);
 void					exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl);
-void					free_start(t_minishell *shell);
 void					exec_red_only(t_cmd *cmd, t_minishell *shell);
 void					exec_pipe(t_minishell *shell);
 void					executing(t_minishell *shell);
 void					exec_pipe(t_minishell *shell);
-void					run_cmd(t_minishell *shell, t_cmd *cmd,
-							t_pipes *pipe_data, int i);
+// void					run_cmd(t_minishell *shell, t_cmd *cmd,
+							// t_pipes *pipe_data, int i);
 void					close_fd(t_pipes *pipe_data);
-void	handle_pipe_cmd(t_minishell *shell, t_cmd *cmd);
-void	free_exit(t_minishell *shell);
-void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell);
+void					free_exit(t_minishell *shell);
+void					preprocess_heredocs(t_cmd *cmd, t_minishell *shell, t_pipes pipe_data);
 /// print functions
 void					print_env_list(t_env **env_list);
 void					prt_list(t_minishell **shell);

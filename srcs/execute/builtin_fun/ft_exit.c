@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 17:00:51 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 16:59:49 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 	i = 1;
 	if (cmd_line[i] == NULL)
 	{
-		
+		printf("exit\n");
 		free_exit(shell);
 		exit(EXIT_SUCCESS);
 	}
@@ -34,12 +34,14 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 		if (check_digit(cmd_line[i]) == 2)
 		{
 			free_exit(shell);
+			printf("exit\n");
 			exit(2);
 		}
 		else
 		{
 			ft_putstr_fd("exit: not numeric argument\n", 2);
 			free_exit(shell);
+			printf("exit\n");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -48,6 +50,7 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 		exit_status = ft_atoi(cmd_line[i]);
 		shell->last_exit = exit_status;
 		free_exit(shell);
+		printf("exit\n");
 		exit(exit_status);
 	}
 }
