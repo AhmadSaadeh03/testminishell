@@ -6,16 +6,18 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/07 16:42:04 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 13:59:56 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_redirection(t_cmd *cmd)
+int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 {
 	t_redirect	*redir;
 
+	if (cmd->heredoc_flag == 1)
+		exec_heredoc(cmd, shell);
 	redir = cmd->redirect;
 	while (redir)
 	{
@@ -71,7 +73,7 @@ int	redirect_in(char *file_name)
 	return (0);
 }
 
-void	exec_heredoc(t_cmd *cmd)
+void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 {
 	t_here	*herd;
 	t_here	*last;
@@ -88,35 +90,27 @@ void	exec_heredoc(t_cmd *cmd)
 		herd->content = read_input(herd->limt);
 		if (!herd->content)
 		{
-			ft_putstr_fd("error here-doc\n", 2);
-			free_here_list(herd);
 			close(fd[0]);
 			close(fd[1]);
 			return ;
 		}
+		last = herd;
 		herd = herd->next;
 	}
-	last = cmd->heredocs;
-	while (last && last->next)
-		last = last->next;
 	if (last && last->content)
 	{
-		if (write(fd[1], last->content, ft_strlen(last->content)) == -1)
-        {
-            ft_putstr_fd("Error writing to pipe\n", 2);
-            close(fd[1]);
-            free_here_list(cmd->heredocs);
-            return;
-        }
-        close(fd[1]);
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-        {
-            ft_putstr_fd("Error redirecting stdin\n", 2);
-            close(fd[0]);
-            return ;
-        }
-		close(fd[0]);
+		char *str = handle_env(last->content, *(shell->env_list));
+		if(str)
+		{
+			free(last->content);
+			last->content = str;
+		}
+		write(fd[1], last->content, ft_strlen(last->content));
+	
 	}
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
 }
 
 char	*read_input(char *limiter)
@@ -135,7 +129,7 @@ char	*read_input(char *limiter)
 		{
 			printf("read_line error\n");
 			free(cont);
-			return (NULL);
+			break ;
 		}
 		if (line[0] == '\0')
 		{
@@ -148,12 +142,13 @@ char	*read_input(char *limiter)
 			break ;
 		}
 		tmp = ft_strjoin(cont, line);
-		free(cont);
 		if (!tmp)
 		{
 			free(line);
+			free(cont);
 			return (NULL);
 		}
+		free(cont);
 		cont = tmp;
 		tmp = ft_strjoin(cont, "\n");
 		free(cont);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:54:04 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/10 13:42:16 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int						check_cmd_path(t_minishell *shell, char **cmd_line);
 int						split_operation(t_minishell *shell, char operator);
 int						split(t_minishell *shell);
 int						cmd_filling(t_minishell *shell);
-int						handle_redirection(t_cmd *cmd);
+int						handle_redirection(t_cmd *cmd, t_minishell *shell);
 int						redirect_out(char *file_name, t_type type);
 int						redirect_in(char *file_name);
 int						closed_quotes(t_minishell *shell, char qoute);
@@ -152,7 +152,6 @@ void					free_array(char **array);
 void					add_redirect(t_cmd *cmd, char *file_name, t_type type);
 void					free_node(t_node *to_free);
 void					process_node_list(t_minishell *shell);
-void					define_cmd(t_minishell **shell);
 void					free_tokens(t_node *list);
 void					my_unsetenv(t_env **env_list, char *name);
 void					free_env_list(t_env *head);
@@ -178,7 +177,7 @@ char					*add_cmd(char *token);
 void					free_here_list(t_here *heredocs);
 t_here					*creat_heredoc(char *limit);
 void					add_heredoc(t_cmd *cmd, char *limit);
-void					exec_heredoc(t_cmd *cmd);
+void	exec_heredoc(t_cmd *cmd, t_minishell *shell);
 void					free_cmd(t_cmd *cmd);
 void					execute_one_cmd(t_minishell *shell, t_cmd *cmd);
 void					free_redir_list(t_redirect *redir);
@@ -193,8 +192,9 @@ void					exec_pipe(t_minishell *shell);
 void					run_cmd(t_minishell *shell, t_cmd *cmd,
 							t_pipes *pipe_data, int i);
 void					close_fd(t_pipes *pipe_data);
+void	handle_pipe_cmd(t_minishell *shell, t_cmd *cmd);
 void	free_exit(t_minishell *shell);
-
+void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell);
 /// print functions
 void					print_env_list(t_env **env_list);
 void					prt_list(t_minishell **shell);

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/07 16:23:52 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 13:15:16 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(int arc, char **arv, char **envp)
 
 	(void)arv;
 	(void)arc;
+	shell = NULL;
 	shell = init_shell(envp);
 	if (!shell)
 	{
@@ -27,10 +28,11 @@ int	main(int arc, char **arv, char **envp)
 	while (1)
 	{
 		shell->name = readline("👾Minihell> ");
-		// printf("%s\n", shell->name);
+		// if (!shell->name)
+			// continue ;
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 		{
-			// free(shell->name);
+			free(shell->name);
 			continue ;
 		}
 		add_history(shell->name);
@@ -39,6 +41,7 @@ int	main(int arc, char **arv, char **envp)
 			free_minishell(shell);
 			continue ;
 		}
+		print_cmd_list(*(shell->cmd_list));
 		executing(shell);
 		if (*(shell->cmd_list))
 			free_cmd(*(shell->cmd_list));

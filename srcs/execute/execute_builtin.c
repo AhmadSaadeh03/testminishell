@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 12:32:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 11:02:26 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,4 @@ void	ft_unset(t_minishell *shell, char **cmd_line)
 		my_unsetenv(shell->env_list, cmd_line[1]);
 	else
 		return ;
-}
-
-int	is_builtin(char *cmd)
-{
-	if (ft_strcmp(cmd, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "cd") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "pwd") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "env") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "export") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "unset") == 0)
-		return (1);
-	else if (ft_strcmp(cmd, "exit") == 0)
-		return (1);
-	else
-		return (0);
 }

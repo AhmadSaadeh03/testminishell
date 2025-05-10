@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/09 19:45:50 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/10 13:42:51 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void	executing(t_minishell *shell)
 	if (cmd && cmd->next)
 		exec_pipe(shell);
 	else
-	{
 		execute_one_cmd(shell, cmd);
-	}
 }
 
 void	execute_one_cmd(t_minishell *shell, t_cmd *cmd)
@@ -54,13 +52,7 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 	}
 	if (pid == 0)
 	{
-		if (cmd->heredoc_flag == 1)
-        {
-            exec_heredoc(cmd);
-            free_exit(shell);
-            exit(0);
-        }
-		if (handle_redirection(cmd) == 1)
+		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_here_list(cmd->heredocs);
 			free_exit(shell);
@@ -89,13 +81,7 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	}
 	if (pid == 0)
 	{
-		if (cmd->heredoc_flag == 1)
-        {
-            exec_heredoc(cmd);
-            free_exit(shell);
-            exit(0);
-        }
-		if (cmd->redir_flag == 1 && handle_redirection(cmd) == 1)
+		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_exit(shell);
 			exit(1);
@@ -105,4 +91,24 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	}
 	else
 		waitpid(pid, NULL, 0);
+}
+
+int	is_builtin(char *cmd)
+{
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "env") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "export") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		return (1);
+	else
+		return (0);
 }

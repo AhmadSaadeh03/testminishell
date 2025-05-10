@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/09 20:11:28 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/10 13:07:44 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	external_cmd(t_minishell *shell, t_cmd *cmd)
 {
 	if ((cmd->heredoc_flag == 1 || cmd->redir_flag == 1))
 	{
-		printf("cmd with redir\n");
 		exec_red_cmd(cmd, shell, 0);
 	}
 	else
@@ -75,8 +74,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	free_array(path);
 }
 
-void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
-		char **cmd_line)
+void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
 {
 	pid_t	pid;
 

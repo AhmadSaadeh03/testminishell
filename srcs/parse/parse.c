@@ -3,41 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/02 15:07:42 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/10 11:37:00 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// no need
-void	define_cmd(t_minishell **shell)
-{
-	t_node	*temp;
-
-	temp = (*shell)->token_list;
-	// temp->cmd_type = COMMAND;
-	// temp = temp->next;
-	while (temp)
-	{
-		if (temp->cmd_type == TOKEN_PIPE && temp->next)
-		{
-			temp->next->cmd_type = COMMAND;
-			temp = temp->next;
-		}
-		temp = temp->next;
-	}
-}
-
 int	parsing(t_minishell **shell)
 {
 	if (put_type(shell) == 1)
 		return (1);
-	define_cmd(shell);
-	// prt_list(shell);
-	// print(shell);
 	return (0);
 }
 
@@ -138,45 +116,3 @@ void	prt_list(t_minishell **shell)
 	}
 	printf(" -> NULL\n");
 }
-
-// void	print(t_minishell **shell)
-// {
-// 	// printf("\n**********cmd*********\n");
-// 	t_cmd *tmp = (*(*shell)->cmd_list);
-// 	int i;
-
-// 	while (tmp)
-// 	{
-// 		i = 0;
-
-// 		// Print command and args
-// 		while (tmp->cmd_line && tmp->cmd_line[i])
-// 		{
-// 			printf("cmd_line : %s\n", tmp->cmd_line[i]);
-// 			i++;
-// 		}
-
-// 		// Print redirections
-// 		if (tmp->redirect)
-// 		{
-// 			if (tmp->append)
-// 				printf("append : %s\n", tmp->redirect);
-// 			else
-// 				printf("redirect : %s\n", tmp->redirect);
-// 		}
-// 		if (tmp->file_out)
-// 			printf("file_out : %s\n", tmp->file_out);
-// 		if (tmp->file_in)
-// 			printf("file_in  : %s\n", tmp->file_in);
-
-// 		// Print pipe if exists
-// 		if (tmp->pipe)
-// 			printf("pipe     : %s\n", tmp->pipe);
-
-// 		// Move to next command if there is one
-// 		if (tmp->next)
-// 			printf("NEXT CMD\n");
-
-// 		tmp = tmp->next;
-// 	}
-// }

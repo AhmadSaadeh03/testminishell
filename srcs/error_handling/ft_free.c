@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 21:17:29 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/10 13:55:43 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,20 @@ void	free_array(char **array)
 	free(array);
 }
 
-void	free_start(t_minishell *shell)
-{
-	if (shell->cmd_list)
-	{
-		// free_cmd_Aaa(*shell->cmd_list);
-		// free(shell->cmd_list);
-		shell->cmd_list = NULL;
-	}
-	if (shell->token_space)
-	{
-		free_array(shell->token_space);
-		shell->token_space = NULL;
-	}
-	// free(shell->last_arg);
-	// free(shell->print_last_arg);
-}
+// void	free_start(t_minishell *shell)
+// {
+// 	if (shell->cmd_list)
+// 	{
+// 		shell->cmd_list = NULL;
+// 	}
+// 	if (shell->token_space)
+// 	{
+// 		free_array(shell->token_space);
+// 		shell->token_space = NULL;
+// 	}
+// 	// free(shell->last_arg);
+// 	// free(shell->print_last_arg);
+// }
 
 void	free_minishell(t_minishell *shell)
 {

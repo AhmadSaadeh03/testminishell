@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/07 17:08:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/10 11:34:01 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,13 @@ void	add_redirect(t_cmd *cmd, char *file_name, t_type type)
 	if (!new)
 		return ;
 	new->file_name = NULL;
-	new->file_name = add_cmd(file_name);
+	if (file_name[0] == '"' && file_name[ft_strlen(file_name) - 1] == '"')
+	{
+		new->file_name = ft_trim_quotes(file_name);
+		printf("file name : %s\n", new->file_name);
+	}
+	else
+		new->file_name = add_cmd(file_name);
 	if (!new->file_name)
 	{
 		free(new);
