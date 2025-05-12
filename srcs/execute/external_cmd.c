@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 13:59:51 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:58:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	path_env = my_getenv((*shell->env_list), "PATH");
 	if (!path_env)
 	{
-		ft_putstr_fd("bash: ls: No such file or directory\n", 2);
+		ft_putstr_fd("bash: No such file or directory\n", 2);
 		return ;
 	}
 	path = ft_split(path_env, ':');
@@ -56,6 +56,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	shell->envps = copy_env_list_to_array((*shell->env_list));
 	if (!shell->envps)
 		return ;
+	free_array(path);
 	if (cmd_path)
 	{
 		execute_cmd(cmd_path, shell, shell->envps, args);
@@ -69,7 +70,6 @@ void	get_path_cmd(t_minishell *shell, char **args)
 		shell->last_exit = 127;
 		free_array(shell->envps);
 	}
-	free_array(path);
 }
 
 void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
@@ -79,11 +79,12 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 	pid = fork();
 	if (pid == 0)
 	{
-		if(execve(cmd_path, cmd_line, envp) == -1)
+		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
 			ft_putstr_fd(cmd_line[0], 2);
 			ft_putstr_fd(": command not found\n", 2);
+			free(cmd_path);
 		}
 		free_exit(shell);
 		exit(0);
@@ -96,7 +97,14 @@ int	check_cmd_path(t_minishell *shell, char **cmd_line)
 {
 	if (ft_strchr(cmd_line[0], '/') != NULL)
 	{
-		execute_cmd(cmd_line[0], shell, shell->envps, cmd_line);
+		if (access(cmd_line[0], X_OK) == 0)
+			execute_cmd(cmd_line[0], shell, shell->envps, cmd_line);
+		else
+		{
+			ft_putstr_fd(cmd_line[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
+		}
+		free_array(shell->envps);
 		return (1);
 	}
 	else

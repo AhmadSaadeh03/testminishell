@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 14:01:54 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:25:34 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, in
 		exec_builtin(shell, cmd->cmd_line);
 	else if (cmd->cmd_line[0])
 		get_path_cmd(shell, cmd->cmd_line);
-	free_pipe_data(pipe_data);
+	free(pipe_data->pid);
 	free_exit(shell);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:52:03 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 13:53:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:24:31 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,21 @@ void	close_fd(t_pipes *pipe_data)
 		close(pipe_data->pipe_fd[i]);
 		i++;
 	}
+    free(pipe_data->pipe_fd);
+	pipe_data->pipe_fd = NULL;
 }
 
 void	free_pipe_data(t_pipes *pipe_data)
 {
 	int	i;
 
-	for (i = 0; i < (pipe_data->cmd_count - 1) * 2; i++)
+    i = 0; 
+	while (i < (pipe_data->cmd_count - 1) * 2)
+    {
 		close(pipe_data->pipe_fd[i]);
-	free(pipe_data->pipe_fd);
+        i++;
+    }
+    free(pipe_data->pipe_fd);
 	free(pipe_data->pid);
 	pipe_data->pipe_fd = NULL;
 	pipe_data->pid = NULL;

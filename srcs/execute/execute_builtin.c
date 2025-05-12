@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 11:02:26 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:48:51 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ void	ft_cd(t_minishell *shell, char **cmd_line)
 	{
 		if (chdir(path) != 0)
 			perror("cd");
+		free(path);
 	}
 	else
 	{
 		if (chdir(cmd_line[1]) != 0)
 			perror("cd");
 	}
-	free(path);
 }
 
 void	ft_pwd(void)
@@ -58,6 +58,7 @@ void	ft_pwd(void)
 
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
+	free(pwd);
 }
 
 void	ft_env(t_minishell *shell)

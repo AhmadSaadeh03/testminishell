@@ -6,14 +6,13 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/13 12:49:55 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:10:33 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	closed_quotes(t_minishell *shell, char qoute)
-// this function to check that the qoutes are closed even number
 {
 	int i;
 	int c;

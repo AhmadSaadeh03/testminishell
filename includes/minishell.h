@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 14:09:50 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:16:47 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,6 @@ void					heredoc_child(t_cmd *cmd, t_minishell *shell);
 void					free_pipe_data(t_pipes *pipe_data);
 void					wait_all_children(t_pipes *pipe_data);
 void					handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i);
-
+void					free_minishell(t_minishell *shell);
 void					print_env_list(t_env **env_list);
 #endif
