@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 11:37:00 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 14:10:19 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,4 @@ t_node	*fix_redirection(t_node *list)
 		temp = temp->next;
 	}
 	return (list);
-}
-
-//////////////////////////// delete
-void	prt_list(t_minishell **shell)
-{
-	t_node	*current;
-
-	current = NULL;
-	printf("\n%s\n", "----------after-------------");
-	current = (*shell)->token_list;
-	while (current != NULL)
-	{
-		printf("%s", current->node);
-		if (current->next != NULL)
-			printf(" -> ");
-		current = current->next;
-	}
-	printf(" -> NULL\n");
 }

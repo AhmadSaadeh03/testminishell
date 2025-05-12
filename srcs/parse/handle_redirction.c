@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 14:21:31 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 13:06:40 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,43 +76,14 @@ int	redirect_in(char *file_name)
 void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 {
 	t_here	*herd;
-	t_here	*last;
-	int		fd[2];
 
-	if (pipe(fd) == -1)
-	{
-		ft_putstr_fd("Error\n", 2);
-		return ;
-	}
+	(void)shell;
 	herd = cmd->heredocs;
 	while (herd)
 	{
 		herd->content = read_input(herd->limt);
-		if (!herd->content)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			return ;
-		}
-		last = herd;
 		herd = herd->next;
 	}
-	if (last && last->content)
-	{
-		if (ft_strchr(last->content, '$'))
-		{
-			char *str = handle_env(last->content, *(shell->env_list));
-			if(str)
-			{
-				free(last->content);
-				last->content = str;
-			}
-		}
-		write(fd[1], last->content, ft_strlen(last->content));
-	}
-	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
 }
 
 char	*read_input(char *limiter)

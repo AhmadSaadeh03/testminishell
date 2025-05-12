@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 17:25:09 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 14:09:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ int						handle_quotes_and_operators(t_minishell *shell);
 int						has_operator_at_edges(char *str, int len);
 int						has_invalid_repeated_operators(char *str);
 int						fill_cmd(t_cmd *cmd2, t_node *temp);
+int						alloc_pipe_resources(t_pipes *p, int count);
+int						init_pipe_data(t_pipes *p, int count);
+int						create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd);
 t_node					*create_node_list(char **tokens);
 t_node					*create_new_node(char *token);
 t_node					*fix_redirection(t_node *list);
@@ -134,6 +137,7 @@ t_cmd					*init_cmd(void);
 
 char					*space_before_op(char *str, int i, int *len);
 char					*space_after_op(char *str, int i, int *len);
+char					*add_cmd(char *token);
 char					*replace_spaces_inside_quotes(const char *input);
 char					*read_input(char *limiter);
 char					*my_getenv(t_env *env_list, char *name);
@@ -147,7 +151,6 @@ void					add_redirect(t_cmd *cmd, char *file_name, t_type type);
 void					handle_export(char *str, t_env **env_list);
 void					append_node(t_node **head, t_node **current,
 							t_node *new_node);
-void					free_minishell(t_minishell *shell);
 void					free_array(char **array);
 void					add_redirect(t_cmd *cmd, char *file_name, t_type type);
 void					free_node(t_node *to_free);
@@ -173,7 +176,6 @@ void					ft_exit(t_minishell *shell, char **cmd_line);
 void					ft_cd(t_minishell *shell, char **cmd_line);
 void					ft_unset(t_minishell *shell, char **cmd_line);
 void					handle_exit_status(char *exit, char *arg);
-char					*add_cmd(char *token);
 void					free_here_list(t_here *heredocs);
 t_here					*creat_heredoc(char *limit);
 void					add_heredoc(t_cmd *cmd, char *limit);
@@ -187,15 +189,13 @@ void					exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl);
 void					exec_red_only(t_cmd *cmd, t_minishell *shell);
 void					exec_pipe(t_minishell *shell);
 void					executing(t_minishell *shell);
-void					exec_pipe(t_minishell *shell);
-// void					run_cmd(t_minishell *shell, t_cmd *cmd,
-							// t_pipes *pipe_data, int i);
 void					close_fd(t_pipes *pipe_data);
 void					free_exit(t_minishell *shell);
-void					preprocess_heredocs(t_cmd *cmd, t_minishell *shell, t_pipes pipe_data);
-/// print functions
-void					print_env_list(t_env **env_list);
-void					prt_list(t_minishell **shell);
-void					print_cmd_list(t_cmd *head);
+void					preprocess_heredocs(t_cmd *cmd, t_minishell *shell);
+void					heredoc_child(t_cmd *cmd, t_minishell *shell);
+void					free_pipe_data(t_pipes *pipe_data);
+void					wait_all_children(t_pipes *pipe_data);
+void					handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i);
 
+void					print_env_list(t_env **env_list);
 #endif

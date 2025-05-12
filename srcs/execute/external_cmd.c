@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 13:07:44 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/12 13:59:51 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ void	external_cmd(t_minishell *shell, t_cmd *cmd)
 		exec_red_cmd(cmd, shell, 0);
 	}
 	else
-	{
 		get_path_cmd(shell, cmd->cmd_line);
-	}
 }
 
 void	get_path_cmd(t_minishell *shell, char **args)
@@ -93,8 +91,6 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 	else
 		waitpid(pid, NULL, 0);
 }
-
-// to handle /bin/ls
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)
 {
