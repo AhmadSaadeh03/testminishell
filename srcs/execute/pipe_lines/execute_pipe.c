@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 16:25:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/13 13:54:44 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	wait_all_children(t_pipes *pipe_data)
 		waitpid(pipe_data->pid[i], &status, 0);
 		i++;
 	}
+	free(pipe_data->pid);
+	pipe_data = NULL;
 }
 
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
@@ -84,12 +86,13 @@ void	exec_pipe(t_minishell *shell)
 
 	cmd = *(shell->cmd_list);
 	preprocess_heredocs(cmd, shell);
-	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)
+	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)\
 		return ;
 	if (create_child_processes(shell, &pipe_data, cmd) == 1)
+	{
+		free_pipe_data(&pipe_data);
 		return ;
+	}
 	close_fd(&pipe_data);
 	wait_all_children(&pipe_data);
-	free(pipe_data.pid);
-	free(pipe_data.pipe_fd);
 }

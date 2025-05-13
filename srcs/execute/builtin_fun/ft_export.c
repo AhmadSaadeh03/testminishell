@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/02 13:58:34 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/13 12:32:51 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void	ft_export(t_minishell *shell, char **cmd_line)
 	{
 		while (cmd_line[i])
 		{
-			if (ft_get_last_char(cmd_line[i]) == 0)
+			if (ft_isalpha(cmd_line[i][0]) == 0)
 			{
-				// printf("cmd line is %s\n",cmd_line[i]);
-				handle_export(cmd_line[i], shell->env_list);
-				// if(!cmd->cmd_line[i+1])
-				//     break ;
+				ft_putstr_fd("export: ", 2);
+				ft_putstr_fd(cmd_line[i], 2);
+				ft_putstr_fd(" not a valid identifier\n", 2);
 			}
+			else if (ft_get_last_char(cmd_line[i]) == 0)
+				handle_export(cmd_line[i], shell->env_list);
 			else
 				break ;
 			i++;

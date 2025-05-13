@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 14:42:32 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/13 12:45:16 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,15 @@ void	ft_echo(t_minishell *shell, char **cmd_line)
 		else if (cmd_line[i][0] == '~')
 		{
 			printf("%s", my_getenv(*(shell->env_list), "HOME"));
+			if (cmd_line[i + 1] != NULL)
+				printf(" ");
 		}
 		else
+		{
 			printf("%s", cmd_line[i]);
-		if (cmd_line[i + 1] != NULL)
-			printf(" ");
+			if (cmd_line[i + 1] != NULL)
+				printf(" ");
+		}
 		i++;
 	}
 	if (newline)

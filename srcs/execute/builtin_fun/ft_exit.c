@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 16:59:49 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/13 14:28:57 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 		}
 		else
 		{
-			ft_putstr_fd("exit: not numeric argument\n", 2);
 			free_exit(shell);
 			printf("exit\n");
+			ft_putstr_fd("exit: numeric argument required\n", 2);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -73,7 +73,7 @@ int	is_valid_number_format(const char *arg, int *sign, long *number)
 	}
 	while (arg[i] != '\0')
 	{
-		if (arg[i] < '0' || arg[i] > '9')
+		if (arg[i] < '0' || arg[i] > '9' || ft_isdigit(arg[i]) == 0)
 			return (1);
 		dig = arg[i] - '0';
 		if (*number > (LONG_MAX - dig) / 10)
