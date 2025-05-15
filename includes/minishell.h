@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/13 13:24:25 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/15 18:46:11 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <errno.h>
-
+# include <signal.h>
+extern volatile sig_atomic_t s_signal;
 typedef struct s_here
 {
 	char				*limt;
@@ -199,4 +200,6 @@ void					wait_all_children(t_pipes *pipe_data);
 void					handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i);
 void					free_minishell(t_minishell *shell);
 void					print_env_list(t_env **env_list);
+
+void handle_signals(int mode);
 #endif

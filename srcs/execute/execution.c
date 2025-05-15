@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 13:55:13 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/15 18:41:06 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 		return ;
 	if (pid == 0)
 	{
+		//handle_signals(1);
 		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_here_list(cmd->heredocs);
@@ -64,7 +65,10 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 		exit(0);
 	}
 	else
+	{
+		//handle_signals(1);
 		waitpid(pid, NULL, 0);
+	}
 }
 
 void	exec_red_only(t_cmd *cmd, t_minishell *shell)

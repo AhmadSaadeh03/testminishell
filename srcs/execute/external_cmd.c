@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/13 13:41:36 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/15 20:03:30 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,13 @@ void	get_path_cmd(t_minishell *shell, char **args)
 		free_array(shell->envps);
 		free(cmd_path);
 	}
+	else if (!cmd_path && check_cmd_path(shell, args) == 0)
+	{
+		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		shell->last_exit = 127;
+		free_array(shell->envps);
+	}
 }
 
 void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
@@ -76,8 +83,9 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 	pid_t	pid;
 
 	pid = fork();
-	if (pid == 0)
+	if (pid == 0)//child
 	{
+		handle_signals(1);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
@@ -86,10 +94,13 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 			free(cmd_path);
 		}
 		free_exit(shell);
-		exit(0);
+		//exit(0);
 	}
-	else
+	else//parent
+	{
+		handle_signals(2);
 		waitpid(pid, NULL, 0);
+	}
 }
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)

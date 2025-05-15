@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/12 15:24:22 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/15 18:56:11 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+volatile sig_atomic_t s_signal = 0;
 
 int	main(int arc, char **arv, char **envp)
 {
@@ -27,7 +28,13 @@ int	main(int arc, char **arv, char **envp)
 	}
 	while (1)
 	{
+		handle_signals(0);
 		shell->name = readline("👾Minihell> ");
+		if ((shell->name) == NULL)
+			{
+				printf("exit\n");
+				break;
+			}
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 		{
 			free(shell->name);
@@ -36,15 +43,13 @@ int	main(int arc, char **arv, char **envp)
 		add_history(shell->name);
 		if (split(shell) == 1)
 		{
+			//free_exit(shell);
 			free(shell->name);
 			continue ;
 		}
 		if (cmd_filling(shell) == 1)
-		{
-			free_exit(shell);
-			continue ;
-		}
-		executing(shell);
+			return (1);
+		 executing(shell);
 		if (*(shell->cmd_list))
 			free_cmd(*(shell->cmd_list));
 		free(shell->cmd_list);
@@ -53,6 +58,8 @@ int	main(int arc, char **arv, char **envp)
 	}
     clear_history();
     free_env_list(*(shell->env_list));
+	free(shell->env_list);
+	free(shell);
 	return (0);
 }
 

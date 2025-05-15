@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/13 13:54:44 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/15 19:53:41 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,27 @@ void	wait_all_children(t_pipes *pipe_data)
 	i = 0;
 	while (i < pipe_data->cmd_count)
 	{
+		//handle_signals(3);
 		waitpid(pipe_data->pid[i], &status, 0);
 		i++;
 	}
+	// if (s_signal == SIGINT)
+	// {
+	// 	printf("sigint1");
+	// 	shell->last_exit =  130;//sigint = 2
+	// }
+	// if(s_signal == SIGQUIT)
+	// {
+	// 	printf("sigquit1");
+	// 	shell->last_exit = 131; // sigqiut = 3
+	// }
 	free(pipe_data->pid);
 	pipe_data = NULL;
 }
 
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 {
+	//handle_signals(1);
 	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
 	else if (i > 0)
