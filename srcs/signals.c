@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 14:23:33 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/15 19:59:45 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/16 20:02:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void handle_ctrl_c(int signal_number)
 
 void handle_ctrl_c_on_process(int signal_number) 
 {
-       // write(STDOUT_FILENO, "\n", 1);
+      // write(STDOUT_FILENO, "ahmad\n", 1);
         s_signal = signal_number;
 }
 
@@ -38,9 +38,9 @@ void    handle_after_child(int signal_number)
 
 void    herdoc_signals(int signal_number)
 {
-    //write(STDOUT_FILENO, "\n", 1);
+    write(STDOUT_FILENO, "\n", 1);
     s_signal = signal_number;
-    exit (1);
+   // close(1);
 }
 void handle_signals(int mode)
 {
@@ -52,7 +52,7 @@ void handle_signals(int mode)
     else if (mode == 1)
     {
         signal(SIGINT,handle_ctrl_c_on_process);
-        if (signal(SIGQUIT,SIG_DFL))
+        if(signal(SIGQUIT,SIG_DFL))
             s_signal = SIGQUIT;
     }
     else if (mode == 2)

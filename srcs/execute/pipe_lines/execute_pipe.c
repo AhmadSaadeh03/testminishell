@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/15 19:53:41 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/16 18:17:52 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,39 +22,34 @@ void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 	}
 }
 
-void	wait_all_children(t_pipes *pipe_data)
+void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 {
-	int	i;
-	int	status;
+    int	i;
+    int	status;
 
-	i = 0;
-	while (i < pipe_data->cmd_count)
-	{
-		//handle_signals(3);
-		waitpid(pipe_data->pid[i], &status, 0);
-		i++;
-	}
-	// if (s_signal == SIGINT)
-	// {
-	// 	printf("sigint1");
-	// 	shell->last_exit =  130;//sigint = 2
-	// }
-	// if(s_signal == SIGQUIT)
-	// {
-	// 	printf("sigquit1");
-	// 	shell->last_exit = 131; // sigqiut = 3
-	// }
-	free(pipe_data->pid);
-	pipe_data = NULL;
+    i = 0;
+    while (i < pipe_data->cmd_count)
+    {
+        waitpid(pipe_data->pid[i], &status, 0);
+        i++;
+    }
+	if (s_signal == SIGINT)
+		shell->last_exit = 128 + s_signal;
+	if (s_signal == SIGQUIT)
+		shell->last_exit = 128 + s_signal;
+    free(pipe_data->pid);
+    pipe_data = NULL;
 }
 
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
 {
-	//handle_signals(1);
 	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
 	else if (i > 0)
+	{
+		//printf("fsdfsd");
 		dup2(pipe_data->pipe_fd[(i - 1) * 2], STDIN_FILENO);
+	}
 	if (i < pipe_data->cmd_count - 1)
 		dup2(pipe_data->pipe_fd[i * 2 + 1], STDOUT_FILENO);
 	close_fd(pipe_data);
@@ -66,13 +61,20 @@ void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, in
 		get_path_cmd(shell, cmd->cmd_line);
 	free(pipe_data->pid);
 	free_exit(shell);
+	// if (s_signal == SIGINT)
+	// {
+	// 	shell->last_exit = 130;
+	// 			printf("ahmasd");
+	// }
 	exit(0);
 }
 
 int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 {
 	int	i = 0;
-
+	handle_signals(3);
+	// if (s_signal == SIGINT)
+	// 			printf("ahmad");
 	while (cmd)
 	{
 		pipe_data->pid[i] = fork();
@@ -84,7 +86,10 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 			return (1);
 		}
 		if (pipe_data->pid[i] == 0)
+		{
+			handle_signals(1);
 			handle_child_process(shell, cmd, pipe_data, i);
+		}
 		cmd = cmd->next;
 		i++;
 	}
@@ -106,5 +111,5 @@ void	exec_pipe(t_minishell *shell)
 		return ;
 	}
 	close_fd(&pipe_data);
-	wait_all_children(&pipe_data);
+	wait_all_children(&pipe_data,shell);
 }

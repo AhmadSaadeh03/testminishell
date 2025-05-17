@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/15 20:03:30 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/16 20:24:43 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,10 @@ void	get_path_cmd(t_minishell *shell, char **args)
 void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
 {
 	pid_t	pid;
-
+	int status;
 	pid = fork();
+	handle_signals(1);
+		//s_signal = SIGQUIT;
 	if (pid == 0)//child
 	{
 		handle_signals(1);
@@ -94,13 +96,22 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 			free(cmd_path);
 		}
 		free_exit(shell);
-		//exit(0);
+		exit(127);
 	}
 	else//parent
-	{
-		handle_signals(2);
-		waitpid(pid, NULL, 0);
-	}
+    {
+        handle_signals(2);
+        waitpid(pid, &status, 0);
+        if (WIFSIGNALED(status))
+        {
+            if (WTERMSIG(status) == SIGINT)
+                shell->last_exit = s_signal + 128;
+            else if (WTERMSIG(status) == SIGQUIT)
+                shell->last_exit =  s_signal + 128;
+        }
+        else if (WIFEXITED(status))
+            shell->last_exit = WEXITSTATUS(status);
+    }
 }
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)

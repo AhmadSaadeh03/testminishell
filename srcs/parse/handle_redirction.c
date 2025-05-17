@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/15 16:53:36 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/16 20:02:44 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,13 @@ char	*read_input(char *limiter)
 	char	*cont;
 	char	*tmp;
 
-	//handle_signals(4);
 	cont = add_cmd("");
 	if (!cont)
 		return (NULL);
+	handle_signals(4);
 	while (1)
 	{
 		line = readline("> ");
-		if (s_signal == SIGINT)
-        {
-            free(cont);
-			return NULL;
-        }
 		if (!line)
 		{
 			printf("read_line error\n");
