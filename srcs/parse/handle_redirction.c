@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/16 20:02:44 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/19 18:40:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 	redir = cmd->redirect;
 	while (redir)
 	{
+
 		if (redir->type == TOKEN_REDIRECT_IN)
 		{
 			if (redirect_in(redir->file_name) == 1)
@@ -40,7 +41,6 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 int	redirect_out(char *file_name, t_type type)
 {
 	int	fd_out;
-
 	if (type == TOKEN_REDIRECT_OUT || type == TOKEN_APPEND)
 	{
 		if (type == TOKEN_APPEND)
@@ -61,7 +61,6 @@ int	redirect_out(char *file_name, t_type type)
 int	redirect_in(char *file_name)
 {
 	int	fd_in;
-
 	fd_in = open(file_name, O_RDONLY);
 	if (fd_in == -1)
 	{
@@ -76,7 +75,6 @@ int	redirect_in(char *file_name)
 void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 {
 	t_here	*herd;
-
 	(void)shell;
 	herd = cmd->heredocs;
 	while (herd)
@@ -95,13 +93,16 @@ char	*read_input(char *limiter)
 	cont = add_cmd("");
 	if (!cont)
 		return (NULL);
+	//printf("sad");
+
 	handle_signals(4);
 	while (1)
 	{
 		line = readline("> ");
+		//handle_signals(4);
 		if (!line)
 		{
-			printf("read_line error\n");
+			//printf("read_line error\n");
 			break ;
 		}
 		if (line[0] == '\0')
@@ -133,6 +134,5 @@ char	*read_input(char *limiter)
 		cont = tmp;
 		free(line);
 	}
-	//handle_signals(0);
 	return (cont);
 }

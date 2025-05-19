@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/17 17:03:49 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/19 18:38:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,26 +83,38 @@ void	get_path_cmd(t_minishell *shell, char **args)
 void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
 {
 	pid_t	pid;
-	(void)shell;
+	int status;
 	pid = fork();
-	if (pid == 0)
+	handle_signals(1);
+		//s_signal = SIGQUIT;
+	if (pid == 0)//child
 	{
-		handle_signals(1);
+		//handle_signals(1);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
+			ft_putstr_fd(cmd_line[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
 			free(cmd_path);
-			free_exit(shell);
-			exit(1);
 		}
 		free_exit(shell);
-		exit(0);
+		exit(127);
 	}
-	else
-	{
-		handle_signals(2);
-		waitpid(pid, NULL, 0);
-	}
+	// else//parent
+    // {
+		printf("hiiiiiiiiiiiiiiiii\n");
+        handle_signals(2);
+        waitpid(pid, &status, 0);
+        if (WIFSIGNALED(status))
+        {
+            if (WTERMSIG(status) == SIGINT)
+                shell->last_exit = s_signal + 128;
+            else if (WTERMSIG(status) == SIGQUIT)
+                shell->last_exit =  s_signal + 128;
+        }
+        else if (WIFEXITED(status))
+            shell->last_exit = WEXITSTATUS(status);
+    // }
 }
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)

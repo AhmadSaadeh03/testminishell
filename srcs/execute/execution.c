@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/15 18:41:06 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/19 18:23:42 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,20 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 		waitpid(pid, NULL, 0);
 }
 
-void	heredoc_child(t_cmd *cmd, t_minishell *shell)
+void	heredoc_child(t_cmd *cmd, t_minishell *shell)//
 {
 	t_here *last;
 	int		fd[2];
 
 	if (pipe(fd) == -1)
 		return ;
+	//handle_signals(5);
 	last = cmd->heredocs;
 	while (last->next)
 		last = last->next;
 	if (last && last->content)
 	{
+		//handle_signals(5);
 		if (ft_strchr(last->content, '$'))
 		{
 			char *str = handle_env(last->content, *(shell->env_list));

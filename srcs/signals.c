@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 14:23:33 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/16 20:02:34 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/19 18:30:49 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void handle_ctrl_c(int signal_number)
 {
     if (signal_number)
     {
-        printf("\n");
+        write(STDOUT_FILENO, "\n", 1);
         rl_on_new_line();//cursor on new line
         rl_replace_line("", 0);
         rl_redisplay();
@@ -39,8 +39,15 @@ void    handle_after_child(int signal_number)
 void    herdoc_signals(int signal_number)
 {
     write(STDOUT_FILENO, "\n", 1);
+    //rl_replace_line("", 0);
     s_signal = signal_number;
-   // close(1);
+    close(0);
+}
+void herdoc_two(int signal_number)
+{
+    rl_on_new_line();//cursor on new line
+    rl_replace_line("ahmad", 0);
+    s_signal = signal_number;
 }
 void handle_signals(int mode)
 {
@@ -70,6 +77,12 @@ void handle_signals(int mode)
     else if (mode == 4)
     {
         signal(SIGINT,herdoc_signals);
+         if (signal(SIGQUIT, SIG_IGN))
+            s_signal = SIGQUIT;
+    }
+    else if (mode == 5)
+    {
+        signal(SIGINT,herdoc_two);
          if (signal(SIGQUIT, SIG_IGN))
             s_signal = SIGQUIT;
     }
