@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/17 16:54:46 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/20 22:15:32 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ void	ft_export(t_minishell *shell, char **cmd_line)
 			}
 			else if (ft_get_last_char(cmd_line[i]) == 0)
 				handle_export(cmd_line[i], shell->env_list);
-			else
-				break ;
 			i++;
 		}
 	}

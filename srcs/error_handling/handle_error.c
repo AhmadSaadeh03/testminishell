@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:16:34 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/04/13 12:50:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/20 21:58:43 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,3 +61,11 @@ int	has_invalid_repeated_operators(char *str)
 	}
 	return (0);
 }
+
+void	print_error(char *mess, char *type)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(type, 2);
+	ft_putstr_fd(mess, 2);
+}
+

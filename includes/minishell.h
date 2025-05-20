@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/16 16:28:38 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/20 21:58:57 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ void					wait_all_children(t_pipes *pipe_data,t_minishell *shell);
 void					handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i);
 void					free_minishell(t_minishell *shell);
 void					print_env_list(t_env **env_list);
-
-void handle_signals(int mode);
+void					handle_invalid_arg(int check_f, t_minishell *shell);
+void					handle_signals(int mode);
+void					print_error(char *mess, char *type);
 #endif

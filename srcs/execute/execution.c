@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/19 18:23:42 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/20 17:12:50 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	heredoc_child(t_cmd *cmd, t_minishell *shell)//
 		last = last->next;
 	if (last && last->content)
 	{
-		//handle_signals(5);
+		handle_signals(5);
 		if (ft_strchr(last->content, '$'))
 		{
 			char *str = handle_env(last->content, *(shell->env_list));

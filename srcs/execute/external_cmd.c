@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/19 18:38:34 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/20 22:23:30 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	if (ft_strchr(args[0], '.') != NULL || ft_strchr(args[0], '/') != NULL)
 	{
 		check_cmd_path(shell, args);
-		// free_array(shell->envps);
 		return ;
 	}
 	cmd_path = NULL;
 	path_env = my_getenv((*shell->env_list), "PATH");
 	if (!path_env)
 	{
-		ft_putstr_fd("bash: No such file or directory\n", 2);
+		print_error(": No such file or directory\n", args[0]);
 		shell->last_exit = 127;
 		return ;
 	}
@@ -66,8 +65,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	free_array(path);
 	if (!cmd_path)
 	{
-		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		print_error(": command not found\n", args[0]);
 		free_array(shell->envps);
 		shell->last_exit = 127;
 		return ;
@@ -93,16 +91,16 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
-			ft_putstr_fd(cmd_line[0], 2);
-			ft_putstr_fd(": command not found\n", 2);
 			free(cmd_path);
+			free_exit(shell);
+			shell->last_exit = 127;
+			exit(1);
 		}
 		free_exit(shell);
-		exit(127);
+		exit(0);
 	}
 	// else//parent
     // {
-		printf("hiiiiiiiiiiiiiiiii\n");
         handle_signals(2);
         waitpid(pid, &status, 0);
         if (WIFSIGNALED(status))
@@ -123,17 +121,13 @@ int	check_cmd_path(t_minishell *shell, char **cmd_line)
 
 	if (stat(cmd_line[0] , &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
-		ft_putstr_fd(cmd_line[0], 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		print_error(": is a directory\n", cmd_line[0]);
 		shell->last_exit = 126;
 		return (0);
 	}
 	if (access(cmd_line[0], X_OK) != 0)
 	{
-		ft_putstr_fd("minishell", 2);
-		ft_putstr_fd(": permission denied: ", 2);
-		ft_putstr_fd(cmd_line[0], 2);
-		ft_putstr_fd("\n", 2);
+		print_error(": permission denied\n", cmd_line[0]);
 		shell->last_exit = 126;
 		return (0);
 	}
