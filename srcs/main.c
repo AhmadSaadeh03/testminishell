@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/15 18:56:11 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/24 13:47:58 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,18 @@ int	main(int arc, char **arv, char **envp)
 	while (1)
 	{
 		handle_signals(0);
+		if (s_signal == SIGINT)
+		{
+			 shell->last_exit = s_signal + 128;
+			 s_signal = 0;
+			continue;
+		}
 		shell->name = readline("👾Minihell> ");
 		if ((shell->name) == NULL)
-			{
-				printf("exit\n");
-				break;
-			}
+		{
+			printf("exit\n");
+			break;
+		}
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 		{
 			free(shell->name);

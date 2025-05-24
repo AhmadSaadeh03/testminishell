@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/20 22:16:15 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/24 13:37:13 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,18 @@ char	*read_input(char *limiter)
 	cont = add_cmd("");
 	if (!cont)
 		return (NULL);
-	// handle_signals(4);
+	int fd = dup(STDIN_FILENO);
+	handle_signals(4);
 	while (1)
 	{
 		line = readline("> ");
 		// handle_signals(4);
+		if (s_signal == SIGINT)
+		{
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+			return NULL;
+		}
 		if (!line)
 			break ;
 		if (line[0] == '\0')
