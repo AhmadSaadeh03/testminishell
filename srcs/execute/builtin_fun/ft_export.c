@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/20 22:15:32 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/24 12:55:15 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	ft_get_last_char(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 void	ft_export(t_minishell *shell, char **cmd_line)
 {
 	int	i;
@@ -46,7 +33,7 @@ void	ft_export(t_minishell *shell, char **cmd_line)
 				ft_putstr_fd(" not a valid identifier\n", 2);
 				shell->last_exit = 127;
 			}
-			else if (ft_get_last_char(cmd_line[i]) == 0)
+			else
 				handle_export(cmd_line[i], shell->env_list);
 			i++;
 		}
