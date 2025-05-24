@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/24 15:04:07 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:29:13 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,17 @@ int	main(int arc, char **arv, char **envp)
 		handle_signals(0);
 		if (s_signal == SIGINT)
 		{
-			shell->last_exit = s_signal + 128;
+			//shell->last_exit = s_signal + 128;
 			s_signal = 0;
-			continue ;
+			continue;
 		}
 		shell->name = readline("👾Minihell> ");
+		if (s_signal == SIGINT)
+			shell->last_exit = s_signal + 128;
 		if ((shell->name) == NULL)
 		{
 			printf("exit\n");
-			break ;
+			break;
 		}
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 		{
@@ -56,15 +58,15 @@ int	main(int arc, char **arv, char **envp)
 		}
 		if (cmd_filling(shell) == 1)
 			return (1);
-		executing(shell);
+		 executing(shell);
 		if (*(shell->cmd_list))
 			free_cmd(*(shell->cmd_list));
 		free(shell->cmd_list);
-		if (shell->token_space)
+        if (shell->token_space)
 			free_array(shell->token_space);
 	}
-	clear_history();
-	free_env_list(*(shell->env_list));
+    clear_history();
+    free_env_list(*(shell->env_list));
 	free(shell->env_list);
 	free(shell);
 	return (0);

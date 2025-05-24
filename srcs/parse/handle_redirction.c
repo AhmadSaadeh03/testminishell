@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 14:15:38 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:28:50 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,32 +81,35 @@ void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 	herd = cmd->heredocs;
 	while (herd)
 	{
-		herd->content = read_input(herd->limt);
+		herd->content = read_input(herd->limt,shell);
 		herd = herd->next;
 	}
 }
 
-char	*read_input(char *limiter)
+char	*read_input(char *limiter,t_minishell *shell)
 {
 	char	*line;
 	char	*cont;
 	char	*tmp;
-	int		fd;
 
 	cont = add_cmd("");
 	if (!cont)
 		return (NULL);
-	fd = dup(STDIN_FILENO);
+	int fd = dup(STDIN_FILENO);
 	handle_signals(4);
+	if (s_signal)
 	while (1)
 	{
 		line = readline("> ");
+		// handle_signals(4);
 		if (s_signal == SIGINT)
 		{
-			free(cont);
+			shell->last_exit = s_signal + 128;
 			dup2(fd, STDIN_FILENO);
 			close(fd);
-			return (NULL);
+			free(line);
+			free(cont);
+			return NULL;
 		}
 		if (!line)
 			break ;

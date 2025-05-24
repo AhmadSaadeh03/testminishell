@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 14:23:33 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/24 13:34:25 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:31:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void	herdoc_signals(int signal_number)
 }
 void	herdoc_two(int signal_number)
 {
-	rl_on_new_line(); //cursor on new line
-	rl_replace_line("ahmad", 0);
 	s_signal = signal_number;
 }
 void	handle_signals(int mode)

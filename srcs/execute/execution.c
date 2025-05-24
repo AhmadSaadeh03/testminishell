@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 14:28:46 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:32:23 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,18 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 		exit(0);
 	}
 	else
+	{
+		handle_signals(5);
 		waitpid(pid, NULL, 0);
-	handle_signals(0);
+		if (s_signal == SIGINT)
+			shell->last_exit = 130;	
+	}
+	//handle_signals(0);
 }
 
 void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 {
 	pid_t	pid;
-
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
@@ -98,8 +102,13 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 		exit(0);
 	}
 	else
+	{
+		handle_signals(5);
 		waitpid(pid, NULL, 0);
-	handle_signals(0);
+		if (s_signal == SIGINT)
+			shell->last_exit = 130;
+	}
+	//handle_signals(0);
 }
 
 void	heredoc_child(t_cmd *cmd, t_minishell *shell) //
