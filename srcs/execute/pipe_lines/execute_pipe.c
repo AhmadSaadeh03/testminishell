@@ -62,11 +62,6 @@ void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 	else if (cmd->cmd_line[0])
 		get_path_cmd(shell, cmd->cmd_line);
 	free_exit(shell);
-	// if (s_signal == SIGINT)
-	// {
-	// 	shell->last_exit = 130;
-	// 			printf("ahmasd");
-	// }
 	exit(0);
 }
 
@@ -76,8 +71,6 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 
 	i = 0;
 	handle_signals(3);
-	// if (s_signal == SIGINT)
-	// 			printf("ahmad");
 	while (cmd)
 	{
 		pipe_data->pid[i] = fork();

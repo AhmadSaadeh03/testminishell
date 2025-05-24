@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 15:28:40 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/24 17:21:34 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,4 +216,7 @@ void							handle_invalid_arg(int check_f,
 									t_minishell *shell);
 void							handle_signals(int mode);
 void							print_error(char *mess, char *type);
+void							print_exit_status(t_minishell *shell, char *arg);
+void							print_arg(char *arg, int has_next);
+
 #endif
