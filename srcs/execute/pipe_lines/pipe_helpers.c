@@ -56,14 +56,15 @@ int	init_pipe_data(t_pipes *p, int count)
 
 void	close_fd(t_pipes *pipe_data)
 {
-	int	i = 0;
-	
+	int	i;
+
+	i = 0;
 	while (i < (pipe_data->cmd_count - 1) * 2)
-	{	
+	{
 		close(pipe_data->pipe_fd[i]);
 		i++;
 	}
-    free(pipe_data->pipe_fd);
+	free(pipe_data->pipe_fd);
 	pipe_data->pipe_fd = NULL;
 }
 
@@ -71,13 +72,13 @@ void	free_pipe_data(t_pipes *pipe_data)
 {
 	int	i;
 
-    i = 0; 
+	i = 0;
 	while (i < (pipe_data->cmd_count - 1) * 2)
-    {
+	{
 		close(pipe_data->pipe_fd[i]);
-        i++;
-    }
-    free(pipe_data->pipe_fd);
+		i++;
+	}
+	free(pipe_data->pipe_fd);
 	free(pipe_data->pid);
 	pipe_data->pipe_fd = NULL;
 	pipe_data->pid = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 13:37:13 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:15:38 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 	redir = cmd->redirect;
 	while (redir)
 	{
-
 		if (redir->type == TOKEN_REDIRECT_IN)
 		{
 			if (redirect_in(redir->file_name) == 1)
@@ -41,6 +40,7 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 int	redirect_out(char *file_name, t_type type)
 {
 	int	fd_out;
+
 	if (type == TOKEN_REDIRECT_OUT || type == TOKEN_APPEND)
 	{
 		if (type == TOKEN_APPEND)
@@ -61,6 +61,7 @@ int	redirect_out(char *file_name, t_type type)
 int	redirect_in(char *file_name)
 {
 	int	fd_in;
+
 	fd_in = open(file_name, O_RDONLY);
 	if (fd_in == -1)
 	{
@@ -75,6 +76,7 @@ int	redirect_in(char *file_name)
 void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 {
 	t_here	*herd;
+
 	(void)shell;
 	herd = cmd->heredocs;
 	while (herd)
@@ -89,21 +91,22 @@ char	*read_input(char *limiter)
 	char	*line;
 	char	*cont;
 	char	*tmp;
+	int		fd;
 
 	cont = add_cmd("");
 	if (!cont)
 		return (NULL);
-	int fd = dup(STDIN_FILENO);
+	fd = dup(STDIN_FILENO);
 	handle_signals(4);
 	while (1)
 	{
 		line = readline("> ");
-		// handle_signals(4);
 		if (s_signal == SIGINT)
 		{
+			free(cont);
 			dup2(fd, STDIN_FILENO);
 			close(fd);
-			return NULL;
+			return (NULL);
 		}
 		if (!line)
 			break ;

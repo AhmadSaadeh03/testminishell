@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-void preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
+void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 {
 	while (cmd)
 	{
@@ -22,10 +22,10 @@ void preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 	}
 }
 
-void wait_all_children(t_pipes *pipe_data, t_minishell *shell)
+void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 {
-	int i;
-	int status;
+	int	i;
+	int	status;
 
 	i = 0;
 	while (i < pipe_data->cmd_count)
@@ -41,7 +41,8 @@ void wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	pipe_data = NULL;
 }
 
-void handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, int i)
+void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
+		int i)
 {
 	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
@@ -69,9 +70,11 @@ void handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data, in
 	exit(0);
 }
 
-int create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
+int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	handle_signals(3);
 	// if (s_signal == SIGINT)
 	// 			printf("ahmad");
@@ -96,19 +99,19 @@ int create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 	return (0);
 }
 
-void exec_pipe(t_minishell *shell)
+void	exec_pipe(t_minishell *shell)
 {
-	t_pipes pipe_data;
-	t_cmd *cmd;
+	t_pipes	pipe_data;
+	t_cmd	*cmd;
 
 	cmd = *(shell->cmd_list);
 	preprocess_heredocs(cmd, shell);
 	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)
-		return;
+		return ;
 	if (create_child_processes(shell, &pipe_data, cmd) == 1)
 	{
 		free_pipe_data(&pipe_data);
-		return;
+		return ;
 	}
 	close_fd(&pipe_data);
 	wait_all_children(&pipe_data, shell);

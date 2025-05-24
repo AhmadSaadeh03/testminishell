@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 12:32:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 15:40:02 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:54:28 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	split_space(t_minishell *shell)
 	if (!shell->token_space)
 	{
 		ft_putstr_fd("Error: Failed to split the input\n", 2);
+		shell->last_exit = 2;
 		return (1);
 	}
 	free(temp);
@@ -99,6 +100,7 @@ int	handle_quotes_and_operators(t_minishell *shell)
 			if (closed_quotes(shell, shell->name[i]) == 1)
 			{
 				ft_putstr_fd("Error: Unclosed quotes\n", 2);
+				shell->last_exit = 2;
 				return (1);
 			}
 		}
@@ -126,6 +128,7 @@ void	process_node_list(t_minishell *shell)
 				|| shell->token_list->node[0] == '>'))
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		shell->last_exit = 127;
 		free_tokens(shell->token_list);
 		free_array(shell->token_space);
 	}
@@ -136,6 +139,7 @@ void	process_node_list(t_minishell *shell)
 			|| ft_strcmp(temp->node, "|") == 0) && temp->next == NULL)
 	{
 		ft_putstr_fd("syntax error near unexpected token\n", 2);
+		shell->last_exit = 127;
 		free_tokens(shell->token_list);
 		free_array(shell->token_space);
 	}

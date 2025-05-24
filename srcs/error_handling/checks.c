@@ -14,8 +14,8 @@
 
 int	closed_quotes(t_minishell *shell, char qoute)
 {
-	int i;
-	int c;
+	int	i;
+	int	c;
 
 	i = 0;
 	c = 0;

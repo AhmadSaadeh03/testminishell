@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:42:51 by fghanem           #+#    #+#             */
-/*   Updated: 2025/04/19 16:37:35 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/24 15:03:47 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*ft_trim_quotes(char *str)
 	return (new_str);
 }
 
-char	*replace_spaces_inside_quotes(const char *input)
+char	*replace_spaces_inside_quotes(char *input)
 {
 	int		i;
 	int		j;

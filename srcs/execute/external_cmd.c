@@ -78,14 +78,16 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	}
 }
 
-void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_line)
+void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
+		char **cmd_line)
 {
 	pid_t	pid;
-	int status;
+	int		status;
+
 	pid = fork();
 	handle_signals(1);
-		//s_signal = SIGQUIT;
-	if (pid == 0)//child
+	//s_signal = SIGQUIT;
+	if (pid == 0) //child
 	{
 		//handle_signals(1);
 		if (execve(cmd_path, cmd_line, envp) == -1)
@@ -100,26 +102,26 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp, char **cmd_lin
 		exit(0);
 	}
 	// else//parent
-    // {
-        handle_signals(2);
-        waitpid(pid, &status, 0);
-        if (WIFSIGNALED(status))
-        {
-            if (WTERMSIG(status) == SIGINT)
-                shell->last_exit = s_signal + 128;
-            else if (WTERMSIG(status) == SIGQUIT)
-                shell->last_exit =  s_signal + 128;
-        }
-        else if (WIFEXITED(status))
-            shell->last_exit = WEXITSTATUS(status);
-    // }
+	// {
+	handle_signals(2);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			shell->last_exit = s_signal + 128;
+		else if (WTERMSIG(status) == SIGQUIT)
+			shell->last_exit = s_signal + 128;
+	}
+	else if (WIFEXITED(status))
+		shell->last_exit = WEXITSTATUS(status);
+	// }
 }
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)
 {
 	struct stat	path_stat;
 
-	if (stat(cmd_line[0] , &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	if (stat(cmd_line[0], &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 	{
 		print_error(": is a directory\n", cmd_line[0]);
 		shell->last_exit = 126;

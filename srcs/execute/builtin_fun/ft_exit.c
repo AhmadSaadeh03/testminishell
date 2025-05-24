@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/20 21:58:28 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/24 15:04:28 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 	exit(exit_status);
 }
 
-int	is_valid_number_format(const char *arg, int *sign, long *number)
+int	is_valid_number_format(char *arg, int *sign, long *number)
 {
 	int	i;
 	int	dig;
@@ -84,7 +84,7 @@ int	is_valid_number_format(const char *arg, int *sign, long *number)
 	return (0);
 }
 
-int	check_digit(const char *arg)
+int	check_digit(char *arg)
 {
 	int		sign;
 	long	number;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 13:31:39 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/24 14:28:46 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,22 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 {
 	pid_t	pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return ;
 	if (pid == 0)
 	{
-		//handle_signals(1);
 		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_here_list(cmd->heredocs);
 			free_exit(shell);
 			exit(1);
+		}
+		if (s_signal == SIGINT)
+		{
+			free_exit(shell);
+			exit(130);
 		}
 		if (cmd->heredoc_flag == 1)
 			heredoc_child(cmd, shell);
@@ -65,10 +70,8 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 		exit(0);
 	}
 	else
-	{
-		//handle_signals(1);
 		waitpid(pid, NULL, 0);
-	}
+	handle_signals(0);
 }
 
 void	exec_red_only(t_cmd *cmd, t_minishell *shell)
@@ -99,10 +102,10 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	handle_signals(0);
 }
 
-void	heredoc_child(t_cmd *cmd, t_minishell *shell)//
+void	heredoc_child(t_cmd *cmd, t_minishell *shell) //
 {
 	t_here *last;
-	int		fd[2];
+	int fd[2];
 
 	if (pipe(fd) == -1)
 		return ;
@@ -116,7 +119,7 @@ void	heredoc_child(t_cmd *cmd, t_minishell *shell)//
 		if (ft_strchr(last->content, '$'))
 		{
 			char *str = handle_env(last->content, *(shell->env_list));
-			if(str)
+			if (str)
 			{
 				free(last->content);
 				last->content = str;
