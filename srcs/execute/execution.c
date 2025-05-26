@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 15:32:23 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:07:02 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	execute_one_cmd(t_minishell *shell, t_cmd *cmd)
 		external_cmd(shell, cmd);
 }
 
-void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
+void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int flag)
 {
 	pid_t	pid;
 
@@ -48,47 +48,24 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int fl)
 	if (pid == -1)
 		return ;
 	if (pid == 0)
-	{
-		if (handle_redirection(cmd, shell) == 1)
-		{
-			free_here_list(cmd->heredocs);
-			free_exit(shell);
-			exit(1);
-		}
-		if (s_signal == SIGINT)
-		{
-			free_exit(shell);
-			exit(130);
-		}
-		if (cmd->heredoc_flag == 1)
-			heredoc_child(cmd, shell);
-		if (fl == 1)
-			exec_builtin(shell, cmd->cmd_line);
-		else
-			get_path_cmd(shell, cmd->cmd_line);
-		free_exit(shell);
-		exit(0);
-	}
+		child_process(cmd, shell, flag);
 	else
 	{
 		handle_signals(5);
 		waitpid(pid, NULL, 0);
 		if (s_signal == SIGINT)
-			shell->last_exit = 130;	
+			shell->last_exit = 130;
 	}
-	//handle_signals(0);
 }
 
 void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 {
 	pid_t	pid;
+
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork");
 		return ;
-	}
 	if (pid == 0)
 	{
 		if (handle_redirection(cmd, shell) == 1)
@@ -108,35 +85,27 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 		if (s_signal == SIGINT)
 			shell->last_exit = 130;
 	}
-	//handle_signals(0);
 }
 
-void	heredoc_child(t_cmd *cmd, t_minishell *shell) //
+void	child_process(t_cmd *cmd, t_minishell *shell, int flag)
 {
-	t_here *last;
-	int fd[2];
-
-	if (pipe(fd) == -1)
-		return ;
-	//handle_signals(5);
-	last = cmd->heredocs;
-	while (last->next)
-		last = last->next;
-	if (last && last->content)
+	if (handle_redirection(cmd, shell) == 1)
 	{
-		// handle_signals(5);
-		if (ft_strchr(last->content, '$'))
-		{
-			char *str = handle_env(last->content, *(shell->env_list));
-			if (str)
-			{
-				free(last->content);
-				last->content = str;
-			}
-		}
-		write(fd[1], last->content, ft_strlen(last->content));
+		free_here_list(cmd->heredocs);
+		free_exit(shell);
+		exit(1);
 	}
-	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
+	if (s_signal == SIGINT)
+	{
+		free_exit(shell);
+		exit(130);
+	}
+	if (cmd->heredoc_flag == 1)
+		heredoc_child(cmd, shell);
+	if (flag == 1)
+		exec_builtin(shell, cmd->cmd_line);
+	else
+		get_path_cmd(shell, cmd->cmd_line);
+	free_exit(shell);
+	exit(0);
 }

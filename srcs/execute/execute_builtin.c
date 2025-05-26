@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/13 12:50:26 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 15:30:36 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	exec_builtin(t_minishell *shell, char **cmd_line)
 	if (!shell || !(*shell->cmd_list))
 		return ;
 	if (ft_strcmp(cmd_line[0], "echo") == 0)
-		ft_echo(shell, cmd_line);
+		ft_echo(shell, cmd_line, 1);
 	else if (ft_strcmp(cmd_line[0], "cd") == 0)
 		ft_cd(shell, cmd_line);
 	else if (ft_strcmp(cmd_line[0], "pwd") == 0)
@@ -42,15 +42,24 @@ void	ft_cd(t_minishell *shell, char **cmd_line)
 	if (cmd_line[1] == NULL)
 	{
 		if (chdir(path) != 0)
+		{
 			perror("cd");
+			shell->last_exit = 127;
+		}
 		free(path);
 	}
 	else
 	{
 		if (cmd_line[2] != NULL)
-			ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		{
+			print_error(" too many arguments\n", "cd: ");
+			shell->last_exit = 127;
+		}
 		else if (chdir(cmd_line[1]) != 0)
-			perror("cd");
+		{
+			print_error("No such file or directory\n", "cd: ");
+			shell->last_exit = 127;
+		}
 	}
 }
 
@@ -70,8 +79,12 @@ void	ft_env(t_minishell *shell)
 
 void	ft_unset(t_minishell *shell, char **cmd_line)
 {
-	if (cmd_line[1])
-		my_unsetenv(shell->env_list, cmd_line[1]);
-	else
-		return ;
+	int	i;
+
+	i = 1;
+	while (cmd_line[i])
+	{
+		my_unsetenv(shell->env_list, cmd_line[i]);
+		i++;
+	}
 }

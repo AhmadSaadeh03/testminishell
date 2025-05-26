@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 17:21:34 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 16:39:27 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int								parsing(t_minishell **shell);
 int								expand(t_minishell *shell);
 int								put_type(t_minishell **shell);
 int								handle_quotes_and_operators(t_minishell *shell);
+int								prepare_env_and_check(t_minishell *shell, char *cmd_path, char *arg);
 int								has_operator_at_edges(char *str, int len);
 int								has_invalid_repeated_operators(char *str);
 int								fill_cmd(t_cmd *cmd2, t_node *temp);
@@ -144,6 +145,7 @@ t_cmd							*init_cmd(void);
 char							*space_before_op(char *str, int i, int *len);
 char							*space_after_op(char *str, int i, int *len);
 char							*add_cmd(char *token);
+char							*find_path(char **path, char *cmd);
 char							*replace_spaces_inside_quotes(char *input);
 char							*read_input(char *limiter,t_minishell *shell);
 char							*my_getenv(t_env *env_list, char *name);
@@ -151,6 +153,7 @@ char							**copy_env_list_to_array(t_env *env_list);
 char							*join_env_pair(char *name, char *value);
 char							*handle_env(char *str, t_env *env_list);
 char							*ft_trim_quotes(char *s1);
+char							**get_path_array(t_minishell *shell, char *arg);
 char							*ft_strjoin_free(char *s1, char *s2);
 void							my_setenv(t_env **env_list, char *name,
 									char *value);
@@ -175,7 +178,7 @@ void							execute_cmd(char *cmd_path, t_minishell *shell,
 
 void							exec_builtin(t_minishell *shell,
 									char **cmd_line);
-void							ft_echo(t_minishell *shell, char **cmd_line);
+void 							ft_echo(t_minishell *shell, char **cmd_line, int newline);
 void							ft_pwd(void);
 void							ft_env(t_minishell *shell);
 void							ft_export(t_minishell *shell, char **cmd_line);
@@ -185,7 +188,6 @@ void							swap_nodes(t_env *a, t_env *b);
 void							ft_exit(t_minishell *shell, char **cmd_line);
 void							ft_cd(t_minishell *shell, char **cmd_line);
 void							ft_unset(t_minishell *shell, char **cmd_line);
-void							handle_exit_status(char *exit, char *arg);
 void							free_here_list(t_here *heredocs);
 t_here							*creat_heredoc(char *limit);
 void							add_heredoc(t_cmd *cmd, char *limit);
@@ -216,7 +218,8 @@ void							handle_invalid_arg(int check_f,
 									t_minishell *shell);
 void							handle_signals(int mode);
 void							print_error(char *mess, char *type);
-void							print_exit_status(t_minishell *shell, char *arg);
-void							print_arg(char *arg, int has_next);
+void							print_echo_args(char *arg, int status, int space_flag);
+void							child_process(t_cmd *cmd, t_minishell *shell, int flag);
+void							handle_exit_status(t_minishell *shell, int status);
 
 #endif

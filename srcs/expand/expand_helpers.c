@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:27:25 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/06 17:14:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 15:07:54 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ void	my_setenv(t_env **env_list, char *name, char *value)
 		{
 			free(temp->value);
 			temp->value = ft_strdup(value);
-			if (!temp->value)
-				return ;
 			return ;
 		}
 		temp = temp->next;

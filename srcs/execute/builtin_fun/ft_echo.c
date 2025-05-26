@@ -6,58 +6,77 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 17:21:43 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:03:22 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void	print_arg(char *arg, int has_next)
+static int	is_ignore(char *cmd)
 {
-	printf("%s", arg);
-	if (has_next)
-		printf(" ");
+	int	i;
+
+	i = 0;
+	if ((ft_strcmp(cmd, "-e") == 0) || (ft_strcmp(cmd,
+				"-E") == 0))
+		return (1);
+	else if (cmd[0] == '-' && (cmd[1] == 'n'
+			|| cmd[1] == 'e' || cmd[1] == 'E'))
+		return (2);
+	return (0);
 }
 
-void	ft_echo(t_minishell *shell, char **cmd_line)
+void	ft_echo(t_minishell *shell, char **cmd_line, int newline)
 {
-	int		i;
-	int		newline;
-	int		flag_arg;
+	int	i;
 
 	i = 1;
-	newline = 1;
 	while (cmd_line[i] != NULL)
 	{
-		if (cmd_line[i] && (cmd_line[i][0] == '-'))
+		if (is_ignore(cmd_line[i]) == 1)
 		{
-			flag_arg = handle_echo_flag(cmd_line[i]);
-			if (flag_arg == 1)
+			i++;
+			continue ;
+		}
+		else if (is_ignore(cmd_line[i]) == 2)
+		{
+			if (handle_echo_flag(cmd_line[i]) == 1)
 			{
-				if (ft_strchr(cmd_line[i], 'n'))
-					newline = 0;
+				newline = 0;
+				i++;
+				continue ;
 			}
 		}
-		else if (cmd_line[i][0] == '$' && cmd_line[i][1] == '?')
-			print_exit_status(shell, cmd_line[i]);
-		else
-			print_arg(cmd_line[i], cmd_line[i + 1] != NULL);
+		print_echo_args(cmd_line[i], shell->last_exit, cmd_line[i + 1] != NULL);
 		i++;
 	}
+	shell->last_exit = 0;
 	if (newline)
 		printf("\n");
 }
 
-void	print_exit_status(t_minishell *shell, char *arg)
+void	print_echo_args(char *arg, int status, int space_flag)
 {
-	char	*exit;
+	char	*p;
+	int		i;
 
-	exit = ft_itoa(shell->last_exit);
-	if (!exit)
-		return ;
-	handle_exit_status(exit, arg);
-	shell->last_exit = 0;
-	free(exit);
+	i = 0;
+	p = arg;
+	while (p[i])
+	{
+		if (p[i] == '$' && p[i + 1] == '?')
+		{
+			ft_putnbr_fd(status, 1);
+			i += 2;
+		}
+		else
+		{
+			ft_putchar_fd(p[i], 1);
+			i++;
+		}
+	}
+	if (space_flag)
+		write(1, " ", 1);
 }
 
 int	handle_echo_flag(char *arg)
@@ -65,6 +84,8 @@ int	handle_echo_flag(char *arg)
 	int	j;
 
 	j = 0;
+	if ((ft_strcmp(arg, "-e") == 0) || (ft_strcmp(arg, "-E") == 0))
+		return (0);
 	if (arg[j] == '-' && arg[j + 1] == 'n')
 	{
 		j++;
@@ -78,14 +99,15 @@ int	handle_echo_flag(char *arg)
 	return (1);
 }
 
-void	handle_exit_status(char *exit, char *arg)
+void	handle_exit_status(t_minishell *shell, int status)
 {
-	char	*suffix;
-	char	*joined;
-
-	suffix = ft_strdup(arg + 2);
-	joined = ft_strjoin(exit, suffix);
-	printf("%s", joined);
-	free(suffix);
-	free(joined);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			shell->last_exit = s_signal + 128;
+		else if (WTERMSIG(status) == SIGQUIT)
+			shell->last_exit = s_signal + 128;
+	}
+	else if (WIFEXITED(status))
+		shell->last_exit = WEXITSTATUS(status);
 }

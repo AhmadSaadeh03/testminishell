@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/19 21:42:37 by fghanem           ###   ########.fr       */
+/*   Updated: 2025/05/26 17:07:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
 	else if (i > 0)
-	{
-		// printf("fsdfsd");
 		dup2(pipe_data->pipe_fd[(i - 1) * 2], STDIN_FILENO);
-	}
 	if (i < pipe_data->cmd_count - 1)
 		dup2(pipe_data->pipe_fd[i * 2 + 1], STDOUT_FILENO);
 	close_fd(pipe_data);

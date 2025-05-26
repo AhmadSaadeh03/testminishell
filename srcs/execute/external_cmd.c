@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 15:10:55 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:16:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,35 @@ void	external_cmd(t_minishell *shell, t_cmd *cmd)
 		get_path_cmd(shell, cmd->cmd_line);
 }
 
+char	*find_path(char **path, char *cmd)
+{
+	int		i;
+	char	*tmp;
+	char	*cmd_path;
+	char	*path_env;
+
+	cmd_path = NULL;
+	i = 0;
+	while (path[i])
+	{
+		path_env = ft_strjoin(path[i], "/");
+		tmp = ft_strjoin(path_env, cmd);
+		free(path_env);
+		if (access(tmp, X_OK) == 0)
+		{
+			cmd_path = ft_strdup(tmp);
+			free(tmp);
+			break ;
+		}
+		free(tmp);
+		i++;
+	}
+	return (cmd_path);
+}
+
 void	get_path_cmd(t_minishell *shell, char **args)
 {
-	char	*path_env;
-	int		i;
 	char	**path;
-	char	*temp;
 	char	*cmd_path;
 
 	if (ft_strchr(args[0], '.') != NULL || ft_strchr(args[0], '/') != NULL)
@@ -33,47 +56,16 @@ void	get_path_cmd(t_minishell *shell, char **args)
 		check_cmd_path(shell, args);
 		return ;
 	}
-	cmd_path = NULL;
-	path_env = my_getenv((*shell->env_list), "PATH");
-	if (!path_env)
-	{
-		print_error(": No such file or directory\n", args[0]);
-		shell->last_exit = 127;
+	path = get_path_array(shell, args[0]);
+	if (!path)
 		return ;
-	}
-	path = ft_split(path_env, ':');
-	i = 0;
-	while (path[i])
-	{
-		path_env = ft_strjoin(path[i], "/");
-		temp = ft_strjoin(path_env, args[0]);
-		free(path_env);
-		if (access(temp, X_OK) == 0)
-		{
-			cmd_path = ft_strdup(temp);
-			free(temp);
-			break ;
-		}
-		free(temp);
-		i++;
-	}
-	shell->envps = copy_env_list_to_array((*shell->env_list));
-	if (!shell->envps)
-		return ;
+	cmd_path = find_path(path, args[0]);
 	free_array(path);
-	if (!cmd_path)
-	{
-		print_error(": command not found\n", args[0]);
-		free_array(shell->envps);
-		shell->last_exit = 127;
+	if (!prepare_env_and_check(shell, cmd_path, args[0]))
 		return ;
-	}
-	else
-	{
-		execute_cmd(cmd_path, shell, shell->envps, args);
-		free_array(shell->envps);
-		free(cmd_path);
-	}
+	execute_cmd(cmd_path, shell, shell->envps, args);
+	free_array(shell->envps);
+	free(cmd_path);
 }
 
 void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
@@ -84,10 +76,8 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 
 	pid = fork();
 	handle_signals(1);
-	//s_signal = SIGQUIT;
-	if (pid == 0) //child
+	if (pid == 0)
 	{
-		//handle_signals(1);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
@@ -99,20 +89,9 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 		free_exit(shell);
 		exit(0);
 	}
-	// else//parent
-	// {
 	handle_signals(2);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			shell->last_exit = s_signal + 128;
-		else if (WTERMSIG(status) == SIGQUIT)
-			shell->last_exit = s_signal + 128;
-	}
-	else if (WIFEXITED(status))
-		shell->last_exit = WEXITSTATUS(status);
-	// }
+	handle_exit_status(shell, status);
 }
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)

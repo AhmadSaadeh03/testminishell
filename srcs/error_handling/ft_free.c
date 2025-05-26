@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:36:10 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 15:23:03 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:08:56 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	free_array(char **array)
 	}
 	free(array);
 }
+
 void	free_minishell(t_minishell *shell)
 {
 	if (shell->token_space[0])

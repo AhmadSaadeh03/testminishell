@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:30:05 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 15:10:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:08:41 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ int	handle_quote(t_minishell *shell, char operator)
 	inside_quotes = 0;
 	while (shell->name[i])
 	{
-		if (shell->name[i] == operator&& !inside_quotes)
+		if (shell->name[i] == operator && !inside_quotes)
 			inside_quotes = 1;
-		else if (shell->name[i] == operator&& inside_quotes)
+		else if (shell->name[i] == operator && inside_quotes)
 		{
 			inside_quotes = 0;
 		}

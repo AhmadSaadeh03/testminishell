@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:58:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 12:55:15 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:00:56 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	sort_export_list_and_print(t_env **env_list)
 	{
 		if (sorted_list->value)
 			printf("declare -x %s=\"%s\"\n", sorted_list->env_name,
-					sorted_list->value);
+				sorted_list->value);
 		else
 			printf("declare -x %s\n", sorted_list->env_name);
 		sorted_list = sorted_list->next;
