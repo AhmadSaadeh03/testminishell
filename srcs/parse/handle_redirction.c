@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/24 15:28:50 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:57:40 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ char	*read_input(char *limiter,t_minishell *shell)
 		return (NULL);
 	int fd = dup(STDIN_FILENO);
 	handle_signals(4);
-	if (s_signal)
+	if (g_signal)
 	while (1)
 	{
 		line = readline("> ");
 		// handle_signals(4);
-		if (s_signal == SIGINT)
+		if (g_signal == SIGINT)
 		{
-			shell->last_exit = s_signal + 128;
+			shell->last_exit = g_signal + 128;
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 			free(line);

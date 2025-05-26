@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:03:22 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:58:18 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ void	handle_exit_status(t_minishell *shell, int status)
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
-			shell->last_exit = s_signal + 128;
+			shell->last_exit = g_signal + 128;
 		else if (WTERMSIG(status) == SIGQUIT)
-			shell->last_exit = s_signal + 128;
+			shell->last_exit = g_signal + 128;
 	}
 	else if (WIFEXITED(status))
 		shell->last_exit = WEXITSTATUS(status);

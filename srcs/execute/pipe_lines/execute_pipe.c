@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:07:50 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:57:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 		waitpid(pipe_data->pid[i], &status, 0);
 		i++;
 	}
-	if (s_signal == SIGINT)
-		shell->last_exit = 128 + s_signal;
-	if (s_signal == SIGQUIT)
-		shell->last_exit = 128 + s_signal;
+	if (g_signal == SIGINT)
+		shell->last_exit = 128 + g_signal;
+	if (g_signal == SIGQUIT)
+		shell->last_exit = 128 + g_signal;
 	free(pipe_data->pid);
 	pipe_data = NULL;
 }

@@ -6,13 +6,13 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/24 15:29:13 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/26 17:56:25 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-volatile sig_atomic_t	s_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
 int	main(int arc, char **arv, char **envp)
 {
@@ -30,15 +30,15 @@ int	main(int arc, char **arv, char **envp)
 	while (1)
 	{
 		handle_signals(0);
-		if (s_signal == SIGINT)
+		if (g_signal == SIGINT)
 		{
-			//shell->last_exit = s_signal + 128;
-			s_signal = 0;
+			//shell->last_exit = g_signal + 128;
+			g_signal = 0;
 			continue;
 		}
 		shell->name = readline("👾Minihell> ");
-		if (s_signal == SIGINT)
-			shell->last_exit = s_signal + 128;
+		if (g_signal == SIGINT)
+			shell->last_exit = g_signal + 128;
 		if ((shell->name) == NULL)
 		{
 			printf("exit\n");

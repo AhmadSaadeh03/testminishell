@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:29:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 15:42:49 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/25 17:18:02 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	expand(t_minishell *shell)
 			new = handle_env(temp->node, (*shell->env_list));
 			if (!new)
 				return (1);
-			final = ft_trim_quotes(new);
+			//final = ft_trim_quotes(new);
+			final = ft_strdup(new);
 			if (!final)
 			{
 				free(new);

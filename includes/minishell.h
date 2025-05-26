@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 16:39:27 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/26 18:05:36 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 
-extern volatile sig_atomic_t	s_signal;
+extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_here
 {
@@ -99,8 +99,8 @@ typedef struct s_minishell
 	int							last_exit;
 }								t_minishell;
 
-int								is_valid_number_format(char *arg,
-									int *sign, long *number);
+int								is_valid_number_format(char *arg, int *sign,
+									long *number);
 int								is_all_whitespace(char *str);
 int								ft_isspace(char c);
 int								get_env_list_size(t_env *env_list);
@@ -126,7 +126,8 @@ int								parsing(t_minishell **shell);
 int								expand(t_minishell *shell);
 int								put_type(t_minishell **shell);
 int								handle_quotes_and_operators(t_minishell *shell);
-int								prepare_env_and_check(t_minishell *shell, char *cmd_path, char *arg);
+int								prepare_env_and_check(t_minishell *shell,
+									char *cmd_path, char *arg);
 int								has_operator_at_edges(char *str, int len);
 int								has_invalid_repeated_operators(char *str);
 int								fill_cmd(t_cmd *cmd2, t_node *temp);
@@ -147,7 +148,7 @@ char							*space_after_op(char *str, int i, int *len);
 char							*add_cmd(char *token);
 char							*find_path(char **path, char *cmd);
 char							*replace_spaces_inside_quotes(char *input);
-char							*read_input(char *limiter,t_minishell *shell);
+char							*read_input(char *limiter, t_minishell *shell);
 char							*my_getenv(t_env *env_list, char *name);
 char							**copy_env_list_to_array(t_env *env_list);
 char							*join_env_pair(char *name, char *value);
@@ -178,7 +179,8 @@ void							execute_cmd(char *cmd_path, t_minishell *shell,
 
 void							exec_builtin(t_minishell *shell,
 									char **cmd_line);
-void 							ft_echo(t_minishell *shell, char **cmd_line, int newline);
+void							ft_echo(t_minishell *shell, char **cmd_line,
+									int newline);
 void							ft_pwd(void);
 void							ft_env(t_minishell *shell);
 void							ft_export(t_minishell *shell, char **cmd_line);
@@ -218,8 +220,16 @@ void							handle_invalid_arg(int check_f,
 									t_minishell *shell);
 void							handle_signals(int mode);
 void							print_error(char *mess, char *type);
-void							print_echo_args(char *arg, int status, int space_flag);
-void							child_process(t_cmd *cmd, t_minishell *shell, int flag);
-void							handle_exit_status(t_minishell *shell, int status);
+void							print_echo_args(char *arg, int status,
+									int space_flag);
+void							child_process(t_cmd *cmd, t_minishell *shell,
+									int flag);
+void							handle_exit_status(t_minishell *shell,
+									int status);
+void							herdoc_signals(int signal_number);
+void							handle_after_child(int signal_number);
+void							handle_ctrl_c_on_process(int signal_number);
+void							handle_ctrl_c(int signal_number);
+char	*remove_all_spaces(char *str);
 
 #endif

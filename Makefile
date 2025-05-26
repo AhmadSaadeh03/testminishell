@@ -6,7 +6,8 @@ SRCS =  srcs/main.c srcs/tokeniz/split.c srcs/error_handling/checks.c srcs/initi
 	srcs/tokeniz/helpers.c srcs/error_handling/handle_error.c srcs/expand/handle_env.c srcs/parse/handle_redirction.c srcs/expand/handle_export.c \
 	srcs/execute/execute_builtin.c srcs/execute/external_cmd.c srcs/expand/expand_helpers.c srcs/error_handling/extra_free.c srcs/tokeniz/split_helper.c \
 	srcs/execute/builtin_fun/ft_echo.c srcs/execute/builtin_fun/ft_export.c srcs/execute/builtin_fun/ft_exit.c \
-	srcs/execute/execution.c srcs/execute/pipe_lines/execute_pipe.c srcs/execute/pipe_lines/pipe_helpers.c srcs/execute/execute_helpers.c srcs/signals.c
+	srcs/execute/execution.c srcs/execute/pipe_lines/execute_pipe.c srcs/execute/pipe_lines/pipe_helpers.c srcs/execute/execute_helpers.c srcs/signals.c\
+	srcs/tokeniz/helper_two.c srcs/expand/env_helper.c srcs/signals_mods.c srcs/tokeniz/split_op.c
 OBJ = $(SRCS:.c=.o)
 
 LIBFT_DIR = libft
