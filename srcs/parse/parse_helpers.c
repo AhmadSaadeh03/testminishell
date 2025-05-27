@@ -1,0 +1,96 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_helpers.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/27 14:01:12 by fghanem           #+#    #+#             */
+/*   Updated: 2025/05/27 15:53:14 by fghanem          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+static int	process_line_input(char **cont, char *line)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(*cont, line);
+	free(line);
+	if (!tmp)
+	{
+		free(*cont);
+		return (0);
+	}
+	free(*cont);
+	*cont = tmp;
+	tmp = ft_strjoin(*cont, "\n");
+	if (!tmp)
+	{
+		free(*cont);
+		return (0);
+	}
+	free(*cont);
+	*cont = tmp;
+	return (1);
+}
+
+static int	handle_sigint_in_heredoc(t_minishell *shell, int fd, char *line,
+	char *cont)
+{
+	shell->last_exit = g_signal + 128;
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	free(line);
+	free(cont);
+	return (1);
+}
+
+char	*read_input(char *limiter, t_minishell *shell)
+{
+	char	*line;
+	char	*cont;
+	int		fd;
+
+	cont = add_cmd("");
+	if (!cont)
+		return (NULL);
+	fd = dup(STDIN_FILENO);
+	handle_signals(4);
+	while (1)
+	{
+		line = readline("> ");
+		if (g_signal == SIGINT)
+			if (handle_sigint_in_heredoc(shell, fd, line, cont))
+				return (NULL);
+		if (!line || ft_strcmp(line, limiter) == 0)
+			break ;
+		if (line[0] == '\0')
+			free(line);
+		else if (!process_line_input(&cont, line))
+			return (NULL);
+	}
+	if (line)
+		free(line);
+	return (cont);
+}
+
+void	add_heredoc(t_cmd *cmd, char *limit)
+{
+	t_here	*new;
+	t_here	*cur;
+
+	new = creat_heredoc(limit);
+	if (!new)
+		return ;
+	if (!cmd->heredocs)
+		cmd->heredocs = new;
+	else
+	{
+		cur = cmd->heredocs;
+		while (cur->next)
+			cur = cur->next;
+		cur->next = new;
+	}
+}

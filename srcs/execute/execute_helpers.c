@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:47:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:12:30 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:46:24 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,6 @@ void	heredoc_child(t_cmd *cmd, t_minishell *shell)
 
 int	prepare_env_and_check(t_minishell *shell, char *cmd_path, char *arg)
 {
-	shell->envps = copy_env_list_to_array((*shell->env_list));
-	if (!shell->envps)
-		return (0);
 	if (!cmd_path)
 	{
 		free_array(shell->envps);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:57:40 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:57:42 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 				return (1);
 		}
 		else if (redir->type == TOKEN_REDIRECT_OUT
-				|| redir->type == TOKEN_APPEND)
+			|| redir->type == TOKEN_APPEND)
 		{
 			if (redirect_out(redir->file_name, redir->type) == 1)
 				return (1);
@@ -36,7 +36,7 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 	}
 	return (0);
 }
-// >
+
 int	redirect_out(char *file_name, t_type type)
 {
 	int	fd_out;
@@ -81,66 +81,7 @@ void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 	herd = cmd->heredocs;
 	while (herd)
 	{
-		herd->content = read_input(herd->limt,shell);
+		herd->content = read_input(herd->limt, shell);
 		herd = herd->next;
 	}
-}
-
-char	*read_input(char *limiter,t_minishell *shell)
-{
-	char	*line;
-	char	*cont;
-	char	*tmp;
-
-	cont = add_cmd("");
-	if (!cont)
-		return (NULL);
-	int fd = dup(STDIN_FILENO);
-	handle_signals(4);
-	if (g_signal)
-	while (1)
-	{
-		line = readline("> ");
-		// handle_signals(4);
-		if (g_signal == SIGINT)
-		{
-			shell->last_exit = g_signal + 128;
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			free(line);
-			free(cont);
-			return NULL;
-		}
-		if (!line)
-			break ;
-		if (line[0] == '\0')
-		{
-			free(line);
-			continue ;
-		}
-		if (ft_strcmp(line, limiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		tmp = ft_strjoin(cont, line);
-		if (!tmp)
-		{
-			free(line);
-			free(cont);
-			return (NULL);
-		}
-		free(cont);
-		cont = tmp;
-		tmp = ft_strjoin(cont, "\n");
-		free(cont);
-		if (!tmp)
-		{
-			free(line);
-			return (NULL);
-		}
-		cont = tmp;
-		free(line);
-	}
-	return (cont);
 }

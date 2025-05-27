@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/26 17:56:25 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/27 14:09:14 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	main(int arc, char **arv, char **envp)
 		}
 		if (cmd_filling(shell) == 1)
 			return (1);
-		 executing(shell);
+		executing(shell);
 		if (*(shell->cmd_list))
 			free_cmd(*(shell->cmd_list));
 		free(shell->cmd_list);

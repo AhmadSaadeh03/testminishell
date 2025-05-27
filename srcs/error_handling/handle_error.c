@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 14:16:34 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/24 14:50:06 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:13:55 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,12 @@ int	has_invalid_repeated_operators(char *str)
 
 void	print_error(char *mess, char *type)
 {
-	char	*tmp1;
-	char	*tmp2;
-	char	*final;
+	char	buffer[512];
 
-	tmp1 = ft_strjoin("minishell: ", type);
-	if (!tmp1)
+	if (!mess || !type)
 		return ;
-	tmp2 = ft_strjoin(tmp1, mess);
-	free(tmp1);
-	if (!tmp2)
-		return ;
-	final = ft_strdup(tmp2);
-	free(tmp2);
-	if (!final)
-		return ;
-	ft_putstr_fd(final, 2);
-	free(final);
+	ft_strlcpy(buffer, "minishell: ", sizeof(buffer));
+	ft_strlcat(buffer, type, sizeof(buffer));
+	ft_strlcat(buffer, mess, sizeof(buffer));
+	write(2, buffer, ft_strlen(buffer));
 }

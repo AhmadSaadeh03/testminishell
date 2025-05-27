@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/10 11:34:01 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 15:54:38 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,51 +47,51 @@ void	add_redirect(t_cmd *cmd, char *file_name, t_type type)
 	}
 }
 
-int	fill_cmd(t_cmd *cmd2, t_node *temp)
-{
-	int	i;
+// int	fill_cmd(t_cmd *cmd2, t_node *temp)
+// {
+// 	int	i;
 
-	i = 0;
-	while (temp)
-	{
-		if (temp->next && (temp->cmd_type == TOKEN_APPEND
-				|| temp->cmd_type == TOKEN_REDIRECT_IN
-				|| temp->cmd_type == TOKEN_REDIRECT_OUT))
-		{
-			add_redirect(cmd2, temp->next->node, temp->cmd_type);
-			cmd2->redir_flag = 1;
-			temp = temp->next;
-		}
-		else if (temp->cmd_type == TOKEN_HEREDOC && temp->next)
-		{
-			add_heredoc(cmd2, temp->next->node);
-			cmd2->heredoc_flag = 1;
-			temp = temp->next;
-		}
-		else if (temp->cmd_type == TOKEN_PIPE && temp->next)
-		{
-			cmd2->cmd_line[i] = NULL;
-			cmd2->next = init_cmd();
-			if (!cmd2->next)
-				return (1);
-			cmd2 = cmd2->next;
-			i = 0;
-		}
-		else if (temp->node && (temp->cmd_type == TOKEN_ARG
-					|| temp->cmd_type == COMMAND))
-		{
-			cmd2->cmd_line[i] = add_cmd(temp->node);
-			if (!cmd2->cmd_line[i])
-			{
-				return (1);
-			}
-			i++;
-		}
-		temp = temp->next;
-	}
-	cmd2->cmd_line[i] = NULL;
-	return (0);
-}
+// 	i = 0;
+// 	while (temp)
+// 	{
+// 		if (temp->next && (temp->cmd_type == TOKEN_APPEND
+// 				|| temp->cmd_type == TOKEN_REDIRECT_IN
+// 				|| temp->cmd_type == TOKEN_REDIRECT_OUT))
+// 		{
+// 			add_redirect(cmd2, temp->next->node, temp->cmd_type);
+// 			cmd2->redir_flag = 1;
+// 			temp = temp->next;
+// 		}
+// 		else if (temp->cmd_type == TOKEN_HEREDOC && temp->next)
+// 		{
+// 			add_heredoc(cmd2, temp->next->node);
+// 			cmd2->heredoc_flag = 1;
+// 			temp = temp->next;
+// 		}
+// 		else if (temp->cmd_type == TOKEN_PIPE && temp->next)
+// 		{
+// 			cmd2->cmd_line[i] = NULL;
+// 			cmd2->next = init_cmd();
+// 			if (!cmd2->next)
+// 				return (1);
+// 			cmd2 = cmd2->next;
+// 			i = 0;
+// 		}
+// 		else if (temp->node && (temp->cmd_type == TOKEN_ARG
+// 					|| temp->cmd_type == COMMAND))
+// 		{
+// 			cmd2->cmd_line[i] = add_cmd(temp->node);
+// 			if (!cmd2->cmd_line[i])
+// 			{
+// 				return (1);
+// 			}
+// 			i++;
+// 		}
+// 		temp = temp->next;
+// 	}
+// 	cmd2->cmd_line[i] = NULL;
+// 	return (0);
+// }
 
 int	cmd_filling(t_minishell *shell)
 {
@@ -144,23 +144,4 @@ t_here	*creat_heredoc(char *limit)
 	redir->limt = add_cmd(limit);
 	redir->next = NULL;
 	return (redir);
-}
-
-void	add_heredoc(t_cmd *cmd, char *limit)
-{
-	t_here	*new;
-	t_here	*cur;
-
-	new = creat_heredoc(limit);
-	if (!new)
-		return ;
-	if (!cmd->heredocs)
-		cmd->heredocs = new;
-	else
-	{
-		cur = cmd->heredocs;
-		while (cur->next)
-			cur = cur->next;
-		cur->next = new;
-	}
 }

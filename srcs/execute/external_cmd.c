@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:16:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 16:46:48 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	char	**path;
 	char	*cmd_path;
 
+	shell->envps = copy_env_list_to_array((*shell->env_list));
+	if (!shell->envps)
+		return ;
 	if (ft_strchr(args[0], '.') != NULL || ft_strchr(args[0], '/') != NULL)
 	{
 		check_cmd_path(shell, args);
