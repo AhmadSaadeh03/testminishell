@@ -6,21 +6,19 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 15:54:38 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 17:10:49 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	add_redirect(t_cmd *cmd, char *file_name, t_type type)
+static t_redirect	*create_redirect_node(char *file_name, t_type type)
 {
 	t_redirect	*new;
-	t_redirect	*curr;
 
-	new = NULL;
 	new = malloc(sizeof(t_redirect));
 	if (!new)
-		return ;
+		return (NULL);
 	new->file_name = NULL;
 	if (file_name[0] == '"' && file_name[ft_strlen(file_name) - 1] == '"')
 	{
@@ -32,10 +30,22 @@ void	add_redirect(t_cmd *cmd, char *file_name, t_type type)
 	if (!new->file_name)
 	{
 		free(new);
-		return ;
+		return (NULL);
 	}
 	new->type = type;
 	new->next = NULL;
+	return (new);
+}
+
+void	add_redirect(t_cmd *cmd, char *file_name, t_type type)
+{
+	t_redirect	*new;
+	t_redirect	*curr;
+
+	new = create_redirect_node(file_name, type);
+	if (!new)
+		return ;
+	curr = new;
 	if (!cmd->redirect)
 		cmd->redirect = new;
 	else

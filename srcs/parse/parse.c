@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/12 14:10:19 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/27 17:24:36 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,38 +62,57 @@ int	put_type(t_minishell **shell)
 	return (0);
 }
 
+static int	fix_heredoc_merge(t_node **temp)
+{
+	t_node	*to_free;
+
+	if ((*temp)->next && (*temp)->next->next
+		&& ft_strcmp((*temp)->node, "<") == 0
+		&& ft_strcmp((*temp)->next->node, "<") == 0)
+	{
+		to_free = (*temp)->next;
+		(*temp)->next = (*temp)->next->next;
+		free_node(to_free);
+		free((*temp)->node);
+		(*temp)->node = ft_strdup("<<");
+		if (!(*temp)->node)
+			return (0);
+		*temp = (*temp)->next;
+	}
+	return (1);
+}
+
+static int	fix_append_merge(t_node **temp)
+{
+	t_node	*to_free;
+
+	if ((*temp)->next && (*temp)->next->next
+		&& ft_strcmp((*temp)->node, ">") == 0
+		&& ft_strcmp((*temp)->next->node, ">") == 0)
+	{
+		to_free = (*temp)->next;
+		(*temp)->next = (*temp)->next->next;
+		free_node(to_free);
+		free((*temp)->node);
+		(*temp)->node = ft_strdup(">>");
+		if (!(*temp)->node)
+			return (0);
+		*temp = (*temp)->next;
+	}
+	return (1);
+}
+
 t_node	*fix_redirection(t_node *list)
 {
 	t_node	*temp;
-	t_node	*to_free;
 
 	temp = list;
 	while (temp)
 	{
-		if (temp->next && temp->next->next && ((ft_strcmp(temp->node, "<") == 0)
-				&& (ft_strcmp(temp->next->node, "<") == 0)))
-		{
-			to_free = temp->next;
-			temp->next = temp->next->next;
-			free_node(to_free);
-			free(temp->node);
-			temp->node = ft_strdup("<<");
-			if (!temp->node)
-				return (NULL);
-			temp = temp->next;
-		}
-		if (temp->next && temp->next->next && ((ft_strcmp(temp->node, ">") == 0)
-				&& (ft_strcmp(temp->next->node, ">") == 0)))
-		{
-			to_free = temp->next;
-			temp->next = temp->next->next;
-			free_node(to_free);
-			free(temp->node);
-			temp->node = ft_strdup(">>");
-			if (!temp->node)
-				return (NULL);
-			temp = temp->next;
-		}
+		if (!fix_heredoc_merge(&temp))
+			return (NULL);
+		if (!fix_append_merge(&temp))
+			return (NULL);
 		temp = temp->next;
 	}
 	return (list);
