@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:35:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/26 17:56:39 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/27 20:40:04 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_ctrl_c_on_process(int signal_number)
 
 void	handle_after_child(int signal_number)
 {
-	write(STDOUT_FILENO, "\n", 1);
+	//write(STDOUT_FILENO, "\n", 1);
 	g_signal = signal_number;
 }
 

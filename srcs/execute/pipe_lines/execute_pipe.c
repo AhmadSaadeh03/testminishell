@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:57:34 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/27 21:25:40 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,24 @@ void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	while (i < pipe_data->cmd_count)
 	{
 		waitpid(pipe_data->pid[i], &status, 0);
+	// 	if (WIFSIGNALED(status))
+	// {
+	// 	if (g_signal == SIGINT)
+	// 		shell->last_exit = 128 + g_signal;
+	// 	if (g_signal == SIGQUIT)
+	// 		shell->last_exit = 128 + g_signal;
+	// 	else 
+	// 		g_signal = 0;
+	// }
 		i++;
 	}
-	if (g_signal == SIGINT)
-		shell->last_exit = 128 + g_signal;
-	if (g_signal == SIGQUIT)
-		shell->last_exit = 128 + g_signal;
+		if (g_signal == SIGINT)
+			shell->last_exit = 128 + g_signal;
+		if (g_signal == SIGQUIT)
+			shell->last_exit = 128 + g_signal;
 	free(pipe_data->pid);
 	pipe_data = NULL;
 }
-
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 		int i)
 {
@@ -67,7 +75,9 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	handle_signals(3);
+	 handle_signals(3);
+	//  signal(SIGINT, SIG_IGN);
+    // signal(SIGQUIT, SIG_IGN);
 	while (cmd)
 	{
 		pipe_data->pid[i] = fork();
@@ -80,7 +90,10 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 		}
 		if (pipe_data->pid[i] == 0)
 		{
-			handle_signals(1);
+			// signal(SIGINT, SIG_DFL);
+            // signal(SIGQUIT, SIG_IGN);
+			 handle_signals(1);
+			//printf("xzc");
 			handle_child_process(shell, cmd, pipe_data, i);
 		}
 		cmd = cmd->next;
@@ -93,7 +106,6 @@ void	exec_pipe(t_minishell *shell)
 {
 	t_pipes	pipe_data;
 	t_cmd	*cmd;
-
 	cmd = *(shell->cmd_list);
 	preprocess_heredocs(cmd, shell);
 	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)

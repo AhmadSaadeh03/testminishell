@@ -81,6 +81,9 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 	handle_signals(1);
 	if (pid == 0)
 	{
+		signal(SIGQUIT,SIG_DFL);
+		signal(SIGINT,SIG_DFL);
+		signal(SIGPIPE, SIG_DFL);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);
@@ -92,10 +95,15 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 		free_exit(shell);
 		exit(0);
 	}
-	handle_signals(2);
-	waitpid(pid, &status, 0);
-	handle_exit_status(shell, status);
-}
+		signal(SIGPIPE, SIG_IGN);
+		handle_signals(2);
+		//signal(SIGQUIT,SIG_IGN);
+		waitpid(pid, &status, 0);
+		//handle_signals(0);
+		handle_exit_status(shell, status);
+		if (g_signal == SIGINT || g_signal == SIGPIPE)
+			write(1, "\n", 1);
+	}
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)
 {
