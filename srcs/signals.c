@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 14:23:33 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/28 15:19:37 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 19:03:34 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,52 +135,53 @@
 // }
 void	handle_quit(int signal_number)
 {
-    g_signal = signal_number;
+	g_signal = signal_number;
 }
+
 static void	handle_quit_signal(int quit_action)
 {
-    if (quit_action == 0)
-        signal(SIGQUIT, SIG_DFL);
-    else
-        signal(SIGQUIT, SIG_IGN);
+	if (quit_action == 0)
+		signal(SIGQUIT, SIG_DFL);
+	else
+		signal(SIGQUIT, SIG_IGN);
 }
 
 static void	handle_signals_helper(int mode)
 {
-    if (mode == 1)
-    {
-        signal(SIGINT, handle_ctrl_c_on_process);
-        signal(SIGQUIT, handle_quit);
-    }
-    else if (mode == 2)
-    {
-        signal(SIGINT, handle_after_child);
-        handle_quit_signal(1);
-    }
-    else if (mode == 3)
-    {
-        signal(SIGINT, handle_ctrl_c_on_process);
-        handle_quit_signal(1);
-    }
-    else if (mode == 4)
-    {
-        signal(SIGINT, herdoc_signals);
-        handle_quit_signal(1);
-    }
-    else if (mode == 5)
-    {
-        signal(SIGINT, handle_ctrl_c_on_process);
-        handle_quit_signal(1);
-    }
+	if (mode == 1)
+	{
+		signal(SIGINT, handle_ctrl_c_on_process);
+		signal(SIGQUIT, handle_quit);
+	}
+	else if (mode == 2)
+	{
+		signal(SIGINT, handle_after_child);
+		handle_quit_signal(1);
+	}
+	else if (mode == 3)
+	{
+		signal(SIGINT, handle_ctrl_c_on_process);
+		handle_quit_signal(1);
+	}
+	else if (mode == 4)
+	{
+		signal(SIGINT, herdoc_signals);
+		handle_quit_signal(1);
+	}
+	else if (mode == 5)
+	{
+		signal(SIGINT, handle_ctrl_c_on_process);
+		handle_quit_signal(1);
+	}
 }
 
 void	handle_signals(int mode)
 {
-    if (mode == 0)
-    {
-        signal(SIGINT, handle_ctrl_c);
-        signal(SIGQUIT, SIG_IGN);
-    }
-    else
-        handle_signals_helper(mode);
+	if (mode == 0)
+	{
+		signal(SIGINT, handle_ctrl_c);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else
+		handle_signals_helper(mode);
 }

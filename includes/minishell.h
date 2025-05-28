@@ -148,7 +148,8 @@ int								has_invalid_repeated_operators(char *str);
 int								fill_cmd(t_cmd *cmd2, t_node *temp);
 int								alloc_pipe_resources(t_pipes *p, int count);
 int								init_pipe_data(t_pipes *p, int count);
-int								preprocess_heredocs(t_cmd *cmd, t_minishell *shell);
+int								preprocess_heredocs(t_cmd *cmd,
+									t_minishell *shell);
 int								create_child_processes(t_minishell *shell,
 									t_pipes *pipe_data, t_cmd *cmd);
 
@@ -200,7 +201,7 @@ void							close_fd(t_pipes *pipe_data);
 void							free_exit(t_minishell *shell);
 void							heredoc_child(t_cmd *cmd, t_minishell *shell);
 void							free_pipe_data(t_pipes *pipe_data);
-int							wait_all_children(t_pipes *pipe_data,
+int								wait_all_children(t_pipes *pipe_data,
 									t_minishell *shell);
 void							handle_child_process(t_minishell *shell,
 									t_cmd *cmd, t_pipes *pipe_data, int i);
@@ -230,11 +231,11 @@ t_env							*copy_env_to_list(char **envp);
 t_cmd							*init_cmd(void);
 t_here							*creat_heredoc(char *limit);
 
-void    herdoc_signals_exit(int signal_number);
+void							herdoc_signals_exit(int signal_number);
 
-char	*read_input_pipe(char *limiter, t_minishell *shell);
-void	exec_heredoc_pipe(t_cmd *cmd, t_minishell *shell);
-
-
+char							*read_input_pipe(char *limiter,
+									t_minishell *shell);
+void							exec_heredoc_pipe(t_cmd *cmd,
+									t_minishell *shell);
 
 #endif
