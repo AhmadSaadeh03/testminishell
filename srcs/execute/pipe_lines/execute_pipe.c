@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 15:37:48 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 17:23:57 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 		int i)
 {
+	int temp;
 	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
 	else if (i > 0)
@@ -73,8 +74,9 @@ void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 		exec_builtin(shell, cmd->cmd_line);
 	else if (cmd->cmd_line[0])
 		get_path_cmd(shell, cmd->cmd_line);
+	temp = shell->last_exit;
 	free_exit(shell);
-	exit(0);
+	exit(temp);
 }
 
 int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
