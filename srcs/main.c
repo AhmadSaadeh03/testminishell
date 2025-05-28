@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/27 21:05:58 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 17:37:19 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ volatile sig_atomic_t	g_signal = 0;
 int	main(int arc, char **arv, char **envp)
 {
 	t_minishell	*shell;
+	int status;
 
 	(void)arv;
 	(void)arc;
@@ -42,6 +43,7 @@ int	main(int arc, char **arv, char **envp)
 		if ((shell->name) == NULL)
 		{
 			printf("exit\n");
+			status = shell->last_exit;
 			break;
 		}
 		if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
@@ -69,7 +71,7 @@ int	main(int arc, char **arv, char **envp)
     free_env_list(*(shell->env_list));
 	free(shell->env_list);
 	free(shell);
-	return (0);
+	return (status);
 }
 
 int	is_all_whitespace(char *str)

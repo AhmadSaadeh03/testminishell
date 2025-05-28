@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 15:59:24 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 18:05:46 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	handle_exit_status(t_minishell *shell, int status)
 		if (WTERMSIG(status) == SIGINT)
 			shell->last_exit = g_signal + 128;
 		else if (WTERMSIG(status) == SIGQUIT)
-			shell->last_exit = g_signal + 128;
+			shell->last_exit = 131;
 	}
 	else if (WIFEXITED(status))
 	{
