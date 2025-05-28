@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 13:22:03 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 14:54:13 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 	while (cmd)
 	{
 		if (cmd->heredoc_flag)
+		{
 			exec_heredoc_pipe(cmd, shell);
-		if (g_signal == SIGINT)
-			return (2);
+			if (g_signal == SIGINT)
+				return (2);
+		}
 		cmd = cmd->next;
 	}
 	return (0);
@@ -52,6 +54,7 @@ void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	free(pipe_data->pid);
 	pipe_data = NULL;
 }
+
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
 		int i)
 {
@@ -109,9 +112,10 @@ void	exec_pipe(t_minishell *shell)
 {
 	t_pipes	pipe_data;
 	t_cmd	*cmd;
+
 	cmd = *(shell->cmd_list);
 	if (preprocess_heredocs(cmd, shell) == 2)
-		return ; 
+		return ;
 	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)
 		return ;
 	if (create_child_processes(shell, &pipe_data, cmd) == 1)

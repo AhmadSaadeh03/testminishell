@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 13:22:20 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 14:57:59 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	exec_heredoc_pipe(t_cmd *cmd, t_minishell *shell)
 	while (herd)
 	{
 		herd->content = read_input_pipe(herd->limt, shell);
+		if (g_signal == SIGINT)
+			return ;
 		herd = herd->next;
 	}
 }
