@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 17:35:19 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 22:14:33 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 {
 	int	exit_status;
 	int	check_f;
-	int temp = shell->last_exit;
+	int	last_exit;
+
+	last_exit = shell->last_exit;
 	if (cmd_line[1] == NULL)
 	{
 		printf("exit\n");
 		free_exit(shell);
-		exit(temp);
+		exit(last_exit);
 	}
 	if (cmd_line[2] != NULL)
 	{

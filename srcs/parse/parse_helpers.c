@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:01:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 14:56:41 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 22:24:50 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	process_line_input(char **cont, char *line)
 	}
 	free(*cont);
 	*cont = tmp;
-	// close(fd);
 	return (1);
 }
 
@@ -62,12 +61,11 @@ char	*read_input(char *limiter, t_minishell *shell)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal == SIGINT)
-			if (handle_sigint_in_heredoc(shell, fd, line, cont))
-			{
-				free_exit(shell);
-				exit(0);
-			}
+		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line, cont))
+		{
+			free_exit(shell);
+			exit(0);
+		}
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
 		if (line[0] == '\0')
@@ -92,13 +90,11 @@ char	*read_input_pipe(char *limiter, t_minishell *shell)
 		return (NULL);
 	fd = dup(STDIN_FILENO);
 	handle_signals(4);
-	(void)shell;
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal == SIGINT)
-			if (handle_sigint_in_heredoc(shell, fd, line, cont))
-				return(NULL);
+		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line, cont))
+			return (NULL);
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
 		if (line[0] == '\0')

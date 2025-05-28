@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 18:22:25 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 22:12:14 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,14 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 		free_exit(shell);
 		exit(0);
 	}
-		signal(SIGPIPE, SIG_IGN);
-		handle_signals(2);
-		//signal(SIGQUIT,SIG_IGN);
-		waitpid(pid, &status, 0);
-		//handle_signals(0);
-		handle_exit_status(shell, status);
-		if (g_signal == SIGINT || g_signal == SIGPIPE)
-			write(1, "\n", 1);
-	}
+	signal(SIGPIPE, SIG_IGN);
+	handle_signals(2);
+	//signal(SIGQUIT,SIG_IGN);
+	waitpid(pid, &status, 0);
+	handle_exit_status(shell, status);
+	if (g_signal == SIGINT || g_signal == SIGPIPE)
+		write(1, "\n", 1);
+}
 
 int	check_cmd_path(t_minishell *shell, char **cmd_line)
 {

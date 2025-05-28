@@ -3,20 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 10:24:49 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 17:24:36 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 22:22:47 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	parsing(t_minishell **shell)
+static void	assign_cmd_type(t_node *temp)
 {
-	if (put_type(shell) == 1)
-		return (1);
-	return (0);
+	if (temp->next && ft_strcmp(temp->node, "<") == 0)
+	{
+		temp->cmd_type = TOKEN_REDIRECT_IN;
+		temp->next->cmd_type = FILEIN;
+	}
+	else if (temp->next && ft_strcmp(temp->node, ">") == 0)
+	{
+		temp->cmd_type = TOKEN_REDIRECT_OUT;
+		temp->next->cmd_type = FILEOUT;
+	}
+	else if (temp->next && ft_strcmp(temp->node, ">>") == 0)
+	{
+		temp->cmd_type = TOKEN_APPEND;
+		temp->next->cmd_type = FILEOUT;
+	}
+	else if (temp->next && ft_strcmp(temp->node, "<<") == 0)
+	{
+		temp->cmd_type = TOKEN_HEREDOC;
+		temp->next->cmd_type = FILEIN;
+	}
+	else if (ft_strcmp(temp->node, "|") == 0 && temp->next)
+		temp->cmd_type = TOKEN_PIPE;
+	else
+		temp->cmd_type = TOKEN_ARG;
 }
 
 int	put_type(t_minishell **shell)
@@ -29,34 +50,12 @@ int	put_type(t_minishell **shell)
 		return (1);
 	while (temp)
 	{
-		if (temp->next && (ft_strcmp(temp->node, "<") == 0))
-		{
-			temp->cmd_type = TOKEN_REDIRECT_IN;
-			temp->next->cmd_type = FILEIN;
+		assign_cmd_type(temp);
+		if ((temp->cmd_type == TOKEN_REDIRECT_IN
+				|| temp->cmd_type == TOKEN_REDIRECT_OUT
+				|| temp->cmd_type == TOKEN_APPEND
+				|| temp->cmd_type == TOKEN_HEREDOC) && temp->next)
 			temp = temp->next;
-		}
-		else if (temp->next && (ft_strcmp(temp->node, ">") == 0))
-		{
-			temp->cmd_type = TOKEN_REDIRECT_OUT;
-			temp->next->cmd_type = FILEOUT;
-			temp = temp->next;
-		}
-		else if (temp->next && (ft_strcmp(temp->node, ">>") == 0))
-		{
-			temp->cmd_type = TOKEN_APPEND;
-			temp->next->cmd_type = FILEOUT;
-			temp = temp->next;
-		}
-		else if (temp->next && (ft_strcmp(temp->node, "<<") == 0))
-		{
-			temp->cmd_type = TOKEN_HEREDOC;
-			temp->next->cmd_type = FILEIN;
-			temp = temp->next;
-		}
-		else if (ft_strcmp(temp->node, "|") == 0 && temp->next)
-			temp->cmd_type = TOKEN_PIPE;
-		else
-			temp->cmd_type = TOKEN_ARG;
 		temp = temp->next;
 	}
 	return (0);

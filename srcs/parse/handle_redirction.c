@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirction.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 14:57:59 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 21:29:39 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ int	handle_redirection(t_cmd *cmd, t_minishell *shell)
 {
 	t_redirect	*redir;
 
-	if (cmd->heredoc_flag == 1)
-		exec_heredoc(cmd, shell);
 	redir = cmd->redirect;
+	(void)shell;
 	while (redir)
 	{
 		if (redir->type == TOKEN_REDIRECT_IN)

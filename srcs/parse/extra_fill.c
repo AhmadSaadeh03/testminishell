@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extra_fill.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:54:13 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 16:56:53 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 21:40:59 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,17 @@ int	fill_cmd(t_cmd *cmd2, t_node *temp)
 			cmd2 = cmd2->next;
 			i = 0;
 		}
-		else if (handle_command_args(cmd2, temp, &i))
-			;
+		else
+			handle_command_args(cmd2, temp, &i);
 		temp = temp->next;
 	}
 	cmd2->cmd_line[i] = NULL;
+	return (0);
+}
+
+int	parsing(t_minishell **shell)
+{
+	if (put_type(shell) == 1)
+		return (1);
 	return (0);
 }

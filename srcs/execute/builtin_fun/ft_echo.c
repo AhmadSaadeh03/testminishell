@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 18:26:12 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 22:13:33 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 static int	is_ignore(char *cmd)
 {
-	int	i;
-
-	i = 0;
 	if ((ft_strcmp(cmd, "-e") == 0) || (ft_strcmp(cmd,
 				"-E") == 0))
 		return (1);
