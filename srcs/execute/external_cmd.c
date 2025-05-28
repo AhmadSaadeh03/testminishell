@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 18:04:49 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 18:22:25 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	}
 	path = get_path_array(shell, args[0]);
 	if (!path)
+	{
+		free_array(shell->envps); // <-- Add this line
 		return ;
+	}
 	cmd_path = find_path(path, args[0]);
 	free_array(path);
 	if (!prepare_env_and_check(shell, cmd_path, args[0]))

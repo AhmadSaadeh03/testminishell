@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:47:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 16:46:24 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 18:28:58 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ char	**get_path_array(t_minishell *shell, char *arg)
 	path_env = my_getenv((*shell->env_list), "PATH");
 	if (!path_env)
 	{
-		print_error(": No such file or directory\n", arg);
+		//print_error(": No such file or directory\n", arg);
+		print_error(": command not found\n", arg);
 		shell->last_exit = 127;
 		return (NULL);
 	}

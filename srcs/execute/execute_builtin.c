@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:51:29 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 18:37:46 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	ft_pwd(void)
 void	ft_env(t_minishell *shell)
 {
 	print_env_list(shell->env_list);
+	shell->last_exit = 0;//here
 }
 
 void	ft_unset(t_minishell *shell, char **cmd_line)
