@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_mods.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 16:35:26 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/27 20:40:04 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:28:12 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,11 @@ void	herdoc_signals(int signal_number)
 	write(STDOUT_FILENO, "\n", 1);
 	g_signal = signal_number;
 	close(0);
+}
+
+void    herdoc_signals_exit(int signal_number)
+{
+    write(STDOUT_FILENO, "\n", 1);
+    g_signal = signal_number;
+    exit(0);
 }

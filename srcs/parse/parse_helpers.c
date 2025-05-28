@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:01:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 15:53:14 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:29:15 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,39 @@ char	*read_input(char *limiter, t_minishell *shell)
 	if (!cont)
 		return (NULL);
 	fd = dup(STDIN_FILENO);
+	handle_signals(6);
+	while (1)
+	{
+		line = readline("> ");
+		// if (g_signal == SIGINT)
+		// 	if (handle_sigint_in_heredoc(shell, fd, line, cont))
+		// 	{
+		// 		printf("ctrl+c\n");
+		// 		free_exit(shell);
+		// 		return (NULL);
+		// 	}
+		if (!line || ft_strcmp(line, limiter) == 0)
+			break ;
+		if (line[0] == '\0')
+			free(line);
+		else if (!process_line_input(&cont, line))
+			return (NULL);
+	}
+	if (line)
+		free(line);
+	return (cont);
+}
+
+char	*read_input_pipe(char *limiter, t_minishell *shell)
+{
+	char	*line;
+	char	*cont;
+	int		fd;
+
+	cont = add_cmd("");
+	if (!cont)
+		return (NULL);
+	fd = dup(STDIN_FILENO);
 	handle_signals(4);
 	while (1)
 	{
@@ -75,6 +108,7 @@ char	*read_input(char *limiter, t_minishell *shell)
 		free(line);
 	return (cont);
 }
+
 
 void	add_heredoc(t_cmd *cmd, char *limit)
 {

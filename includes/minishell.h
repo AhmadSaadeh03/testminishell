@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 14:03:47 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:27:59 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int								has_invalid_repeated_operators(char *str);
 int								fill_cmd(t_cmd *cmd2, t_node *temp);
 int								alloc_pipe_resources(t_pipes *p, int count);
 int								init_pipe_data(t_pipes *p, int count);
+int								preprocess_heredocs(t_cmd *cmd, t_minishell *shell);
 int								create_child_processes(t_minishell *shell,
 									t_pipes *pipe_data, t_cmd *cmd);
 
@@ -197,8 +198,6 @@ void							exec_pipe(t_minishell *shell);
 void							executing(t_minishell *shell);
 void							close_fd(t_pipes *pipe_data);
 void							free_exit(t_minishell *shell);
-void							preprocess_heredocs(t_cmd *cmd,
-									t_minishell *shell);
 void							heredoc_child(t_cmd *cmd, t_minishell *shell);
 void							free_pipe_data(t_pipes *pipe_data);
 void							wait_all_children(t_pipes *pipe_data,
@@ -230,5 +229,12 @@ t_env							*create_env(char *env_var);
 t_env							*copy_env_to_list(char **envp);
 t_cmd							*init_cmd(void);
 t_here							*creat_heredoc(char *limit);
+
+void    herdoc_signals_exit(int signal_number);
+
+char	*read_input_pipe(char *limiter, t_minishell *shell);
+void	exec_heredoc_pipe(t_cmd *cmd, t_minishell *shell);
+
+
 
 #endif

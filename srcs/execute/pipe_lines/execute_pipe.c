@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 21:25:40 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:22:03 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
+int	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 {
 	while (cmd)
 	{
 		if (cmd->heredoc_flag)
-			exec_heredoc(cmd, shell);
+			exec_heredoc_pipe(cmd, shell);
+		if (g_signal == SIGINT)
+			return (2);
 		cmd = cmd->next;
 	}
+	return (0);
 }
 
 void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
@@ -75,7 +78,7 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	 handle_signals(3);
+	handle_signals(3);
 	//  signal(SIGINT, SIG_IGN);
     // signal(SIGQUIT, SIG_IGN);
 	while (cmd)
@@ -92,7 +95,7 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 		{
 			// signal(SIGINT, SIG_DFL);
             // signal(SIGQUIT, SIG_IGN);
-			 handle_signals(1);
+			handle_signals(1);
 			//printf("xzc");
 			handle_child_process(shell, cmd, pipe_data, i);
 		}
@@ -107,7 +110,8 @@ void	exec_pipe(t_minishell *shell)
 	t_pipes	pipe_data;
 	t_cmd	*cmd;
 	cmd = *(shell->cmd_list);
-	preprocess_heredocs(cmd, shell);
+	if (preprocess_heredocs(cmd, shell) == 2)
+		return ; 
 	if (init_pipe_data(&pipe_data, cmd_count(cmd)) == 1)
 		return ;
 	if (create_child_processes(shell, &pipe_data, cmd) == 1)

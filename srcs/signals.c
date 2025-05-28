@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 14:23:33 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/27 21:08:37 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:27:45 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,11 @@ static void	handle_signals_helper(int mode)
 		signal(SIGINT, handle_ctrl_c_on_process);
 		handle_quit_signal(1);
 	}
+	else if (mode == 6)
+    {
+        signal(SIGINT, herdoc_signals_exit);
+        handle_quit_signal(1);
+    }
 }
 
 void	handle_signals(int mode)

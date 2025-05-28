@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:30:14 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 16:57:42 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 13:22:20 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,19 @@ void	exec_heredoc(t_cmd *cmd, t_minishell *shell)
 	while (herd)
 	{
 		herd->content = read_input(herd->limt, shell);
+		herd = herd->next;
+	}
+}
+
+void	exec_heredoc_pipe(t_cmd *cmd, t_minishell *shell)
+{
+	t_here	*herd;
+
+	(void)shell;
+	herd = cmd->heredocs;
+	while (herd)
+	{
+		herd->content = read_input_pipe(herd->limt, shell);
 		herd = herd->next;
 	}
 }
