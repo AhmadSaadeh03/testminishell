@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/27 16:46:48 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:17:15 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 	int		status;
 
 	pid = fork();
-	handle_signals(1);
+	//handle_signals(1);
 	if (pid == 0)
 	{
-		signal(SIGQUIT,SIG_DFL);
-		signal(SIGINT,SIG_DFL);
+		// signal(SIGQUIT,SIG_DFL);
+		// signal(SIGINT,SIG_DFL);
 		signal(SIGPIPE, SIG_DFL);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{

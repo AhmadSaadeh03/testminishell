@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 13:27:59 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:32:15 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void							close_fd(t_pipes *pipe_data);
 void							free_exit(t_minishell *shell);
 void							heredoc_child(t_cmd *cmd, t_minishell *shell);
 void							free_pipe_data(t_pipes *pipe_data);
-void							wait_all_children(t_pipes *pipe_data,
+int							wait_all_children(t_pipes *pipe_data,
 									t_minishell *shell);
 void							handle_child_process(t_minishell *shell,
 									t_cmd *cmd, t_pipes *pipe_data, int i);

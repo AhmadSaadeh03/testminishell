@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:58:18 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:42:57 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,8 @@ void	handle_exit_status(t_minishell *shell, int status)
 			shell->last_exit = g_signal + 128;
 	}
 	else if (WIFEXITED(status))
+	{
+		printf("ahmad");
 		shell->last_exit = WEXITSTATUS(status);
+	}
 }

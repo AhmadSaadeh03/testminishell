@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/26 17:57:17 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:35:59 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	executing(t_minishell *shell)
 {
 	t_cmd	*cmd;
-
+	g_signal = 0;//and here;
 	cmd = *(shell->cmd_list);
 	if (cmd && cmd->next)
 		exec_pipe(shell);

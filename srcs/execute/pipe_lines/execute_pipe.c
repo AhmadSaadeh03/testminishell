@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 14:54:13 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:37:48 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	preprocess_heredocs(t_cmd *cmd, t_minishell *shell)
 	return (0);
 }
 
-void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
+int	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 {
 	int	i;
 	int	status;
-
+	(void)shell;
 	i = 0;
 	while (i < pipe_data->cmd_count)
 	{
@@ -47,12 +47,13 @@ void	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	// }
 		i++;
 	}
-		if (g_signal == SIGINT)
-			shell->last_exit = 128 + g_signal;
-		if (g_signal == SIGQUIT)
-			shell->last_exit = 128 + g_signal;
+		// if (g_signal == SIGINT)
+		// 	shell->last_exit = 128 + g_signal;
+		// if (g_signal == SIGQUIT)
+		// 	shell->last_exit = 128 + g_signal;
 	free(pipe_data->pid);
 	pipe_data = NULL;
+	return status;
 }
 
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
@@ -97,11 +98,12 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 		if (pipe_data->pid[i] == 0)
 		{
 			// signal(SIGINT, SIG_DFL);
-            // signal(SIGQUIT, SIG_IGN);
-			handle_signals(1);
+            signal(SIGQUIT, SIG_DFL);
+			//handle_signals(1);
 			//printf("xzc");
 			handle_child_process(shell, cmd, pipe_data, i);
 		}
+		handle_signals(1);//this
 		cmd = cmd->next;
 		i++;
 	}
@@ -124,5 +126,14 @@ void	exec_pipe(t_minishell *shell)
 		return ;
 	}
 	close_fd(&pipe_data);
-	wait_all_children(&pipe_data, shell);
+	int status = wait_all_children(&pipe_data, shell);
+	if (g_signal == SIGINT)
+			shell->last_exit = 128 + g_signal;
+	if (g_signal == SIGQUIT)
+		shell->last_exit = 128 + g_signal;
+	if(g_signal != SIGINT && g_signal != SIGQUIT)
+	{
+		printf("dsf");
+		handle_exit_status(shell,status);
+	}
 }
