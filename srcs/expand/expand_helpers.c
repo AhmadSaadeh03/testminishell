@@ -70,44 +70,6 @@ char	**copy_env_list_to_array(t_env *env_list)
 	return (env_array);
 }
 
-// void	my_setenv(t_env **env_list, char *name, char *value)
-// {
-// 	t_env	*temp;
-// 	t_env	*new_node;
-
-// 	temp = *env_list;
-// 	while (temp)
-// 	{
-// 		if (ft_strcmp(temp->env_name, name) == 0)
-// 		{
-// 			free(temp->value);
-// 			temp->value = ft_strdup(value);
-// 			if (!temp->value)
-// 				return ;
-// 			return ;
-// 		}
-// 		temp = temp->next;
-// 	}
-// 	new_node = malloc(sizeof(t_env));
-// 	if (!new_node)
-// 		return ;
-// 	new_node->env_name = ft_strdup(name);
-// 	if (value)
-// 	{
-// 		new_node->value = ft_strdup(value);
-// 		if (!new_node->value)
-// 		{
-// 			perror("adding error");
-// 			free(new_node->env_name);
-// 			free(new_node);
-// 			return ;
-// 		}
-// 	}
-// 	else
-// 		new_node->value = NULL;
-// 	new_node->next = *env_list;
-// 	*env_list = new_node;
-// }
 static int	update_env_value_if_exists(t_env *env_list, char *name, char *value)
 {
 	t_env	*temp;
@@ -117,6 +79,10 @@ static int	update_env_value_if_exists(t_env *env_list, char *name, char *value)
 	{
 		if (ft_strcmp(temp->env_name, name) == 0)
 		{
+			if (temp->value == NULL && value == NULL)
+				return (1);
+			if (temp->value && value == NULL)
+				return (1);
 			free(temp->value);
 			temp->value = ft_strdup(value);
 			if (!temp->value)

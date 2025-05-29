@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:19:21 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/29 11:23:05 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,8 @@ int	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	while (i < pipe_data->cmd_count)
 	{
 		waitpid(pipe_data->pid[i], &status, 0);
-	// 	if (WIFSIGNALED(status))
-	// {
-	// 	if (g_signal == SIGINT)
-	// 		shell->last_exit = 128 + g_signal;
-	// 	if (g_signal == SIGQUIT)
-	// 		shell->last_exit = 128 + g_signal;
-	// 	else
-	// 		g_signal = 0;
 		i++;
 	}
-		// if (g_signal == SIGINT)
-		// 	shell->last_exit = 128 + g_signal;
-		// if (g_signal == SIGQUIT)
-		// 	shell->last_exit = 128 + g_signal;
 	free(pipe_data->pid);
 	pipe_data = NULL;
 	return (status);
@@ -86,8 +74,6 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 
 	i = 0;
 	handle_signals(3);
-	//  signal(SIGINT, SIG_IGN);
-// signal(SIGQUIT, SIG_IGN);
 	while (cmd)
 	{
 		pipe_data->pid[i] = fork();
@@ -100,13 +86,10 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 		}
 		if (pipe_data->pid[i] == 0)
 		{
-			// signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			//handle_signals(1);
-			//printf("xzc");
 			handle_child_process(shell, cmd, pipe_data, i);
 		}
-		handle_signals(1);//this
+		handle_signals(1);
 		cmd = cmd->next;
 		i++;
 	}

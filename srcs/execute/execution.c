@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:09:41 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/29 11:50:45 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	executing(t_minishell *shell)
 {
 	t_cmd	*cmd;
 
-	g_signal = 0;//and here;
+	g_signal = 0;
 	cmd = *(shell->cmd_list);
 	if (cmd && cmd->next)
 		exec_pipe(shell);
@@ -70,9 +70,10 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	if (pid == 0)
 	{
 		if (cmd->heredoc_flag == 1)
+		{
 			exec_heredoc(cmd, shell);
-		if (cmd->heredoc_flag == 1)
 			heredoc_child(cmd, shell);
+		}
 		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_exit(shell);
@@ -90,9 +91,11 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 void	child_process(t_cmd *cmd, t_minishell *shell, int flag)
 {
 	if (cmd->heredoc_flag == 1)
+	{
+		printf("hi\n");
 		exec_heredoc(cmd, shell);
-	if (cmd->heredoc_flag == 1)
 		heredoc_child(cmd, shell);
+	}
 	if (handle_redirection(cmd, shell) == 1)
 	{
 		free_exit(shell);

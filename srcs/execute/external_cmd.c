@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:12:14 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/29 12:24:19 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	path = get_path_array(shell, args[0]);
 	if (!path)
 	{
-		free_array(shell->envps); // <-- Add this line
+		free_array(shell->envps);
 		return ;
 	}
 	cmd_path = find_path(path, args[0]);
@@ -84,8 +84,6 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 	handle_signals(1);
 	if (pid == 0)
 	{
-		// signal(SIGQUIT,SIG_DFL);
-		// signal(SIGINT,SIG_DFL);
 		handle_signals(1);
 		signal(SIGPIPE, SIG_DFL);
 		if (execve(cmd_path, cmd_line, envp) == -1)
@@ -93,15 +91,13 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 			free_array(envp);
 			free(cmd_path);
 			free_exit(shell);
-			shell->last_exit = 127;
-			exit(1);
+			exit(127);
 		}
 		free_exit(shell);
 		exit(0);
 	}
 	signal(SIGPIPE, SIG_IGN);
 	handle_signals(2);
-	//signal(SIGQUIT,SIG_IGN);
 	waitpid(pid, &status, 0);
 	handle_exit_status(shell, status);
 	if (g_signal == SIGINT || g_signal == SIGPIPE)

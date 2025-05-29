@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:01:12 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:24:50 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/29 12:17:22 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,29 @@
 static int	process_line_input(char **cont, char *line)
 {
 	char	*tmp;
+	char	*join;
 
-	tmp = ft_strjoin(*cont, line);
+	join = ft_strjoin(*cont, line);
 	free(line);
+	if (!join)
+	{
+		free(*cont);
+		return (0);
+	}
+	tmp = ft_strjoin(join, "\n");
 	if (!tmp)
 	{
 		free(*cont);
 		return (0);
 	}
-	free(*cont);
-	*cont = tmp;
-	tmp = ft_strjoin(*cont, "\n");
-	if (!tmp)
-	{
-		free(*cont);
-		return (0);
-	}
+	free(join);
 	free(*cont);
 	*cont = tmp;
 	return (1);
 }
 
 static int	handle_sigint_in_heredoc(t_minishell *shell, int fd, char *line,
-	char *cont)
+		char *cont)
 {
 	shell->last_exit = g_signal + 128;
 	dup2(fd, STDIN_FILENO);
@@ -61,11 +61,9 @@ char	*read_input(char *limiter, t_minishell *shell)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line, cont))
-		{
-			free_exit(shell);
-			exit(0);
-		}
+		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line,
+				cont))
+			(free_exit(shell), exit(0));
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
 		if (line[0] == '\0')
@@ -73,8 +71,7 @@ char	*read_input(char *limiter, t_minishell *shell)
 		else if (!process_line_input(&cont, line))
 			return (NULL);
 	}
-	if (line)
-		free(line);
+	free(line);
 	close(fd);
 	return (cont);
 }
@@ -93,7 +90,8 @@ char	*read_input_pipe(char *limiter, t_minishell *shell)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line, cont))
+		if (g_signal == SIGINT && handle_sigint_in_heredoc(shell, fd, line,
+				cont))
 			return (NULL);
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
@@ -102,8 +100,7 @@ char	*read_input_pipe(char *limiter, t_minishell *shell)
 		else if (!process_line_input(&cont, line))
 			return (NULL);
 	}
-	if (line)
-		free(line);
+	free(line);
 	close(fd);
 	return (cont);
 }

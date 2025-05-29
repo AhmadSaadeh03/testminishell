@@ -31,7 +31,6 @@ void	handle_ctrl_c_on_process(int signal_number)
 
 void	handle_after_child(int signal_number)
 {
-	// write(STDOUT_FILENO, "\n", 1);
 	g_signal = signal_number;
 }
 
