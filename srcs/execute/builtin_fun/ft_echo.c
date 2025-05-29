@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:12:34 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:13:33 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:18:00 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,7 @@ void	handle_exit_status(t_minishell *shell, int status)
 			shell->last_exit = 131;
 	}
 	else if (WIFEXITED(status))
+	{
 		shell->last_exit = WEXITSTATUS(status);
+	}
 }

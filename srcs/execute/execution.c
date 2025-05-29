@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 11:50:45 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:10:33 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 		if (handle_redirection(cmd, shell) == 1)
 		{
 			free_exit(shell);
-			exit(1);
+			exit(0);
 		}
 		free_exit(shell);
 		exit(0);
@@ -92,14 +92,13 @@ void	child_process(t_cmd *cmd, t_minishell *shell, int flag)
 {
 	if (cmd->heredoc_flag == 1)
 	{
-		printf("hi\n");
 		exec_heredoc(cmd, shell);
 		heredoc_child(cmd, shell);
 	}
 	if (handle_redirection(cmd, shell) == 1)
 	{
 		free_exit(shell);
-		exit(1);
+		exit(0);
 	}
 	if (g_signal == SIGINT)
 	{

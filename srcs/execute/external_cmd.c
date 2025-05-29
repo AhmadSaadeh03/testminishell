@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 12:24:19 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:03:48 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	get_path_cmd(t_minishell *shell, char **args)
 		return ;
 	if (ft_strchr(args[0], '.') != NULL || ft_strchr(args[0], '/') != NULL)
 	{
-		check_cmd_path(shell, args);
+		if (!check_cmd_path(shell, args))
+			free_array(shell->envps);
 		return ;
 	}
 	path = get_path_array(shell, args[0]);
@@ -114,7 +115,13 @@ int	check_cmd_path(t_minishell *shell, char **cmd_line)
 		shell->last_exit = 126;
 		return (0);
 	}
-	if (access(cmd_line[0], X_OK) != 0)
+	if (access(cmd_line[0], F_OK) != 0)
+	{
+		print_error(": command not found\n", cmd_line[0]);
+		shell->last_exit = 127;
+		return (0);
+	}
+	else if (access(cmd_line[0], X_OK) != 0)
 	{
 		print_error(": permission denied\n", cmd_line[0]);
 		shell->last_exit = 126;
