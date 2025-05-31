@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:35:31 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 11:21:20 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/30 12:59:20 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_cd(t_minishell *shell, char **cmd_line)
 		if (chdir(path) != 0)
 		{
 			perror("cd");
-			shell->last_exit = 127;
+			shell->last_exit = 1;
 		}
 		free(path);
 	}
@@ -53,12 +53,12 @@ void	ft_cd(t_minishell *shell, char **cmd_line)
 		if (cmd_line[2] != NULL)
 		{
 			print_error(" too many arguments\n", "cd: ");
-			shell->last_exit = 127;
+			shell->last_exit = 1;
 		}
 		else if (chdir(cmd_line[1]) != 0)
 		{
 			print_error("No such file or directory\n", "cd: ");
-			shell->last_exit = 127;
+			shell->last_exit = 1;
 		}
 	}
 }

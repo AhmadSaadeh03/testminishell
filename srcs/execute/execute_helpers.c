@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:47:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 11:21:39 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/30 14:49:08 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ char	**get_path_array(t_minishell *shell, char *arg)
 {
 	char	*path_env;
 
+	if (ft_strcmp(arg, ".") == 0 || ft_strcmp(arg, "..") == 0)
+	{
+		shell->last_exit = 0;
+		return (NULL);
+	}
 	path_env = my_getenv((*shell->env_list), "PATH");
 	if (!path_env)
 	{

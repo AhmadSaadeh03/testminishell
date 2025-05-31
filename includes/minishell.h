@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:04:30 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 15:32:15 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/30 18:37:11 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ typedef struct s_here
 	char						*content;
 	struct s_here				*next;
 }								t_here;
+typedef struct s_handle_env
+{
+	int							i;
+	int							in_single_quotes;
+	int							in_double_quotes;
+	char						*var_name;
+	char						*var_val;
+	int							var_start;
+	char						*ptr;
+	char						*new_str;
+}								t_handle_env;
 
 typedef struct s_pipes
 {
@@ -98,7 +109,17 @@ typedef struct s_minishell
 	char						**envps;
 	int							last_exit;
 }								t_minishell;
-
+int								extract_var_name(char *str, t_handle_env *h);
+int								expand_var_value(t_handle_env *h,
+									t_env *env_list);
+int								handle_env_variable(char *str, t_handle_env *h,
+									t_env *env_list);
+void							handle_normal_char(char *str, t_handle_env *h);
+void							handle_special_char_dollar(t_handle_env *h);
+int								handle_dollar_zero(t_handle_env *h);
+void							handle_dollar_digit(t_handle_env *h);
+int								handle_dollar_cases(char *str, t_handle_env *h,
+									t_env *env_list);
 char							*space_before_op(char *str, int i, int *len);
 char							*space_after_op(char *str, int i, int *len);
 char							*add_cmd(char *token);

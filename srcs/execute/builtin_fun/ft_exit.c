@@ -6,7 +6,7 @@
 /*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:12:15 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 22:14:33 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/30 12:48:07 by fatoom           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	handle_invalid_arg(int check_f, t_minishell *shell)
 {
-	printf("exit\n");
 	if (check_f == 2)
 	{
 		free_exit(shell);
@@ -35,25 +34,24 @@ void	ft_exit(t_minishell *shell, char **cmd_line)
 	int	last_exit;
 
 	last_exit = shell->last_exit;
+	printf("exit\n");
 	if (cmd_line[1] == NULL)
 	{
-		printf("exit\n");
 		free_exit(shell);
 		exit(last_exit);
 	}
+	check_f = check_digit(cmd_line[1]);
+	if (check_f != 3)
+		handle_invalid_arg(check_f, shell);
 	if (cmd_line[2] != NULL)
 	{
 		print_error("too many arguments\n", "exit: ");
 		shell->last_exit = 1;
 		return ;
 	}
-	check_f = check_digit(cmd_line[1]);
-	if (check_f != 3)
-		handle_invalid_arg(check_f, shell);
 	exit_status = ft_atoi(cmd_line[1]);
 	shell->last_exit = exit_status;
 	free_exit(shell);
-	printf("exit\n");
 	exit(exit_status);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:38:28 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 17:03:48 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:53:46 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	get_path_cmd(t_minishell *shell, char **args)
 	shell->envps = copy_env_list_to_array((*shell->env_list));
 	if (!shell->envps)
 		return ;
-	if (ft_strchr(args[0], '.') != NULL || ft_strchr(args[0], '/') != NULL)
+	if (ft_strchr(args[0], '/') != NULL)
 	{
 		if (!check_cmd_path(shell, args))
 			free_array(shell->envps);
@@ -82,11 +82,9 @@ void	execute_cmd(char *cmd_path, t_minishell *shell, char **envp,
 	int		status;
 
 	pid = fork();
-	handle_signals(1);
 	if (pid == 0)
 	{
 		handle_signals(1);
-		signal(SIGPIPE, SIG_DFL);
 		if (execve(cmd_path, cmd_line, envp) == -1)
 		{
 			free_array(envp);

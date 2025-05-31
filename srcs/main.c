@@ -6,7 +6,7 @@
 /*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/29 16:11:32 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/31 13:07:50 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	run_and_cleanup(t_minishell *shell)
 		return ;
 	}
 	if (cmd_filling(shell) == 1)
-		exit(1);
+		return ;
 	executing(shell);
 	if (*(shell->cmd_list))
 		free_cmd(*(shell->cmd_list));

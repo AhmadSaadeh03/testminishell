@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asaadeh <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 15:09:08 by asaadeh           #+#    #+#             */
-/*   Updated: 2024/08/30 17:06:34 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/05/31 13:06:03 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,3 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		ft_bzero(p, sum);
 	return (p);
 }
-/*int     main()
-{
-		//printf("%p",ft_calloc(6, 3));
-
-		printf("%p",calloc(9, 2));
-}*/

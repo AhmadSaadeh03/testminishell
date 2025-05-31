@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fatoom <fatoom@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 14:31:06 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/28 21:41:46 by fatoom           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:04:20 by fghanem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ static t_redirect	*create_redirect_node(char *file_name, t_type type)
 		return (NULL);
 	new->file_name = NULL;
 	if (file_name[0] == '"' && file_name[ft_strlen(file_name) - 1] == '"')
-	{
 		new->file_name = ft_trim_quotes(file_name);
-		printf("file name : %s\n", new->file_name);
-	}
 	else
+	{
 		new->file_name = add_cmd(file_name);
+		if (!new->file_name)
+		{
+			free(new);
+			return (NULL);
+		}
+	}
 	if (!new->file_name)
 	{
 		free(new);
@@ -106,6 +110,11 @@ t_here	*creat_heredoc(char *limit)
 	redir->content = NULL;
 	redir->limt = NULL;
 	redir->limt = add_cmd(limit);
+	if (!redir->limt)
+	{
+		free(redir);
+		return (NULL);
+	}
 	redir->next = NULL;
 	return (redir);
 }

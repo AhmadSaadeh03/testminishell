@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:42:20 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 11:23:05 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:53:03 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,18 @@ int	wait_all_children(t_pipes *pipe_data, t_minishell *shell)
 	int	i;
 	int	status;
 
+	int	last_status;
 	(void)shell;
 	i = 0;
 	while (i < pipe_data->cmd_count)
 	{
 		waitpid(pipe_data->pid[i], &status, 0);
+		last_status = status;
 		i++;
 	}
 	free(pipe_data->pid);
 	pipe_data = NULL;
-	return (status);
+	return (last_status);
 }
 
 void	handle_child_process(t_minishell *shell, t_cmd *cmd, t_pipes *pipe_data,
@@ -73,7 +75,6 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	handle_signals(3);
 	while (cmd)
 	{
 		pipe_data->pid[i] = fork();
@@ -85,10 +86,7 @@ int	create_child_processes(t_minishell *shell, t_pipes *pipe_data, t_cmd *cmd)
 			return (1);
 		}
 		if (pipe_data->pid[i] == 0)
-		{
-			signal(SIGQUIT, SIG_DFL);
 			handle_child_process(shell, cmd, pipe_data, i);
-		}
 		handle_signals(1);
 		cmd = cmd->next;
 		i++;
@@ -114,10 +112,5 @@ void	exec_pipe(t_minishell *shell)
 	}
 	close_fd(&pipe_data);
 	status = wait_all_children(&pipe_data, shell);
-	if (g_signal == SIGINT)
-		shell->last_exit = 128 + g_signal;
-	if (g_signal == SIGQUIT)
-		shell->last_exit = 128 + g_signal;
-	if (g_signal != SIGINT && g_signal != SIGQUIT)
-		handle_exit_status(shell, status);
+	handle_exit_status(shell, status);
 }

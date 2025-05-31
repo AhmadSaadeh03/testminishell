@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/29 16:10:33 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/31 12:58:15 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ void	exec_red_cmd(t_cmd *cmd, t_minishell *shell, int flag)
 		child_process(cmd, shell, flag);
 	else
 	{
-		handle_signals(5);
+		handle_signals(2);
 		waitpid(pid, NULL, 0);
-		if (g_signal == SIGINT)
-			shell->last_exit = 130;
 	}
 }
 
@@ -82,10 +80,8 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 		free_exit(shell);
 		exit(0);
 	}
-	handle_signals(5);
+	handle_signals(2);
 	waitpid(pid, NULL, 0);
-	if (g_signal == SIGINT)
-		shell->last_exit = 130;
 }
 
 void	child_process(t_cmd *cmd, t_minishell *shell, int flag)
