@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fghanem <fghanem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:32:56 by asaadeh           #+#    #+#             */
-/*   Updated: 2025/05/31 13:07:50 by fghanem          ###   ########.fr       */
+/*   Updated: 2025/05/31 19:52:00 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	handle_empty_input(t_minishell *shell, int *status)
 
 static void	run_and_cleanup(t_minishell *shell)
 {
-	add_history(shell->name);
 	if (split(shell) == 1)
 	{
 		free(shell->name);
@@ -59,6 +58,7 @@ static void	run_and_cleanup(t_minishell *shell)
 
 static int	handle_spaces(t_minishell *shell)
 {
+	add_history(shell->name);
 	if (shell->name[0] == '\0' || is_all_whitespace(shell->name))
 	{
 		free(shell->name);

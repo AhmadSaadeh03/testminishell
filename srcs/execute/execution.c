@@ -6,7 +6,7 @@
 /*   By: asaadeh <asaadeh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:35 by fghanem           #+#    #+#             */
-/*   Updated: 2025/05/31 12:58:15 by asaadeh          ###   ########.fr       */
+/*   Updated: 2025/06/01 12:25:08 by asaadeh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	exec_red_only(t_cmd *cmd, t_minishell *shell)
 	}
 	handle_signals(2);
 	waitpid(pid, NULL, 0);
+	if (g_signal == SIGINT)
+		shell->last_exit = g_signal + 128;
 }
 
 void	child_process(t_cmd *cmd, t_minishell *shell, int flag)
